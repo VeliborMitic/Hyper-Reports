@@ -1,4 +1,4 @@
-package org.prime.internship.pojo;
+package org.prime.internship.entity;
 
 public class Employe {
     private long id;

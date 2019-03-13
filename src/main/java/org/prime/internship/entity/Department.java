@@ -1,4 +1,4 @@
-package org.prime.internship.pojo;
+package org.prime.internship.entity;
 
 import java.util.List;
 
