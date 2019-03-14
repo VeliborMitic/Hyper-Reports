@@ -1,18 +1,23 @@
 package org.prime.internship;
 
-/**
- * Hello world!
- *
- */
-
 // http://136ea.k.time4vps.cloud/data/
 
-public class App 
+import org.prime.internship.parser.CSVParser;
+
+
+public class App
 {
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+    public static void main( String[] args ){
+
+        CSVParser parser = new CSVParser();
+        try {
+            parser.readWithCsvBeanReader();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+
 
 
 }
