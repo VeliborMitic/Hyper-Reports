@@ -6,6 +6,8 @@ public class DailyReport {
     private String companyName;
     private LocalDate date;
     private String city;
+
+    private String department;
     private String employee;
     private Double turnover;
 
@@ -49,12 +51,21 @@ public class DailyReport {
         this.turnover = turnover;
     }
 
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
     @Override
     public String toString() {
-        return "DailyReportDTO{" +
+        return "DailyReport{" +
                 "companyName='" + companyName + '\'' +
                 ", date=" + date +
                 ", city='" + city + '\'' +
+                ", department='" + department + '\'' +
                 ", employee='" + employee + '\'' +
                 ", turnover=" + turnover +
                 '}';

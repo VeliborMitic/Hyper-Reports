@@ -21,7 +21,7 @@ public class CSVParser{
     public void readWithCsvBeanReader() throws IOException {
 
         //TODO: Dynamicly passing file names to method
-        try (ICsvBeanReader beanReader = new CsvBeanReader(new FileReader("2018-10-01-blogtags.csv"), CsvPreference.STANDARD_PREFERENCE)) {
+        try (ICsvBeanReader beanReader = new CsvBeanReader(new FileReader("reports/2018-10-01-blogtags.csv"), CsvPreference.STANDARD_PREFERENCE)) {
 
             // the header elements are used to map the values to the bean (names must match)
             final String[] header = beanReader.getHeader(true);
@@ -37,7 +37,9 @@ public class CSVParser{
                 Turnover turnover =  new Turnover();
                 turnover.setTurnover(dailyReport.getTurnover());
 
+
                 //TODO: Take company name and date from file name and set attributes
+                dailyReport.setDepartment("");
                 dailyReport.setCompanyName("Prime");
                 dailyReport.setDate(LocalDate.now());
 
