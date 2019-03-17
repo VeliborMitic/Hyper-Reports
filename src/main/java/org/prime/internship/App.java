@@ -2,38 +2,28 @@ package org.prime.internship;
 
 // http://136ea.k.time4vps.cloud/data/
 
+import org.prime.internship.parser.CSVParser;
 import org.prime.internship.parser.XMLParser;
+import org.prime.internship.utility.Util;
 
 import javax.xml.stream.XMLStreamException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.io.IOException;
+import java.time.LocalDate;
 
 
 public class App
 {
-    public static void main( String[] args ) throws XMLStreamException, FileNotFoundException {
+    public static void main( String[] args ) throws XMLStreamException, IOException {
 
-//        TestStAXParser testStAXParser = new TestStAXParser();
-//        testStAXParser.testParse();
 
-        XMLParser xmlParser = new XMLParser();
-        xmlParser.readXML();
+        Util.printList(new XMLParser("reports/2018-10-01-agivu.xml", "Sekica", LocalDate.now()).readReportBeans());
+        Util.printList(new CSVParser("reports/2018-10-01-blogtags.csv", "Yekica", LocalDate.now()).readReportBeans( ));
+
 
     }
 
 
-    public static List<String> listAllFilesInDirectory () {
-        File[] files = new File("reports/").listFiles();
 
-        return Arrays.asList(files).parallelStream().map(file ->
-                file.getName()).collect(Collectors.toList());
-    }
 
-    public static void printList (Iterable<?> list){
-        for (Object obj : list)
-            System.out.println(obj);
-    }
+
 }

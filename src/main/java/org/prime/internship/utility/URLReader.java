@@ -1,4 +1,4 @@
-package org.prime.internship.util;
+package org.prime.internship.utility;
 
 import java.io.BufferedReader;
 import java.io.IOException;

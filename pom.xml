@@ -43,6 +43,12 @@
       <artifactId>stax-api</artifactId>
       <version>1.0-2</version>
     </dependency>
+      <dependency>
+          <groupId>org.jetbrains</groupId>
+          <artifactId>annotations</artifactId>
+          <version>16.0.3</version>
+          <scope>compile</scope>
+      </dependency>
 
   </dependencies>
 
