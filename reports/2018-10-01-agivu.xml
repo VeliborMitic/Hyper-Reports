@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cities>
+  <city name="Barcelona">
+    <departments>
+      <department name="Health">
+        <employee>Pat Roelofsen</employee>
+        <turnover>8185.43</turnover>
+      </department>
+      <department name="Books">
+        <employee>Ericka Buntin</employee>
+        <turnover>6575.75</turnover>
+      </department>
+      <department name="Tools">
+        <employee>Floyd Cammell</employee>
+        <turnover>14247.27</turnover>
+      </department>
+      <department name="Beauty">
+        <employee>Brittni McGlue</employee>
+        <turnover>17998.16</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Toledo">
+    <departments>
+      <department name="Games">
+        <employee>Renae Cleugher</employee>
+        <turnover>15846.82</turnover>
+      </department>
+      <department name="Industrial">
+        <employee>Sanson Pamplin</employee>
+        <turnover>16493.73</turnover>
+      </department>
+      <department name="Grocery">
+        <employee>Evey Fawlks</employee>
+        <turnover>12395.16</turnover>
+      </department>
+      <department name="Automotive">
+        <employee>Courtney Everal</employee>
+        <turnover>16125.3</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Zaragoza">
+    <departments>
+      <department name="Garden">
+        <employee>Davey Doblin</employee>
+        <turnover>9661.58</turnover>
+      </department>
+      <department name="Music">
+        <employee>Davey Doblin</employee>
+        <turnover>6803.14</turnover>
+      </department>
+      <department name="Toys">
+        <employee>Tildy Behling</employee>
+        <turnover>18557.03</turnover>
+      </department>
+      <department name="Movies">
+        <employee>Ferdinand Teal</employee>
+        <turnover>10632.15</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Murcia">
+    <departments>
+      <department name="Computers">
+        <employee>Quintina Abrahams</employee>
+        <turnover>17669.01</turnover>
+      </department>
+      <department name="Electronics">
+        <employee>Quintina Abrahams</employee>
+        <turnover>11295.43</turnover>
+      </department>
+      <department name="Kids">
+        <employee>Ida Tocqueville</employee>
+        <turnover>12701.04</turnover>
+      </department>
+      <department name="Sports">
+        <employee>Janet Cotes</employee>
+        <turnover>7579.02</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Valladolid">
+    <departments>
+      <department name="Baby">
+        <employee>Anitra Longden</employee>
+        <turnover>9010.45</turnover>
+      </department>
+      <department name="Home">
+        <employee>Norby Arling</employee>
+        <turnover>9563.4</turnover>
+      </department>
+      <department name="Jewelery">
+        <employee>Kelby Rolland</employee>
+        <turnover>10147.99</turnover>
+      </department>
+      <department name="Clothing">
+        <employee>Dougie Andreone</employee>
+        <turnover>13996.34</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Santiago de Compostela">
+    <departments>
+      <department name="Health">
+        <employee>Bowie Drewitt</employee>
+        <turnover>16912.97</turnover>
+      </department>
+      <department name="Books">
+        <employee>Humfrid Wyse</employee>
+        <turnover>12524.83</turnover>
+      </department>
+      <department name="Tools">
+        <employee>Prentice Coram</employee>
+        <turnover>10057.24</turnover>
+      </department>
+      <department name="Beauty">
+        <employee>Prentice Coram</employee>
+        <turnover>17637.74</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Mérida">
+    <departments>
+      <department name="Games">
+        <employee>Randolph Coil</employee>
+        <turnover>9801.46</turnover>
+      </department>
+      <department name="Industrial">
+        <employee>Clio Giottini</employee>
+        <turnover>8269.17</turnover>
+      </department>
+      <department name="Grocery">
+        <employee>Kaleb Merrikin</employee>
+        <turnover>15961.03</turnover>
+      </department>
+      <department name="Automotive">
+        <employee>Kaleb Merrikin</employee>
+        <turnover>14535.41</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Santa Cruz de Tenerife">
+    <departments>
+      <department name="Garden">
+        <employee>Tersina Crichmer</employee>
+        <turnover>4732.06</turnover>
+      </department>
+      <department name="Music">
+        <employee>Benjie Trim</employee>
+        <turnover>18948.51</turnover>
+      </department>
+      <department name="Toys">
+        <employee>Benjie Trim</employee>
+        <turnover>14790.81</turnover>
+      </department>
+      <department name="Movies">
+        <employee>Lidia Joye</employee>
+        <turnover>17207.86</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Seville">
+    <departments>
+      <department name="Computers">
+        <employee>Roseanna Tucsell</employee>
+        <turnover>10899.49</turnover>
+      </department>
+      <department name="Electronics">
+        <employee>Roseanna Tucsell</employee>
+        <turnover>10564.86</turnover>
+      </department>
+      <department name="Kids">
+        <employee>Jacquenette Curnnok</employee>
+        <turnover>4971.8</turnover>
+      </department>
+      <department name="Sports">
+        <employee>Adah Rolfe</employee>
+        <turnover>12256.93</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Pamplona">
+    <departments>
+      <department name="Baby">
+        <employee>Sandye Lilburn</employee>
+        <turnover>19641.98</turnover>
+      </department>
+      <department name="Home">
+        <employee>Sherwood Mengue</employee>
+        <turnover>17556.3</turnover>
+      </department>
+      <department name="Jewelery">
+        <employee>Gennifer Tarburn</employee>
+        <turnover>6357.03</turnover>
+      </department>
+      <department name="Clothing">
+        <employee>Ram Andri</employee>
+        <turnover>11213.27</turnover>
+      </department>
+    </departments>
+  </city>
+</cities>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cities>
+  <city name="Boston">
+    <departments>
+      <department name="Health">
+        <employee>Joelly Rampling</employee>
+        <turnover>9360.92</turnover>
+      </department>
+      <department name="Books">
+        <employee>Kai Screaton</employee>
+        <turnover>11229.87</turnover>
+      </department>
+      <department name="Tools">
+        <employee>Osborn Knowlman</employee>
+        <turnover>17903.84</turnover>
+      </department>
+      <department name="Beauty">
+        <employee>Brenda Ayers</employee>
+        <turnover>15232.44</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Columbus">
+    <departments>
+      <department name="Games">
+        <employee>Boote Braune</employee>
+        <turnover>11208.55</turnover>
+      </department>
+      <department name="Industrial">
+        <employee>Broderick Dayborne</employee>
+        <turnover>18532.07</turnover>
+      </department>
+      <department name="Grocery">
+        <employee>Brit Biddwell</employee>
+        <turnover>8172.11</turnover>
+      </department>
+      <department name="Automotive">
+        <employee>Felicle Kedge</employee>
+        <turnover>19637.2</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Salt Lake City">
+    <departments>
+      <department name="Garden">
+        <employee>Alica Fydo</employee>
+        <turnover>9230.56</turnover>
+      </department>
+      <department name="Music">
+        <employee>Darice Karpinski</employee>
+        <turnover>11358.51</turnover>
+      </department>
+      <department name="Toys">
+        <employee>Trumann Bothbie</employee>
+        <turnover>10549.99</turnover>
+      </department>
+      <department name="Movies">
+        <employee>Ludwig Ludwikiewicz</employee>
+        <turnover>17884.21</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Jefferson City">
+    <departments>
+      <department name="Computers">
+        <employee>Alick Carwithan</employee>
+        <turnover>17813.37</turnover>
+      </department>
+      <department name="Electronics">
+        <employee>Amii Wilhelmy</employee>
+        <turnover>10079.56</turnover>
+      </department>
+      <department name="Kids">
+        <employee>Elli Storror</employee>
+        <turnover>16258.67</turnover>
+      </department>
+      <department name="Sports">
+        <employee>Oren Robelow</employee>
+        <turnover>10694.21</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Saint Paul">
+    <departments>
+      <department name="Baby">
+        <employee>Davita Scougal</employee>
+        <turnover>19441.18</turnover>
+      </department>
+      <department name="Home">
+        <employee>Rob Ziehm</employee>
+        <turnover>8163.19</turnover>
+      </department>
+      <department name="Jewelery">
+        <employee>Saxon Fragino</employee>
+        <turnover>18028</turnover>
+      </department>
+      <department name="Clothing">
+        <employee>Haslett Powys</employee>
+        <turnover>10862.27</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Lansing">
+    <departments>
+      <department name="Health">
+        <employee>Vinny Lafuente</employee>
+        <turnover>15799.74</turnover>
+      </department>
+      <department name="Books">
+        <employee>Obadias Veld</employee>
+        <turnover>17347.43</turnover>
+      </department>
+      <department name="Tools">
+        <employee>Jehanna Kemmish</employee>
+        <turnover>18028.11</turnover>
+      </department>
+      <department name="Beauty">
+        <employee>Alick Carwithan</employee>
+        <turnover>18207.57</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Providence">
+    <departments>
+      <department name="Games">
+        <employee>Oren Robelow</employee>
+        <turnover>10332.8</turnover>
+      </department>
+      <department name="Industrial">
+        <employee>Flori Langlais</employee>
+        <turnover>12401.37</turnover>
+      </department>
+      <department name="Grocery">
+        <employee>Wilmer Bulbrook</employee>
+        <turnover>18704.79</turnover>
+      </department>
+      <department name="Automotive">
+        <employee>Jaynell Grunnell</employee>
+        <turnover>14103.65</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Topeka">
+    <departments>
+      <department name="Garden">
+        <employee>Lucho Phetteplace</employee>
+        <turnover>13080.93</turnover>
+      </department>
+      <department name="Music">
+        <employee>Pauline Pedder</employee>
+        <turnover>14511.4</turnover>
+      </department>
+      <department name="Toys">
+        <employee>Nixie Trimble</employee>
+        <turnover>11864.31</turnover>
+      </department>
+      <department name="Movies">
+        <employee>Myca Backe</employee>
+        <turnover>12294.5</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Helena">
+    <departments>
+      <department name="Computers">
+        <employee>Brandise Towell</employee>
+        <turnover>10856.12</turnover>
+      </department>
+      <department name="Electronics">
+        <employee>Noni Limer</employee>
+        <turnover>14818.54</turnover>
+      </department>
+      <department name="Kids">
+        <employee>Erik Astman</employee>
+        <turnover>8930.34</turnover>
+      </department>
+      <department name="Sports">
+        <employee>Mallory Sellwood</employee>
+        <turnover>10456.85</turnover>
+      </department>
+    </departments>
+  </city>
+  <city name="Jackson">
+    <departments>
+      <department name="Baby">
+        <employee>Melesa Pherps</employee>
+        <turnover>19178.87</turnover>
+      </department>
+      <department name="Home">
+        <employee>Nicol Sinkings</employee>
+        <turnover>8023.56</turnover>
+      </department>
+      <department name="Jewelery">
+        <employee>Selestina McLaren</employee>
+        <turnover>18238.34</turnover>
+      </department>
+      <department name="Clothing">
+        <employee>Kelsy Marrows</employee>
+        <turnover>8338.24</turnover>
+      </department>
+    </departments>
+  </city>
+</cities>
