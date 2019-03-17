@@ -17,6 +17,6 @@ public class Util {
         File[] files = new File("reports/").listFiles();
 
         return Arrays.asList(files).parallelStream().map(file ->
-                file.getName()).collect(Collectors.toList());
+            file.getName()).collect(Collectors.toList());
     }
 }
