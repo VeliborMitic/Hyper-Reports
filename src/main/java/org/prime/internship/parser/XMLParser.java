@@ -9,30 +9,28 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class XMLParser extends BaseParser {
+public class XMLParser {
     private List<DailyReportBean> dailyReportBeanList;
     private String cityName = "";
     private String departmentName = "";
     private String employeeName = "";
     private String turnover = "";
 
-    public XMLParser(String fileName, String companyName, LocalDate reportDate) {
-        super(fileName, companyName, reportDate);
+    public XMLParser() {
         this.dailyReportBeanList = new ArrayList<>();
     }
 
-    public List<DailyReportBean> readReportBeans() throws FileNotFoundException, XMLStreamException {
+    public List<DailyReportBean> readReportBeans(String fileName) throws FileNotFoundException, XMLStreamException {
         boolean bEmployee = false;
         boolean bTurnover = false;
 
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLEventReader eventReader =
-                factory.createXMLEventReader(new FileReader(this.getFileName()));
+                factory.createXMLEventReader(new FileReader(fileName));
 
         while (eventReader.hasNext()) {
             XMLEvent event = eventReader.nextEvent();
@@ -75,7 +73,7 @@ public class XMLParser extends BaseParser {
                     EndElement endElement = event.asEndElement();
 
                     if (endElement.getName().getLocalPart().equalsIgnoreCase("department")) {
-                        this.dailyReportBeanList.add(new DailyReportBean(this.getCompanyName(), this.getReportDate(),cityName, departmentName, employeeName, Double.parseDouble(turnover)));
+                        this.dailyReportBeanList.add(new DailyReportBean(cityName, departmentName, employeeName, Double.parseDouble(turnover)));
                     }
                     break;
             }

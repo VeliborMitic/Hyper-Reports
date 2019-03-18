@@ -1,61 +1,58 @@
 package org.prime.internship.entity;
 
-
-import java.util.List;
-
 public class Employee {
-    private int id;
-    private String name;
-    private Company company;
-    private City city;
-    private Department department;
-    private List<Turnover> turnovers;
+    private int employee_id;
+    private String employee_name;
+    private int company_id;
+    private int city_id;
+    private int department_id;
+    private int turnover_id;
 
-    public int getId() {
-        return id;
+    public int getEmployee_id() {
+        return employee_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setEmployee_id(int employee_id) {
+        this.employee_id = employee_id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmployee_name() {
+        return employee_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmployee_name(String employee_name) {
+        this.employee_name = employee_name;
     }
 
-    public Company getCompany() {
-        return company;
+    public int getCompany_id() {
+        return company_id;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setCompany_id(int company_id) {
+        this.company_id = company_id;
     }
 
-    public City getCity() {
-        return city;
+    public int getCity_id() {
+        return city_id;
     }
 
-    public void setCity(City city) {
-        this.city = city;
+    public void setCity_id(int city_id) {
+        this.city_id = city_id;
     }
 
-    public Department getDepartment() {
-        return department;
+    public int getDepartment_id() {
+        return department_id;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setDepartment_id(int department_id) {
+        this.department_id = department_id;
     }
 
-    public List<Turnover> getTurnovers() {
-        return turnovers;
+    public int getTurnover_id() {
+        return turnover_id;
     }
 
-    public void setTurnovers(List<Turnover> turnovers) {
-        this.turnovers = turnovers;
+    public void setTurnover_id(int turnover_id) {
+        this.turnover_id = turnover_id;
     }
 }

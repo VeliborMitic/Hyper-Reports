@@ -1,15 +1,18 @@
 package org.prime.internship.entity;
 
-public class Company {
-    private int id;
-    private String name;
+import java.time.LocalDate;
 
-    public int getId() {
-        return id;
+public class Company {
+    private int company_id;
+    private String name;
+    private LocalDate lastDocumentDate;
+
+    public int getCompany_id() {
+        return company_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCompany_id(int company_id) {
+        this.company_id = company_id;
     }
 
     public String getName() {
@@ -18,5 +21,13 @@ public class Company {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public LocalDate getLastDocumentDate() {
+        return lastDocumentDate;
+    }
+
+    public void setLastDocumentDate(LocalDate lastDocumentDate) {
+        this.lastDocumentDate = lastDocumentDate;
     }
 }

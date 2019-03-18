@@ -1,18 +1,15 @@
 package org.prime.internship.entity;
 
-import java.util.List;
-
-
 public class City {
-    private int id;
+    private int city_id;
     private String name;
 
-    public int getId() {
-        return id;
+    public int getCity_id() {
+        return city_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCity_id(int city_id) {
+        this.city_id = city_id;
     }
 
     public String getName() {

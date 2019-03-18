@@ -4,25 +4,25 @@ import java.time.LocalDate;
 
 
 public class Turnover {
-    private int id;
-    private double turnover;
+    private int turnover_id;
+    private int employee_id;
     private LocalDate date;
-    private Employee employee;
+    private double turnoverValue;
 
-    public int getId() {
-        return id;
+    public int getTurnover_id() {
+        return turnover_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTurnover_id(int turnover_id) {
+        this.turnover_id = turnover_id;
     }
 
-    public double getTurnover() {
-        return turnover;
+    public int getEmployee_id() {
+        return employee_id;
     }
 
-    public void setTurnover(double turnover) {
-        this.turnover = turnover;
+    public void setEmployee_id(int employee_id) {
+        this.employee_id = employee_id;
     }
 
     public LocalDate getDate() {
@@ -33,11 +33,11 @@ public class Turnover {
         this.date = date;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public double getTurnoverValue() {
+        return turnoverValue;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setTurnoverValue(double turnoverValue) {
+        this.turnoverValue = turnoverValue;
     }
 }

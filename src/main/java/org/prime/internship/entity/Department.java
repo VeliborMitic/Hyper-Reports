@@ -1,18 +1,15 @@
 package org.prime.internship.entity;
 
-import java.util.List;
-
-
 public class Department {
-    private int id;
+    private int department_id;
     private String name;
 
-    public int getId() {
-        return id;
+    public int getDepartment_id() {
+        return department_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setDepartment_id(int department_id) {
+        this.department_id = department_id;
     }
 
     public String getName() {

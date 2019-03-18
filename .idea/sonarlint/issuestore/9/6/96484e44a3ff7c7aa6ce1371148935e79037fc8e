@@ -1,5 +1,11 @@
 
-Jsquid:S1612",Replace this lambda with a method reference.(Ì×é8Ö˜úŒ˜-
-isquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Ÿƒ¶ä8²Â˜-
-V
-squid:S106%"9Replace this use of System.out or System.err by a logger.(Áªø8„ÃÄ˜˜-
+Vsquid:S18545"9Remove this useless assignment to local variable "datum".(ßùì58á’ââ˜-
+[
+squid:S1062"9Replace this use of System.out or System.err by a logger.(“¼ş‰ıÿÿÿÿ8…ÿßâ˜-
+bsquid:UselessImportCheck"7Remove this unused import 'java.text.SimpleDateFormat'.(ú¡ÙÛ8Ù® á˜-
+[
+squid:S1061"9Replace this use of System.out or System.err by a logger.(Öïá¥øÿÿÿÿ8›šá˜-
+Gsquid:S14815"*Remove this unused "datum" local variable.(ßùì58á’ââ˜-
+©%squid:RedundantThrowsDeclarationCheck"qRemove the declaration of thrown exception 'java.text.ParseException', as it cannot be thrown from method's body.(ˆ…­Å8Ä±Óâ˜-
+U
+squid:S1063"9Replace this use of System.out or System.err by a logger.(»şy8Í†íâ˜-

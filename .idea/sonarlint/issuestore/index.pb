@@ -23,11 +23,27 @@ h
 8src/main/java/org/prime/internship/parser/XMLParser.java,6\0\6006bebc863e43ed15474f0726c0837b8ba165ef
 g
 7src/main/java/org/prime/internship/entity/Employee.java,c\5\c52344ecd1ec27df00c56f896a2c4e0d9f703344
-n
->src/main/java/org/prime/internship/entity/dto/DailyReport.java,0\9\098cb27c475d4d91f7d1c7441261790db70719eb
-f
-6src/main/java/org/prime/internship/util/URLReader.java,6\6\66371e6114b3086eb9e6cb05da0b8f536199409c
 L
 reports/2018-10-01-agivu.xml,7\e\7e9b6641c1d8dc967bd54cab6b305c4ca12b9a96
 O
 reports/2018-10-01-blogtags.csv,5\f\5f5e1c9cefb3b326906dd3ca28fed23c94d3473a
+r
+Bsrc/main/java/org/prime/internship/entity/dto/DailyReportBean.java,e\5\e5871fa769ce6c51e047d5d9a3b192489ae35597
+O
+reports/2018-10-01-brainbox.xml,c\c\cc7065b5396c03212714899b64b47a46130e2ce3
+Q
+!reports/2018-10-01-browseblab.xml,3\3\3314f1dbf4591ffbf06ab07269c4adc796ed4a96
+P
+ reports/2018-10-01-browsecat.xml,9\b\9bd7f5513f00186ced8ef0878e64f4ccfba60a1b
+Q
+!reports/2018-10-01-bubbletube.csv,0\9\09d97e37207fd7fd9806d3a28fd6b55446620129
+O
+reports/2018-10-01-buzzster.csv,7\d\7d93baef186fcb8587976b00a1e077687599b669
+i
+9src/main/java/org/prime/internship/parser/BaseParser.java,b\8\b8b93b058335af42b35137298b79940e6f2af56c
+M
+reports/2018-10-01-ailane.csv,2\a\2aa09dd6b60e096445f3faa2bca23c5236b708b3
+i
+9src/main/java/org/prime/internship/utility/URLReader.java,4\e\4e52446cf44190438a0637854de931ae9e82ff47
+d
+4src/main/java/org/prime/internship/utility/Util.java,d\0\d05a6eb61155c50e4cea21a5aecf7a79c23d744b
