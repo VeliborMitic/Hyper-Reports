@@ -2,11 +2,10 @@ package org.prime.internship.entity;
 
 public class Employee {
     private int employee_id;
-    private String employee_name;
+    private String name;
     private int company_id;
     private int city_id;
     private int department_id;
-    private int turnover_id;
 
     public int getEmployee_id() {
         return employee_id;
@@ -16,12 +15,12 @@ public class Employee {
         this.employee_id = employee_id;
     }
 
-    public String getEmployee_name() {
-        return employee_name;
+    public String getName() {
+        return name;
     }
 
-    public void setEmployee_name(String employee_name) {
-        this.employee_name = employee_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getCompany_id() {
@@ -46,13 +45,5 @@ public class Employee {
 
     public void setDepartment_id(int department_id) {
         this.department_id = department_id;
-    }
-
-    public int getTurnover_id() {
-        return turnover_id;
-    }
-
-    public void setTurnover_id(int turnover_id) {
-        this.turnover_id = turnover_id;
     }
 }

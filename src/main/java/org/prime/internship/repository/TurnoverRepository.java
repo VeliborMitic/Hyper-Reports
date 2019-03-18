@@ -1,7 +1,6 @@
 package org.prime.internship.repository;
 
 import org.prime.internship.database.DatabaseManager;
-import org.prime.internship.entity.Company;
 import org.prime.internship.entity.Turnover;
 
 import java.io.IOException;
@@ -97,9 +96,9 @@ public class TurnoverRepository implements BaseRepository<Turnover>{
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, turnover.getEmployee_id());
-            statement.setDate(3, Date.valueOf(turnover.getDate()));
-            statement.setDouble(4, turnover.getTurnoverValue());
-            statement.setInt(1, turnover.getTurnover_id());
+            statement.setDate(2, Date.valueOf(turnover.getDate()));
+            statement.setDouble(3, turnover.getTurnoverValue());
+            statement.setInt(4, turnover.getTurnover_id());
 
             statement.execute();
         } catch (IOException | SQLException | ClassNotFoundException e) {

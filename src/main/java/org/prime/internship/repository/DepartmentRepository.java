@@ -1,7 +1,6 @@
 package org.prime.internship.repository;
 
 import org.prime.internship.database.DatabaseManager;
-import org.prime.internship.entity.City;
 import org.prime.internship.entity.Department;
 
 import java.io.IOException;

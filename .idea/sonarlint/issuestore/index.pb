@@ -39,11 +39,21 @@ Q
 !reports/2018-10-01-bubbletube.csv,0\9\09d97e37207fd7fd9806d3a28fd6b55446620129
 O
 reports/2018-10-01-buzzster.csv,7\d\7d93baef186fcb8587976b00a1e077687599b669
-i
-9src/main/java/org/prime/internship/parser/BaseParser.java,b\8\b8b93b058335af42b35137298b79940e6f2af56c
 M
 reports/2018-10-01-ailane.csv,2\a\2aa09dd6b60e096445f3faa2bca23c5236b708b3
 i
 9src/main/java/org/prime/internship/utility/URLReader.java,4\e\4e52446cf44190438a0637854de931ae9e82ff47
 d
 4src/main/java/org/prime/internship/utility/Util.java,d\0\d05a6eb61155c50e4cea21a5aecf7a79c23d744b
+q
+Asrc/main/java/org/prime/internship/repository/BaseRepository.java,8\5\85ad4a207d830e38c1b923f83b99f21d740f64e3
+q
+Asrc/main/java/org/prime/internship/repository/CityRepository.java,0\c\0cd9a162a7b7241ac3203a226b9edae9f7464433
+t
+Dsrc/main/java/org/prime/internship/repository/CompanyRepository.java,b\8\b89540ef827a71a160ab7259225600f20fc1a3d3
+w
+Gsrc/main/java/org/prime/internship/repository/DepartmentRepository.java,3\1\310d2c8bb2931ebee13a6b8000c716eb85105725
+u
+Esrc/main/java/org/prime/internship/repository/TurnoverRepository.java,1\0\103249826c32e6bbabcd2e1fdb7410c9745409cc
+u
+Esrc/main/java/org/prime/internship/repository/EmployeeRepository.java,2\2\227d6d9b2fc87b2d336e2bc67b430c6b38e75acd
