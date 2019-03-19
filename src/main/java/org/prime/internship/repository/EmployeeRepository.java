@@ -37,6 +37,28 @@ public class EmployeeRepository implements BaseRepository<Employee> {
     }
 
     @Override
+    public Employee getOneByName(String name) {
+
+        String sql = "SELECT * " +
+                "FROM `employees` " +
+                "WHERE employee_id = ?";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, name);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return createEntityInstance(resultSet);
+                }
+            }
+        } catch (IOException | SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public List<Employee> getAll() {
         List<Employee> employees = new ArrayList<>();
 

@@ -32,6 +32,28 @@ public class CityRepository implements BaseRepository <City>{
     }
 
     @Override
+    public City getOneByName(String name) {
+
+        String sql = "SELECT * " +
+                "FROM `cities` " +
+                "WHERE city_id = ?";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, name);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return createEntityInstance(resultSet);
+                }
+            }
+        } catch (IOException | SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public List<City> getAll() {
         List<City> cities = new ArrayList<>();
 

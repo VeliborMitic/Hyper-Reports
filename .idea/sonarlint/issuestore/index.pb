@@ -57,3 +57,6 @@ u
 Esrc/main/java/org/prime/internship/repository/TurnoverRepository.java,1\0\103249826c32e6bbabcd2e1fdb7410c9745409cc
 u
 Esrc/main/java/org/prime/internship/repository/EmployeeRepository.java,2\2\227d6d9b2fc87b2d336e2bc67b430c6b38e75acd
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302

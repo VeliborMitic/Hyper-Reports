@@ -32,6 +32,30 @@ public class CompanyRepository implements  BaseRepository <Company>{
     }
 
     @Override
+    public Company getOneByName (String name){
+        String sql = "SELECT * " +
+                "FROM `companies` " +
+                "WHERE name = ?";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, name);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return createEntityInstance(resultSet);
+                }
+            }
+        } catch (IOException | SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+
+
+    }
+
+    @Override
     public List<Company> getAll() {
         List<Company> companies = new ArrayList<>();
 

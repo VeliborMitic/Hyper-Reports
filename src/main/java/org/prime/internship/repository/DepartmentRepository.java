@@ -33,6 +33,28 @@ public class DepartmentRepository implements BaseRepository<Department>{
     }
 
     @Override
+    public Department getOneByName(String name) {
+
+        String sql = "SELECT * " +
+                "FROM `departments` " +
+                "WHERE department_id = ?";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, name);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return createEntityInstance(resultSet);
+                }
+            }
+        } catch (IOException | SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public List<Department> getAll() {
         List<Department> departments = new ArrayList<>();
 

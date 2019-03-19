@@ -74,8 +74,6 @@ public class XMLParser {
                         this.dailyReportBeanList.add(new DailyReportBean(cityName, departmentName, employeeName, Double.parseDouble(turnover)));
                     }
                     break;
-
-                default: break;
             }
         }
         return dailyReportBeanList;

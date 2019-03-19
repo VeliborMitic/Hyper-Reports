@@ -26,7 +26,7 @@ public class Util {
         File[] files = new File("reports/").listFiles();
 
         return Arrays.asList(files).parallelStream().map(file ->
-            file.getName()).collect(Collectors.toList());
+                file.getName()).collect(Collectors.toList());
     }
 
     public static String[] parseFileName (String fileName){
@@ -41,41 +41,6 @@ public class Util {
             strings[2] = m.group(3);
         }
         return strings;
-    }
-
-    private static void downloadFolder(
-        FTPClient ftpClient, String remotePath, String localPath) throws IOException {
-        System.out.println("Downloading folder " + remotePath + " to " + localPath);
-
-        FTPFile[] remoteFiles = ftpClient.listFiles(remotePath);
-
-        for (FTPFile remoteFile : remoteFiles)
-        {
-            if (!remoteFile.getName().equals(".") && !remoteFile.getName().equals(".."))
-            {
-                String remoteFilePath = remotePath + "/" + remoteFile.getName();
-                String localFilePath = localPath + "/" + remoteFile.getName();
-
-                if (remoteFile.isDirectory())
-                {
-                    new File(localFilePath).mkdirs();
-
-                    downloadFolder(ftpClient, remoteFilePath, localFilePath);
-                }
-                else
-                {
-                    System.out.println("Downloading file " + remoteFilePath + " to " +
-                            localFilePath);
-
-                    OutputStream outputStream =
-                            new BufferedOutputStream(new FileOutputStream(localFilePath));
-                    if (!ftpClient.retrieveFile(remoteFilePath, outputStream)){
-                        System.out.println("Failed to download file " + remoteFilePath);
-                    }
-                    outputStream.close();
-                }
-            }
-        }
     }
 
 
