@@ -1,7 +1,6 @@
 package org.prime.internship.entity.dto;
 
 public class DailyReportBean {
-
     private String city;
     private String department;
     private String employee;

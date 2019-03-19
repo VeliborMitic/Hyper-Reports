@@ -12,7 +12,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeRepository implements BaseRepository<Employee>{
+public class EmployeeRepository implements BaseRepository<Employee> {
+
     @Override
     public Employee getOne(Integer id) {
 
@@ -21,18 +22,13 @@ public class EmployeeRepository implements BaseRepository<Employee>{
                 "WHERE employee_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
 
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                Employee employee = new Employee();
-                employee.setEmployee_id(resultSet.getInt("employee_id"));
-                employee.setName(resultSet.getString("name"));
-                employee.setCompany_id(resultSet.getInt("company_id"));
-                employee.setCity_id(resultSet.getInt("city_id"));
-                employee.setDepartment_id(resultSet.getInt("department_id"));
-                return employee;
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return createEntityInstance(resultSet);
+                }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -48,17 +44,12 @@ public class EmployeeRepository implements BaseRepository<Employee>{
                 "FROM `employees`";
 
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Employee employee = new Employee();
-                employee.setEmployee_id(resultSet.getInt("employee_id"));
-                employee.setName(resultSet.getString("name"));
-                employee.setCompany_id(resultSet.getInt("company_id"));
-                employee.setCity_id(resultSet.getInt("city_id"));
-                employee.setDepartment_id(resultSet.getInt("department_id"));
-                employees.add(employee);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    employees.add(createEntityInstance(resultSet));
+                }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -69,21 +60,16 @@ public class EmployeeRepository implements BaseRepository<Employee>{
     @Override
     public Employee insert(Employee employee) {
 
-        String sql = "INSERT INTO `employees` (employee_id, name, company_id, city_id, department_id) "+
+        String sql = "INSERT INTO `employees` (name, company_id, city_id, department_id, employee_id) " +
                 "VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            statement.setInt(1, employee.getEmployee_id());
-            statement.setString(2, employee.getName());
-            statement.setInt(3, employee.getCompany_id());
-            statement.setInt(4, employee.getCity_id());
-            statement.setInt(5, employee.getDepartment_id());
+            writeEntityToDataBase(employee, statement);
 
-            statement.execute();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    employee.setEmployee_id(generatedKeys.getInt(1));
+                    employee.setEmployeeId(generatedKeys.getInt(1));
                 }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -102,15 +88,8 @@ public class EmployeeRepository implements BaseRepository<Employee>{
                 "SET department_id = ?," +
                 "WHERE employee_id = ?";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, employee.getName());
-            statement.setInt(2, employee.getCompany_id());
-            statement.setInt(3, employee.getCity_id());
-            statement.setInt(4, employee.getDepartment_id());
-            statement.setInt(5, employee.getEmployee_id());
-
-            statement.execute();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            writeEntityToDataBase(employee, statement);
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -123,12 +102,32 @@ public class EmployeeRepository implements BaseRepository<Employee>{
                 "FROM `employees` " +
                 "WHERE employee_id = ?";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.execute();
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
 
+    //helper method for CRUD operations - avoids duplicate code
+    private void writeEntityToDataBase(Employee employee, PreparedStatement statement) throws SQLException {
+        statement.setString(1, employee.getName());
+        statement.setInt(2, employee.getCompanyId());
+        statement.setInt(3, employee.getCityId());
+        statement.setInt(4, employee.getDepartmentId());
+        statement.setInt(5, employee.getEmployeeId());
+        statement.execute();
+    }
+
+    //helper method for CRUD operations - avoids duplicate code
+    private Employee createEntityInstance(ResultSet resultSet) throws SQLException {
+        Employee employee = new Employee();
+        employee.setEmployeeId(resultSet.getInt("employee_id"));
+        employee.setName(resultSet.getString("name"));
+        employee.setCompanyId(resultSet.getInt("company_id"));
+        employee.setCityId(resultSet.getInt("city_id"));
+        employee.setDepartmentId(resultSet.getInt("department_id"));
+        return employee;
     }
 }

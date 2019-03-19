@@ -29,8 +29,7 @@ public class XMLParser {
         boolean bTurnover = false;
 
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLEventReader eventReader =
-                factory.createXMLEventReader(new FileReader(fileName));
+        XMLEventReader eventReader = factory.createXMLEventReader(new FileReader(fileName));
 
         while (eventReader.hasNext()) {
             XMLEvent event = eventReader.nextEvent();
@@ -41,12 +40,12 @@ public class XMLParser {
                     StartElement startElement = event.asStartElement();
                     String qName = startElement.getName().getLocalPart();
 
-                    if (qName.equalsIgnoreCase("city") || qName.equalsIgnoreCase("department")) {
+                    if (qName.equalsIgnoreCase("city") ||
+                            qName.equalsIgnoreCase("department")) {
                         Iterator<Attribute> attributes = startElement.getAttributes();
                         String startElementValue = attributes.next().getValue();
                         if (qName.equalsIgnoreCase("City")) {
                             cityName = startElementValue;
-
                         } else {
                             departmentName = startElementValue;
                         }
@@ -71,11 +70,12 @@ public class XMLParser {
 
                 case XMLStreamConstants.END_ELEMENT:
                     EndElement endElement = event.asEndElement();
-
                     if (endElement.getName().getLocalPart().equalsIgnoreCase("department")) {
                         this.dailyReportBeanList.add(new DailyReportBean(cityName, departmentName, employeeName, Double.parseDouble(turnover)));
                     }
                     break;
+
+                default: break;
             }
         }
         return dailyReportBeanList;

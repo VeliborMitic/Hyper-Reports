@@ -1,18 +1,21 @@
 package org.prime.internship.entity;
 
-public class Employee {
-    private int employee_id;
-    private String name;
-    private int company_id;
-    private int city_id;
-    private int department_id;
+import java.io.Serializable;
 
-    public int getEmployee_id() {
-        return employee_id;
+public class Employee  implements Serializable {
+    private static final long serialVersionUID = 2275847963464611489L;
+    private int employeeId;
+    private String name;
+    private int companyId;
+    private int cityId;
+    private int departmentId;
+
+    public int getEmployeeId() {
+        return employeeId;
     }
 
-    public void setEmployee_id(int employee_id) {
-        this.employee_id = employee_id;
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getName() {
@@ -23,27 +26,27 @@ public class Employee {
         this.name = name;
     }
 
-    public int getCompany_id() {
-        return company_id;
+    public int getCompanyId() {
+        return companyId;
     }
 
-    public void setCompany_id(int company_id) {
-        this.company_id = company_id;
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
     }
 
-    public int getCity_id() {
-        return city_id;
+    public int getCityId() {
+        return cityId;
     }
 
-    public void setCity_id(int city_id) {
-        this.city_id = city_id;
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
     }
 
-    public int getDepartment_id() {
-        return department_id;
+    public int getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartment_id(int department_id) {
-        this.department_id = department_id;
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 }

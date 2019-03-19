@@ -1,10 +1,14 @@
 package org.prime.internship.utility;
 
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
+
+import java.io.BufferedOutputStream;
 import java.io.File;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,6 +41,41 @@ public class Util {
             strings[2] = m.group(3);
         }
         return strings;
+    }
+
+    private static void downloadFolder(
+        FTPClient ftpClient, String remotePath, String localPath) throws IOException {
+        System.out.println("Downloading folder " + remotePath + " to " + localPath);
+
+        FTPFile[] remoteFiles = ftpClient.listFiles(remotePath);
+
+        for (FTPFile remoteFile : remoteFiles)
+        {
+            if (!remoteFile.getName().equals(".") && !remoteFile.getName().equals(".."))
+            {
+                String remoteFilePath = remotePath + "/" + remoteFile.getName();
+                String localFilePath = localPath + "/" + remoteFile.getName();
+
+                if (remoteFile.isDirectory())
+                {
+                    new File(localFilePath).mkdirs();
+
+                    downloadFolder(ftpClient, remoteFilePath, localFilePath);
+                }
+                else
+                {
+                    System.out.println("Downloading file " + remoteFilePath + " to " +
+                            localFilePath);
+
+                    OutputStream outputStream =
+                            new BufferedOutputStream(new FileOutputStream(localFilePath));
+                    if (!ftpClient.retrieveFile(remoteFilePath, outputStream)){
+                        System.out.println("Failed to download file " + remoteFilePath);
+                    }
+                    outputStream.close();
+                }
+            }
+        }
     }
 
 

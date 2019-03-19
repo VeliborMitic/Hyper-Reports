@@ -1,18 +1,20 @@
 package org.prime.internship.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Company {
-    private int company_id;
+public class Company  implements Serializable {
+    private static final long serialVersionUID = 3290684569571507828L;
+    private int companyId;
     private String name;
     private LocalDate lastDocumentDate;
 
-    public int getCompany_id() {
-        return company_id;
+    public int getCompanyId() {
+        return companyId;
     }
 
-    public void setCompany_id(int company_id) {
-        this.company_id = company_id;
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
     }
 
     public String getName() {

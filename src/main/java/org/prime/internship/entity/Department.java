@@ -1,15 +1,18 @@
 package org.prime.internship.entity;
 
-public class Department {
-    private int department_id;
+import java.io.Serializable;
+
+public class Department  implements Serializable {
+    private static final long serialVersionUID = 1224162932987697738L;
+    private int departmentId;
     private String name;
 
-    public int getDepartment_id() {
-        return department_id;
+    public int getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartment_id(int department_id) {
-        this.department_id = department_id;
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 
     public String getName() {

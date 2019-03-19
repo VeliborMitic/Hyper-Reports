@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TurnoverRepository implements BaseRepository<Turnover>{
+
     @Override
     public Turnover getOne(Integer id) {
 
@@ -17,17 +18,15 @@ public class TurnoverRepository implements BaseRepository<Turnover>{
                 "WHERE turnover_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
 
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                Turnover turnover = new Turnover();
-                turnover.setTurnover_id(resultSet.getInt("turnover_id"));
-                turnover.setEmployee_id(resultSet.getInt("employee_id"));
-                turnover.setDate(resultSet.getDate("date").toLocalDate());
-                turnover.setTurnoverValue(resultSet.getDouble("turnover"));
-                return turnover;
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    createEntityInstance(resultSet);
+                    //Turnover turnover;
+                    return createEntityInstance(resultSet);
+                }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -43,16 +42,12 @@ public class TurnoverRepository implements BaseRepository<Turnover>{
                 "FROM `turnovers`";
 
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Turnover turnover = new Turnover();
-                turnover.setTurnover_id(resultSet.getInt("turnover_id"));
-                turnover.setEmployee_id(resultSet.getInt("employee_id"));
-                turnover.setDate(resultSet.getDate("date").toLocalDate());
-                turnover.setTurnoverValue(resultSet.getDouble("turnover"));
-                turnovers.add(turnover);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    turnovers.add(createEntityInstance(resultSet));
+                }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -62,20 +57,14 @@ public class TurnoverRepository implements BaseRepository<Turnover>{
 
     @Override
     public Turnover insert(Turnover turnover) {
-        String sql = "INSERT INTO `turnovers` (turnover_id, employee_id, date, turnover) "+
+        String sql = "INSERT INTO `turnovers` (employee_id, date, turnover, turnover_id) "+
                 "VALUES (?, ?, ?, ?)";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            statement.setInt(1, turnover.getTurnover_id());
-            statement.setInt(2, turnover.getEmployee_id());
-            statement.setDate(3, Date.valueOf(turnover.getDate()));
-            statement.setDouble(4, turnover.getTurnoverValue());
-
-            statement.execute();
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            writeEntityToDataBase(turnover, statement);
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    turnover.setTurnover_id(generatedKeys.getInt(1));
+                    turnover.setTurnoverId(generatedKeys.getInt(1));
                 }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -93,14 +82,8 @@ public class TurnoverRepository implements BaseRepository<Turnover>{
                 "SET turnover = ?," +
                 "WHERE turnover_id = ?";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setInt(1, turnover.getEmployee_id());
-            statement.setDate(2, Date.valueOf(turnover.getDate()));
-            statement.setDouble(3, turnover.getTurnoverValue());
-            statement.setInt(4, turnover.getTurnover_id());
-
-            statement.execute();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            writeEntityToDataBase(turnover, statement);
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -113,11 +96,30 @@ public class TurnoverRepository implements BaseRepository<Turnover>{
                 "FROM `turnovers` " +
                 "WHERE turnover_id = ?";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.execute();
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    //helper method for CRUD operations - avoids duplicate code
+    private Turnover createEntityInstance(ResultSet resultSet) throws SQLException {
+        Turnover turnover = new Turnover();
+        turnover.setTurnoverId(resultSet.getInt("turnover_id"));
+        turnover.setEmployeeId(resultSet.getInt("employee_id"));
+        turnover.setDate(resultSet.getDate("date").toLocalDate());
+        turnover.setTurnoverValue(resultSet.getDouble("turnover"));
+        return turnover;
+    }
+
+    //helper method for CRUD operations - avoids duplicate code
+    private void writeEntityToDataBase(Turnover turnover, PreparedStatement statement) throws SQLException {
+        statement.setInt(1, turnover.getEmployeeId());
+        statement.setDate(2, Date.valueOf(turnover.getDate()));
+        statement.setDouble(3, turnover.getTurnoverValue());
+        statement.setInt(4, turnover.getTurnoverId());
+        statement.execute();
     }
 }

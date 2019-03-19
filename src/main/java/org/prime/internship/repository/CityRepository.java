@@ -17,15 +17,13 @@ public class CityRepository implements BaseRepository <City>{
                 "WHERE city_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
 
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                City city = new City();
-                city.setCity_id(resultSet.getInt("city_id"));
-                city.setName(resultSet.getString("name"));
-                return city;
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return createEntityInstance(resultSet);
+                }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -41,15 +39,12 @@ public class CityRepository implements BaseRepository <City>{
                 "FROM `cities`";
 
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                City city = new City();
-                city.setCity_id(resultSet.getInt("city_id"));
-                city.setName(resultSet.getString("name"));
-
-                cities.add(city);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    cities.add(createEntityInstance(resultSet));
+                }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -63,15 +58,11 @@ public class CityRepository implements BaseRepository <City>{
         String sql = "INSERT INTO `cities` (city_id, name) "+
                 "VALUES (?, ?)";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            statement.setInt(1, city.getCity_id());
-            statement.setString(2, city.getName());
-
-            statement.execute();
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            writeEntityToDataBase(city, statement);
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    city.setCity_id(generatedKeys.getInt(1));
+                    city.setCityId(generatedKeys.getInt(1));
                 }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -87,12 +78,8 @@ public class CityRepository implements BaseRepository <City>{
                 "SET name = ?," +
                 "WHERE city_id = ?";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, city.getName());
-            statement.setInt(2, city.getCity_id());
-
-            statement.execute();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            writeEntityToDataBase(city, statement);
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -105,12 +92,26 @@ public class CityRepository implements BaseRepository <City>{
                 "FROM `cities` " +
                 "WHERE city_id = ?";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.execute();
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private City createEntityInstance(ResultSet resultSet) throws SQLException {
+        City city = new City();
+        city.setCityId(resultSet.getInt("city_id"));
+        city.setName(resultSet.getString("name"));
+        return city;
+    }
+
+    //helper method for CRUD operations - avoids duplicate code
+    private void writeEntityToDataBase(City city, PreparedStatement statement) throws SQLException {
+        statement.setString(1, city.getName());
+        statement.setInt(2, city.getCityId());
+        statement.execute();
     }
 
 }

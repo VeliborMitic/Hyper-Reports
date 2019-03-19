@@ -18,15 +18,13 @@ public class DepartmentRepository implements BaseRepository<Department>{
                 "WHERE department_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
 
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                Department department = new Department();
-                department.setDepartment_id(resultSet.getInt("department_id"));
-                department.setName(resultSet.getString("name"));
-                return department;
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return createEntityInstance(resultSet);
+                }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -42,15 +40,11 @@ public class DepartmentRepository implements BaseRepository<Department>{
                 "FROM `departments`";
 
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Department department = new Department();
-                department.setDepartment_id(resultSet.getInt("department_id"));
-                department.setName(resultSet.getString("name"));
-
-                departments.add(department);
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    departments.add(createEntityInstance(resultSet));
+                }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -64,15 +58,11 @@ public class DepartmentRepository implements BaseRepository<Department>{
         String sql = "INSERT INTO `departments` (department_id, name) "+
                 "VALUES (?, ?)";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            statement.setInt(1, department.getDepartment_id());
-            statement.setString(2, department.getName());
-
-            statement.execute();
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            writeEntityToDataBase(department, statement);
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    department.setDepartment_id(generatedKeys.getInt(1));
+                    department.setDepartmentId(generatedKeys.getInt(1));
                 }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -88,12 +78,8 @@ public class DepartmentRepository implements BaseRepository<Department>{
                 "SET name = ?," +
                 "WHERE department_id = ?";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, department.getName());
-            statement.setInt(2, department.getDepartment_id());
-
-            statement.execute();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            writeEntityToDataBase(department, statement);
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -106,7 +92,7 @@ public class DepartmentRepository implements BaseRepository<Department>{
                 "FROM `departments` " +
                 "WHERE department_id = ?";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.execute();
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -114,4 +100,18 @@ public class DepartmentRepository implements BaseRepository<Department>{
         }
     }
 
+    //helper method for CRUD operations - avoids duplicate code
+    private Department createEntityInstance(ResultSet resultSet) throws SQLException {
+        Department department = new Department();
+        department.setDepartmentId(resultSet.getInt("department_id"));
+        department.setName(resultSet.getString("name"));
+        return department;
+    }
+
+    //helper method for CRUD operations - avoids duplicate code
+    private void writeEntityToDataBase(Department department, PreparedStatement statement) throws SQLException {
+        statement.setInt(1, department.getDepartmentId());
+        statement.setString(2, department.getName());
+        statement.execute();
+    }
 }

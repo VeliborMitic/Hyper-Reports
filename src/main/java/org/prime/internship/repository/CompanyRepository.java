@@ -17,16 +17,13 @@ public class CompanyRepository implements  BaseRepository <Company>{
                 "WHERE company_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
 
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                Company company = new Company();
-                company.setCompany_id(resultSet.getInt("company_id"));
-                company.setName(resultSet.getString("name"));
-                company.setLastDocumentDate(resultSet.getDate("lastDocument").toLocalDate());
-                return company;
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return createEntityInstance(resultSet);
+                }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -42,15 +39,12 @@ public class CompanyRepository implements  BaseRepository <Company>{
                 "FROM `companies`";
 
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Company company = new Company();
-                company.setCompany_id(resultSet.getInt("company_id"));
-                company.setName(resultSet.getString("name"));
-                company.setLastDocumentDate(resultSet.getDate("lastDocument").toLocalDate());
-                companies.add(company);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    companies.add(createEntityInstance(resultSet));
+                }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -64,16 +58,13 @@ public class CompanyRepository implements  BaseRepository <Company>{
         String sql = "INSERT INTO `companies` (company_id, name, lastDocument) "+
                 "VALUES (?, ?, ?)";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            statement.setInt(1, company.getCompany_id());
-            statement.setString(2, company.getName());
-            statement.setDate(3, Date.valueOf(company.getLastDocumentDate()));
+            writeEntityToDataBase(company, statement);
 
-            statement.execute();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    company.setCompany_id(generatedKeys.getInt(1));
+                    company.setCompanyId(generatedKeys.getInt(1));
                 }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -88,15 +79,10 @@ public class CompanyRepository implements  BaseRepository <Company>{
         String sql = "UPDATE `companies`" +
                 "SET name = ?," +
                 "SET lastDocument = ?," +
-                "WHERE city_id = ?";
+                "WHERE company_id = ?";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, company.getName());
-            statement.setDate(2, Date.valueOf(company.getLastDocumentDate()));
-            statement.setInt(3, company.getCompany_id());
-
-            statement.execute();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            writeEntityToDataBase(company, statement);
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -109,13 +95,29 @@ public class CompanyRepository implements  BaseRepository <Company>{
             "FROM `companies` " +
             "WHERE company_id = ?";
         try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.execute();
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
 
+    //helper method for CRUD operations - avoids duplicate code
+    private Company createEntityInstance(ResultSet resultSet) throws SQLException {
+        Company company = new Company();
+        company.setCompanyId(resultSet.getInt("company_id"));
+        company.setName(resultSet.getString("name"));
+        company.setLastDocumentDate(resultSet.getDate("lastDocument").toLocalDate());
+        return company;
+    }
+
+    //helper method for CRUD operations - avoids duplicate code
+    private void writeEntityToDataBase(Company company, PreparedStatement statement) throws SQLException {
+        statement.setString(1, company.getName());
+        statement.setDate(2, Date.valueOf(company.getLastDocumentDate()));
+        statement.setInt(3, company.getCompanyId());
+        statement.execute();
     }
 
 }
