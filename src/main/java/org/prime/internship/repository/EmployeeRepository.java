@@ -36,7 +36,6 @@ public class EmployeeRepository implements BaseRepository<Employee> {
         return null;
     }
 
-    @Override
     public Employee getOneByName(String name) {
 
         String sql = "SELECT * " +

@@ -35,30 +35,6 @@ public class TurnoverRepository implements BaseRepository<Turnover>{
     }
 
     @Override
-    public Turnover getOneByName(String name) {
-
-        String sql = "SELECT * " +
-                "FROM `turnovers` " +
-                "WHERE turnover_id = ?";
-
-        try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, name);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    createEntityInstance(resultSet);
-                    //Turnover turnover;
-                    return createEntityInstance(resultSet);
-                }
-            }
-        } catch (IOException | SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
     public List<Turnover> getAll() {
         List<Turnover> turnovers = new ArrayList<>();
 

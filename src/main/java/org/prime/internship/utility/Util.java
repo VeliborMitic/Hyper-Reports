@@ -29,6 +29,7 @@ public class Util {
                 file.getName()).collect(Collectors.toList());
     }
 
+    // String[0] - date,  String[1] - companyName,  String[2] - extension
     public static String[] parseFileName (String fileName){
         String[] strings = new String[3];
         String regex = ".*(\\d{4}-\\d{2}-\\d{2})-(.*)\\.(.*)";

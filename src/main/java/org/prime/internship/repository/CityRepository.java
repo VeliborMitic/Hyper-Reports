@@ -31,7 +31,6 @@ public class CityRepository implements BaseRepository <City>{
         return null;
     }
 
-    @Override
     public City getOneByName(String name) {
 
         String sql = "SELECT * " +

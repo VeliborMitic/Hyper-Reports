@@ -7,9 +7,9 @@ import java.net.URL;
 
 public class URLReader {
 
-    URL oracle = new URL("http://136ea.k.time4vps.cloud/data/");
+    URL url = new URL("http://136ea.k.time4vps.cloud/data/");
     BufferedReader in = new BufferedReader(
-            new InputStreamReader(oracle.openStream()));
+            new InputStreamReader(url.openStream()));
 
     String inputLine;
 

@@ -31,7 +31,6 @@ public class CompanyRepository implements  BaseRepository <Company>{
         return null;
     }
 
-    @Override
     public Company getOneByName (String name){
         String sql = "SELECT * " +
                 "FROM `companies` " +
@@ -128,7 +127,7 @@ public class CompanyRepository implements  BaseRepository <Company>{
     }
 
     //helper method for CRUD operations - avoids duplicate code
-    private Company createEntityInstance(ResultSet resultSet) throws SQLException {
+    public Company createEntityInstance(ResultSet resultSet) throws SQLException {
         Company company = new Company();
         company.setCompanyId(resultSet.getInt("company_id"));
         company.setName(resultSet.getString("name"));

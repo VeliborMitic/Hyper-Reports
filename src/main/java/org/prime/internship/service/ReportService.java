@@ -3,65 +3,55 @@ package org.prime.internship.service;
 import org.prime.internship.entity.dto.DailyReportBean;
 import org.prime.internship.parser.CSVParser;
 import org.prime.internship.parser.XMLParser;
-import org.prime.internship.repository.CityRepository;
-import org.prime.internship.repository.CompanyRepository;
-import org.prime.internship.repository.DepartmentRepository;
-import org.prime.internship.repository.EmployeeRepository;
-import org.prime.internship.repository.TurnoverRepository;
 import org.prime.internship.utility.Util;
 
 import javax.xml.stream.XMLStreamException;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ReportService {
-
-    private final String PATH = "";
-
-    private CityRepository cityRepository;
-    private CompanyRepository companyRepository;
-    private DepartmentRepository departmentRepository;
-    private EmployeeRepository employeeRepository;
-    private TurnoverRepository turnoverRepository;
+    private CompanyService companyService;
+    private DepartmentService departmentService;
+    private CityService cityService;
+    private EmployeeService employeeService;
+    private TurnoverService turnoverService;
+    private List<DailyReportBean> list;
 
     public ReportService(){
-        cityRepository = new CityRepository();
-        companyRepository = new CompanyRepository();
-        departmentRepository = new DepartmentRepository();
-        employeeRepository = new EmployeeRepository();
-        turnoverRepository = new TurnoverRepository();
+        this.companyService = new CompanyService();
+        this.departmentService = new DepartmentService();
+        this.cityService = new CityService();
+        this.employeeService = new EmployeeService();
+        this.turnoverService = new TurnoverService();
     }
 
-    public static void harvestDailyReportsFromResource() throws IOException, XMLStreamException {
-        List<String> fileNames = Util.listAllFilesInDirectory();
+    public void writeAllFilesFromResourceToDB() throws IOException, XMLStreamException {
+        List<String> allFilesList = Util.listAllFilesInDirectory();
 
-        for (String file : fileNames) {
-            String[] attributes = Util.parseFileName(file);
+        for (String fileName : allFilesList) {
+            String[] attributes = Util.parseFileName(fileName);
 
             if (attributes[2].equalsIgnoreCase("csv")) {
-                List<DailyReportBean> list = new CSVParser().readReportBeans("reports/" + file);
-                for(DailyReportBean bean : list){
-
-                }
+                list = new CSVParser().readReportBeans("reports/" + fileName);
+                processFile(attributes);
 
             } else if (attributes[2].equalsIgnoreCase("xml")) {
-                List<DailyReportBean> list = new XMLParser().readReportBeans("reports/" + file);
-                for(DailyReportBean bean : list){
-
-                }
+                list = new XMLParser().readReportBeans("reports/" + fileName);
+                processFile(attributes);
             }
         }
-
     }
 
-
-
-
+    private void processFile(String[] attributes) {
+        list.forEach(bean -> turnoverService.processTurnoverToDB(
+                employeeService.processEmployeeToDB(
+                        bean.getEmployee(),
+                        companyService.processCompanyToDB(attributes[1], attributes[0]).getCompanyId(),
+                        cityService.processCityToDB(bean.getCity()).getCityId(),
+                        departmentService.processDepartmentToDB(bean.getDepartment()).getDepartmentId()).getEmployeeId(),
+                attributes[0],
+                bean.getTurnover()
+        ));
+    }
 
 }

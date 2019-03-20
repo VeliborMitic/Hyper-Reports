@@ -15,8 +15,6 @@ i
 9src/main/java/org/prime/internship/entity/Department.java,1\8\18ce41731ab6166e1d6a279d9507a5c7204fe73c
 p
 @src/main/java/org/prime/internship/database/DatabaseManager.java,a\2\a252ae06e2b2f52dd813dd03b78b19654a909a84
-d
-4src/main/resources/application.properties.properties,9\2\920dbf4cf745a460329797483bea5e8e14baf5c7
 h
 8src/main/java/org/prime/internship/PropertiesReader.java,5\9\59f18c4642b82c672d66ce376eada9a12dc044f2
 h
@@ -60,3 +58,7 @@ Esrc/main/java/org/prime/internship/repository/EmployeeRepository.java,2\2\227d
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
+Y
+)src/main/resources/application.properties,0\6\06f65155ec73600b9fc5c4dc2883d4bb84d8e284
+m
+=src/main/java/org/prime/internship/service/ReportService.java,e\0\e05b7f41de96252b4e07135cc4cbf85c0acba280

@@ -32,7 +32,6 @@ public class DepartmentRepository implements BaseRepository<Department>{
         return null;
     }
 
-    @Override
     public Department getOneByName(String name) {
 
         String sql = "SELECT * " +
