@@ -1,6 +1,6 @@
 package org.prime.internship.service;
 
-import org.prime.internship.entity.dto.DailyReportBean;
+import org.prime.internship.entity.dto.DailyReport;
 import org.prime.internship.parser.CSVParser;
 import org.prime.internship.parser.XMLParser;
 
@@ -15,7 +15,7 @@ public class ReportService {
     private EmployeeService employeeService;
     private TurnoverService turnoverService;
     private FileService fileService;
-    private List<DailyReportBean> dailyReportBeanList;
+    private List<DailyReport> dailyReportList;
 
     public ReportService() {
         this.companyService = new CompanyService();
@@ -34,12 +34,12 @@ public class ReportService {
                 String[] attributes = fileService.parseFileName(fileName);
 
                 if (attributes[2].equalsIgnoreCase("csv")) {
-                    dailyReportBeanList = new CSVParser().readReportBeans("reports/" + fileName);
+                    dailyReportList = new CSVParser().readReportBeans("reports/" + fileName);
 
                     processFile(attributes);
 
                 } else if (attributes[2].equalsIgnoreCase("xml")) {
-                    dailyReportBeanList = new XMLParser().readReportBeans("reports/" + fileName);
+                    dailyReportList = new XMLParser().readReportBeans("reports/" + fileName);
 
                     processFile(attributes);
                 }
@@ -50,7 +50,7 @@ public class ReportService {
     }
 
     private void processFile(String[] attributes) {
-        dailyReportBeanList.forEach(bean -> turnoverService.processTurnoverToDB(
+        dailyReportList.forEach(bean -> turnoverService.processTurnoverToDB(
                 employeeService.processEmployeeToDB(
                         bean.getEmployee(),
                         companyService.processCompanyToDB(attributes[1], attributes[0]).getCompanyId(),

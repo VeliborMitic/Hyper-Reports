@@ -1,6 +1,6 @@
 package org.prime.internship.parser;
 
-import org.prime.internship.entity.dto.DailyReportBean;
+import org.prime.internship.entity.dto.DailyReport;
 import org.supercsv.cellprocessor.ParseDouble;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -14,23 +14,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CSVParser {
-    private List<DailyReportBean> dailyReportBeansList;
+    private List<DailyReport> dailyReportBeansList;
 
     public CSVParser() {
         this.dailyReportBeansList = new ArrayList<>();
     }
 
-    public List<DailyReportBean> readReportBeans(String fileName) throws IOException {
-        DailyReportBean dailyReportBean;
+    public List<DailyReport> readReportBeans(String fileName) throws IOException {
+        DailyReport dailyReport;
         try (ICsvBeanReader beanReader = new CsvBeanReader(
                 new FileReader(fileName), CsvPreference.STANDARD_PREFERENCE)) {
 
             final String[] header = beanReader.getHeader(true);
             final CellProcessor[] processors = getProcessors();
 
-            while ((dailyReportBean = beanReader.read(DailyReportBean.class, header, processors)) != null) {
-                dailyReportBean.setDepartment("");
-                this.dailyReportBeansList.add(dailyReportBean);
+            while ((dailyReport = beanReader.read(DailyReport.class, header, processors)) != null) {
+                dailyReport.setDepartment("");
+                this.dailyReportBeansList.add(dailyReport);
             }
         }
         return this.dailyReportBeansList;

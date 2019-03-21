@@ -2,16 +2,13 @@ package org.prime.internship.entity.dto;
 
 import java.time.LocalDate;
 
-public class DailyReportBean {
+public class DailyReport {
     private String city;
     private String department;
     private String employee;
     private Double turnover;
 
-    public DailyReportBean() {
-    }
-
-    public DailyReportBean(String city, String department, String employee, Double turnover) {
+    public DailyReport(String city, String department, String employee, Double turnover) {
         this.city = city;
         this.department = department;
         this.employee = employee;
