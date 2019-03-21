@@ -1,5 +1,6 @@
 package org.prime.internship.parser;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import org.prime.internship.entity.dto.DailyReport;
 
 import javax.xml.stream.XMLEventReader;
@@ -36,6 +37,8 @@ public class XMLParser {
 
             switch (event.getEventType()) {
 
+                //TODO: Refactor parser:
+                // parseStartElement(XMLEvent event), parseCharacterElement(XMLEvent event) and parseEndElement(XMLEvent event)
                 case XMLStreamConstants.START_ELEMENT:
                     StartElement startElement = event.asStartElement();
                     String qName = startElement.getName().getLocalPart();

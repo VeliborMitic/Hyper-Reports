@@ -8,6 +8,9 @@ public class DailyReport {
     private String employee;
     private Double turnover;
 
+    public DailyReport() {
+    }
+
     public DailyReport(String city, String department, String employee, Double turnover) {
         this.city = city;
         this.department = department;

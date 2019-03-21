@@ -43,9 +43,10 @@ public class ReportService {
 
                     processFile(attributes);
                 }
+                System.out.println("File \"" + fileName + "\" processed!");
             }
         } else {
-            System.out.println("All files already processed!");
+            System.out.println("All files in source directory already processed!");
         }
     }
 

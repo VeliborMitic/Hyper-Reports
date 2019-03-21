@@ -1,12 +1,13 @@
 package org.prime.internship.service;
 
-import org.prime.internship.utility.Util;
+import org.prime.internship.entity.Company;
 
 import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -28,10 +29,19 @@ class FileService {
         if (!allFiles.isEmpty()) {
             for (String fileName : allFiles) {
                 String[] attributes = parseFileName(fileName);
-                if ((companyService.getOneByName(attributes[1]).getLastDocumentDate() != null)
-                        && Util.isDateAfter(LocalDate.parse(attributes[0]), companyService.getOneByName(attributes[1]).getLastDocumentDate()))
-                    newFiles.add(fileName);
+
+                Optional<Company> company = Optional.ofNullable(companyService.getOneByName(attributes[1]));
+                if (!company.isPresent()){
+                        newFiles.add(fileName);
+                }else{
+                    if (LocalDate.parse(attributes[0]).isAfter(companyService.getOneByName(attributes[1]).getLastDocumentDate())){
+                        newFiles.add(fileName);
+                    }
+                }
             }
+        }else{
+            System.out.println("Resource diretctory is empty!");
+            System.exit(99);
         }
         return newFiles;
     }
