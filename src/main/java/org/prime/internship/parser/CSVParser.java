@@ -28,6 +28,7 @@ public class CSVParser{
             final CellProcessor[] processors = getProcessors();
 
             while ((dailyReportBean = beanReader.read(DailyReportBean.class, header, processors)) != null) {
+                dailyReportBean.setDepartment("");
                 this.dailyReportBeansList.add(dailyReportBean);
             }
         }

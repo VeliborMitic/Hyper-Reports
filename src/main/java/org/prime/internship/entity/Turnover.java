@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 
-public class Turnover  implements Serializable {
+public class Turnover implements Serializable {
     private static final long serialVersionUID = 6977947445823075897L;
     private int turnoverId;
     private int employeeId;

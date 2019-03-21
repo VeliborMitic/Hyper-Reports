@@ -13,9 +13,7 @@ public class DepartmentRepository implements BaseRepository<Department>{
     @Override
     public Department getOne(Integer id) {
 
-        String sql = "SELECT * " +
-                "FROM `departments` " +
-                "WHERE department_id = ?";
+        String sql = "SELECT * FROM departments WHERE department_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
             PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -23,7 +21,11 @@ public class DepartmentRepository implements BaseRepository<Department>{
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return createEntityInstance(resultSet);
+                    Department department = new Department();
+                    department.setDepartmentId(resultSet.getInt("department_id"));
+                    department.setName(resultSet.getString("name"));
+
+                    return department;
                 }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -34,9 +36,7 @@ public class DepartmentRepository implements BaseRepository<Department>{
 
     public Department getOneByName(String name) {
 
-        String sql = "SELECT * " +
-                "FROM `departments` " +
-                "WHERE department_id = ?";
+        String sql = "SELECT * FROM departments WHERE name = ?";
 
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -44,7 +44,11 @@ public class DepartmentRepository implements BaseRepository<Department>{
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return createEntityInstance(resultSet);
+                    Department department = new Department();
+                    department.setDepartmentId(resultSet.getInt("department_id"));
+                    department.setName(resultSet.getString("name"));
+
+                    return department;
                 }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -57,14 +61,17 @@ public class DepartmentRepository implements BaseRepository<Department>{
     public List<Department> getAll() {
         List<Department> departments = new ArrayList<>();
 
-        String sql = "SELECT * " +
-                "FROM `departments`";
+        String sql = "SELECT * FROM departments";
 
         try (Connection connection = DatabaseManager.connect();
             PreparedStatement statement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    departments.add(createEntityInstance(resultSet));
+                    Department department = new Department();
+                    department.setDepartmentId(resultSet.getInt("department_id"));
+                    department.setName(resultSet.getString("name"));
+
+                    departments.add(department);
                 }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -76,11 +83,14 @@ public class DepartmentRepository implements BaseRepository<Department>{
     @Override
     public Department insert(Department department) {
 
-        String sql = "INSERT INTO `departments` (department_id, name) "+
-                "VALUES (?, ?)";
+        String sql = "INSERT INTO departments (department_id, name) VALUES (?, ?)";
         try (Connection connection = DatabaseManager.connect();
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            writeEntityToDataBase(department, statement);
+
+            statement.setInt(1, department.getDepartmentId());
+            statement.setString(2, department.getName());
+            statement.execute();
+
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     department.setDepartmentId(generatedKeys.getInt(1));
@@ -95,12 +105,14 @@ public class DepartmentRepository implements BaseRepository<Department>{
     @Override
     public Department update(Department department) {
 
-        String sql = "UPDATE `departments`" +
-                "SET name = ?," +
-                "WHERE department_id = ?";
+        String sql = "UPDATE `departments` SET name = ? WHERE department_id = ?";
         try (Connection connection = DatabaseManager.connect();
             PreparedStatement statement = connection.prepareStatement(sql)) {
-            writeEntityToDataBase(department, statement);
+
+            statement.setString(1, department.getName());
+            statement.setInt(2, department.getDepartmentId());
+            statement.execute();
+
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -109,9 +121,7 @@ public class DepartmentRepository implements BaseRepository<Department>{
 
     @Override
     public void delete(Integer id) {
-        String sql = "DELETE " +
-                "FROM `departments` " +
-                "WHERE department_id = ?";
+        String sql = "DELETE FROM `departments` WHERE department_id = ?";
         try (Connection connection = DatabaseManager.connect();
             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
@@ -119,20 +129,5 @@ public class DepartmentRepository implements BaseRepository<Department>{
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    //helper method for CRUD operations - avoids duplicate code
-    private Department createEntityInstance(ResultSet resultSet) throws SQLException {
-        Department department = new Department();
-        department.setDepartmentId(resultSet.getInt("department_id"));
-        department.setName(resultSet.getString("name"));
-        return department;
-    }
-
-    //helper method for CRUD operations - avoids duplicate code
-    private void writeEntityToDataBase(Department department, PreparedStatement statement) throws SQLException {
-        statement.setInt(1, department.getDepartmentId());
-        statement.setString(2, department.getName());
-        statement.execute();
     }
 }

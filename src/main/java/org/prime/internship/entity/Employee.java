@@ -2,7 +2,7 @@ package org.prime.internship.entity;
 
 import java.io.Serializable;
 
-public class Employee  implements Serializable {
+public class Employee implements Serializable {
     private static final long serialVersionUID = 2275847963464611489L;
     private int employeeId;
     private String name;

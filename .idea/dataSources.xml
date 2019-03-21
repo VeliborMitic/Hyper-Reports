@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="hyper@localhost" uuid="7d2afe2e-8db9-4277-8bd0-93eb8ecf7f43">
+    <data-source source="LOCAL" name="@localhost" uuid="734af0d3-093f-460d-854d-49b5a0b8d435">
       <driver-ref>mariadb</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mariadb://localhost:3306/hyper</jdbc-url>
+      <jdbc-url>jdbc:mariadb://localhost:3306</jdbc-url>
       <driver-properties>
         <property name="autoReconnect" value="true" />
         <property name="zeroDateTimeBehavior" value="convertToNull" />

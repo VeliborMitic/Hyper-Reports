@@ -1,18 +1,8 @@
 package org.prime.internship.utility;
 
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Util {
 
@@ -22,26 +12,14 @@ public class Util {
         }
     }
 
-    public static List<String> listAllFilesInDirectory () {
-        File[] files = new File("reports/").listFiles();
-
-        return Arrays.asList(files).parallelStream().map(file ->
-                file.getName()).collect(Collectors.toList());
+    public static Timestamp convertLocalDateToTimestamp(LocalDate localDate) {
+        LocalDateTime localDateTime = localDate.atStartOfDay();
+        return Timestamp.valueOf(localDateTime);
     }
 
-    // String[0] - date,  String[1] - companyName,  String[2] - extension
-    public static String[] parseFileName (String fileName){
-        String[] strings = new String[3];
-        String regex = ".*(\\d{4}-\\d{2}-\\d{2})-(.*)\\.(.*)";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher m = pattern.matcher(fileName);
+    public static boolean isDateAfter(LocalDate date1, LocalDate date2){
 
-        if (m.find()) {
-            strings[0] = m.group(1);
-            strings[1] = m.group(2);
-            strings[2] = m.group(3);
-        }
-        return strings;
+        return date1.isAfter(date2);
     }
 
 

@@ -7,8 +7,6 @@ public class DailyReportBean {
     private String department;
     private String employee;
     private Double turnover;
-    private String company;
-    private LocalDate date;
 
     public DailyReportBean() {
     }
@@ -50,22 +48,6 @@ public class DailyReportBean {
 
     public void setDepartment(String department) {
         this.department = department;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
     }
 
     @Override

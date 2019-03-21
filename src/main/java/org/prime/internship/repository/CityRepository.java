@@ -8,21 +8,25 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CityRepository implements BaseRepository <City>{
+public class CityRepository implements BaseRepository<City> {
+
     @Override
     public City getOne(Integer id) {
 
-        String sql = "SELECT * " +
-                "FROM `cities` " +
-                "WHERE city_id = ?";
+        String sql = "SELECT * FROM cities WHERE city_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
+
                 if (resultSet.next()) {
-                    return createEntityInstance(resultSet);
+                    City city = new City();
+                    city.setCityId(resultSet.getInt("city_id"));
+                    city.setName(resultSet.getString("name"));
+
+                    return city;
                 }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -33,17 +37,18 @@ public class CityRepository implements BaseRepository <City>{
 
     public City getOneByName(String name) {
 
-        String sql = "SELECT * " +
-                "FROM `cities` " +
-                "WHERE city_id = ?";
-
+        String sql = "SELECT * FROM cities WHERE name = ?";
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, name);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return createEntityInstance(resultSet);
+                    City city = new City();
+                    city.setCityId(resultSet.getInt("city_id"));
+                    city.setName(resultSet.getString("name"));
+
+                    return city;
                 }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -56,15 +61,16 @@ public class CityRepository implements BaseRepository <City>{
     public List<City> getAll() {
         List<City> cities = new ArrayList<>();
 
-        String sql = "SELECT * " +
-                "FROM `cities`";
-
+        String sql = "SELECT * FROM cities";
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    cities.add(createEntityInstance(resultSet));
+                    City city = new City();
+                    city.setCityId(resultSet.getInt("city_id"));
+                    city.setName(resultSet.getString("name"));
+                    cities.add(city);
                 }
             }
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -76,11 +82,14 @@ public class CityRepository implements BaseRepository <City>{
     @Override
     public City insert(City city) {
 
-        String sql = "INSERT INTO `cities` (city_id, name) "+
-                "VALUES (?, ?)";
+        String sql = "INSERT INTO cities (city_id, name) VALUES (?, ?)";
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            writeEntityToDataBase(city, statement);
+             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            statement.setInt(1, city.getCityId());
+            statement.setString(2, city.getName());
+            statement.execute();
+
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     city.setCityId(generatedKeys.getInt(1));
@@ -95,12 +104,15 @@ public class CityRepository implements BaseRepository <City>{
     @Override
     public City update(City city) {
 
-        String sql = "UPDATE `cities`" +
-                "SET name = ?," +
-                "WHERE city_id = ?";
+        String sql = "UPDATE cities SET name = ? WHERE city_id = ?";
+
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
-            writeEntityToDataBase(city, statement);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, city.getName());
+            statement.setInt(2, city.getCityId());
+            statement.execute();
+
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -109,30 +121,13 @@ public class CityRepository implements BaseRepository <City>{
 
     @Override
     public void delete(Integer id) {
-        String sql = "DELETE " +
-                "FROM `cities` " +
-                "WHERE city_id = ?";
+        String sql = "DELETE FROM cities WHERE city_id = ?";
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.execute();
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
-
-    private City createEntityInstance(ResultSet resultSet) throws SQLException {
-        City city = new City();
-        city.setCityId(resultSet.getInt("city_id"));
-        city.setName(resultSet.getString("name"));
-        return city;
-    }
-
-    //helper method for CRUD operations - avoids duplicate code
-    private void writeEntityToDataBase(City city, PreparedStatement statement) throws SQLException {
-        statement.setString(1, city.getName());
-        statement.setInt(2, city.getCityId());
-        statement.execute();
-    }
-
 }
