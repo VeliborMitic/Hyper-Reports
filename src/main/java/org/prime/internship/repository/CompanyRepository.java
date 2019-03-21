@@ -13,7 +13,6 @@ public class CompanyRepository implements BaseRepository<Company> {
 
     @Override
     public Company getOne(Integer id) {
-
         String sql = "SELECT * FROM companies WHERE company_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
@@ -62,7 +61,6 @@ public class CompanyRepository implements BaseRepository<Company> {
     @Override
     public List<Company> getAll() {
         List<Company> companies = new ArrayList<>();
-
         String sql = "SELECT * FROM companies";
 
         try (Connection connection = DatabaseManager.connect();
@@ -85,8 +83,8 @@ public class CompanyRepository implements BaseRepository<Company> {
 
     @Override
     public Company insert(Company company) {
-
         String sql = "INSERT INTO companies (company_id, name, lastDocument) VALUES (?, ?, ?)";
+
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -108,8 +106,8 @@ public class CompanyRepository implements BaseRepository<Company> {
 
     @Override
     public Company update(Company company) {
-
         String sql = "UPDATE companies SET name = ?, lastDocument = ? WHERE company_id = ?";
+
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -127,6 +125,7 @@ public class CompanyRepository implements BaseRepository<Company> {
     @Override
     public void delete(Integer id) {
         String sql = "DELETE FROM companies WHERE company_id = ?";
+
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);

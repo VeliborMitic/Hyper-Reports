@@ -8,15 +8,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DepartmentRepository implements BaseRepository<Department>{
+public class DepartmentRepository implements BaseRepository<Department> {
 
     @Override
     public Department getOne(Integer id) {
-
         String sql = "SELECT * FROM departments WHERE department_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -35,7 +34,6 @@ public class DepartmentRepository implements BaseRepository<Department>{
     }
 
     public Department getOneByName(String name) {
-
         String sql = "SELECT * FROM departments WHERE name = ?";
 
         try (Connection connection = DatabaseManager.connect();
@@ -60,11 +58,10 @@ public class DepartmentRepository implements BaseRepository<Department>{
     @Override
     public List<Department> getAll() {
         List<Department> departments = new ArrayList<>();
-
         String sql = "SELECT * FROM departments";
 
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Department department = new Department();
@@ -82,10 +79,10 @@ public class DepartmentRepository implements BaseRepository<Department>{
 
     @Override
     public Department insert(Department department) {
-
         String sql = "INSERT INTO departments (department_id, name) VALUES (?, ?)";
+
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setInt(1, department.getDepartmentId());
             statement.setString(2, department.getName());
@@ -104,10 +101,10 @@ public class DepartmentRepository implements BaseRepository<Department>{
 
     @Override
     public Department update(Department department) {
-
         String sql = "UPDATE `departments` SET name = ? WHERE department_id = ?";
+
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, department.getName());
             statement.setInt(2, department.getDepartmentId());
@@ -122,8 +119,9 @@ public class DepartmentRepository implements BaseRepository<Department>{
     @Override
     public void delete(Integer id) {
         String sql = "DELETE FROM `departments` WHERE department_id = ?";
+
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.execute();
         } catch (IOException | SQLException | ClassNotFoundException e) {

@@ -52,7 +52,7 @@ public class DailyReportBean {
 
     @Override
     public String toString() {
-        return  "city='" + city + '\'' +
+        return "city='" + city + '\'' +
                 ", department='" + department + '\'' +
                 ", employee='" + employee + '\'' +
                 ", turnover=" + turnover +

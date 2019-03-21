@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class Util {
 
-    public static void printList (Iterable<?> list){
+    public static void printList(Iterable<?> list) {
         for (Object obj : list) {
             System.out.println(obj);
         }
@@ -17,10 +17,8 @@ public class Util {
         return Timestamp.valueOf(localDateTime);
     }
 
-    public static boolean isDateAfter(LocalDate date1, LocalDate date2){
+    public static boolean isDateAfter(LocalDate date1, LocalDate date2) {
 
         return date1.isAfter(date2);
     }
-
-
 }

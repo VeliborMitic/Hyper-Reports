@@ -5,15 +5,15 @@ import org.prime.internship.repository.TurnoverRepository;
 
 import java.time.LocalDate;
 
-public class TurnoverService {
+class TurnoverService {
 
     private TurnoverRepository turnoverRepository;
 
-    TurnoverService(){
+    TurnoverService() {
         this.turnoverRepository = new TurnoverRepository();
     }
 
-    void processTurnoverToDB(int employeeId, String date, double value){
+    void processTurnoverToDB(int employeeId, String date, double value) {
         Turnover turnover = new Turnover();
         turnover.setEmployeeId(employeeId);
         turnover.setDate(LocalDate.parse(date));

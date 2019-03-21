@@ -16,7 +16,6 @@ public class EmployeeRepository implements BaseRepository<Employee> {
 
     @Override
     public Employee getOne(Integer id) {
-
         String sql = "SELECT * FROM employees WHERE employee_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
@@ -41,7 +40,6 @@ public class EmployeeRepository implements BaseRepository<Employee> {
     }
 
     public Employee getOneByName(String name) {
-
         String sql = "SELECT * FROM employees WHERE name = ?";
 
         try (Connection connection = DatabaseManager.connect();
@@ -68,7 +66,6 @@ public class EmployeeRepository implements BaseRepository<Employee> {
     @Override
     public List<Employee> getAll() {
         List<Employee> employees = new ArrayList<>();
-
         String sql = "SELECT * FROM employees";
 
         try (Connection connection = DatabaseManager.connect();
@@ -93,7 +90,6 @@ public class EmployeeRepository implements BaseRepository<Employee> {
 
     @Override
     public Employee insert(Employee employee) {
-
         String sql = "INSERT INTO employees (employee_id, name, company_id, city_id, department_id) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
@@ -120,7 +116,6 @@ public class EmployeeRepository implements BaseRepository<Employee> {
 
     @Override
     public Employee update(Employee employee) {
-
         String sql = "UPDATE employees SET name = ?, company_id = ?, city_id = ?, department_id = ? " +
                 "WHERE employee_id = ?";
 
@@ -142,7 +137,6 @@ public class EmployeeRepository implements BaseRepository<Employee> {
 
     @Override
     public void delete(Integer id) {
-
         String sql = "DELETE FROM employees WHERE employee_id = ?";
 
         try (Connection connection = DatabaseManager.connect();

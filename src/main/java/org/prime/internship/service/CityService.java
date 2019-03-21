@@ -3,14 +3,14 @@ package org.prime.internship.service;
 import org.prime.internship.entity.City;
 import org.prime.internship.repository.CityRepository;
 
-public class CityService {
+class CityService {
     private CityRepository cityRepository;
 
-    CityService(){
+    CityService() {
         this.cityRepository = new CityRepository();
     }
 
-    City processCityToDB (String name){
+    City processCityToDB(String name) {
         City city;
         if (cityRepository.getOneByName(name) != null) {
             city = cityRepository.getOneByName(name);

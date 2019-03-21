@@ -16,7 +16,6 @@ class FileService {
     private List<String> allFiles;
     private List<String> newFiles;
 
-
     FileService() {
         this.companyService = new CompanyService();
         this.allFiles = new ArrayList<>();

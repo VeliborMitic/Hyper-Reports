@@ -12,7 +12,6 @@ public class CityRepository implements BaseRepository<City> {
 
     @Override
     public City getOne(Integer id) {
-
         String sql = "SELECT * FROM cities WHERE city_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
@@ -36,8 +35,8 @@ public class CityRepository implements BaseRepository<City> {
     }
 
     public City getOneByName(String name) {
-
         String sql = "SELECT * FROM cities WHERE name = ?";
+
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, name);
@@ -60,8 +59,8 @@ public class CityRepository implements BaseRepository<City> {
     @Override
     public List<City> getAll() {
         List<City> cities = new ArrayList<>();
-
         String sql = "SELECT * FROM cities";
+
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -81,8 +80,8 @@ public class CityRepository implements BaseRepository<City> {
 
     @Override
     public City insert(City city) {
-
         String sql = "INSERT INTO cities (city_id, name) VALUES (?, ?)";
+
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -103,7 +102,6 @@ public class CityRepository implements BaseRepository<City> {
 
     @Override
     public City update(City city) {
-
         String sql = "UPDATE cities SET name = ? WHERE city_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
@@ -122,6 +120,7 @@ public class CityRepository implements BaseRepository<City> {
     @Override
     public void delete(Integer id) {
         String sql = "DELETE FROM cities WHERE city_id = ?";
+
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);

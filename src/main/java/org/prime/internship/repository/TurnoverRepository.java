@@ -9,15 +9,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TurnoverRepository implements BaseRepository<Turnover>{
+public class TurnoverRepository implements BaseRepository<Turnover> {
 
     @Override
     public Turnover getOne(Integer id) {
-
         String sql = "SELECT * FROM turnovers WHERE turnover_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -40,11 +39,10 @@ public class TurnoverRepository implements BaseRepository<Turnover>{
     @Override
     public List<Turnover> getAll() {
         List<Turnover> turnovers = new ArrayList<>();
-
         String sql = "SELECT * FROM turnovers";
 
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
@@ -53,6 +51,7 @@ public class TurnoverRepository implements BaseRepository<Turnover>{
                     turnover.setEmployeeId(resultSet.getInt("employee_id"));
                     turnover.setDate(resultSet.getTimestamp("date").toLocalDateTime().toLocalDate());
                     turnover.setTurnoverValue(resultSet.getDouble("turnover"));
+
                     turnovers.add(turnover);
                 }
             }
@@ -64,10 +63,11 @@ public class TurnoverRepository implements BaseRepository<Turnover>{
 
     @Override
     public Turnover insert(Turnover turnover) {
-        String sql = "INSERT INTO turnovers (turnover_id, employee_id, date, turnover) "+
+        String sql = "INSERT INTO turnovers (turnover_id, employee_id, date, turnover) " +
                 "VALUES (?, ?, ?, ?)";
+
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setInt(1, turnover.getTurnoverId());
             statement.setInt(2, turnover.getEmployeeId());
@@ -92,8 +92,9 @@ public class TurnoverRepository implements BaseRepository<Turnover>{
 
         String sql = "UPDATE turnovers SET employee_id = ?, date = ?, turnover = ? " +
                 "WHERE turnover_id = ?";
+
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, turnover.getEmployeeId());
             statement.setTimestamp(2, Util.convertLocalDateToTimestamp(turnover.getDate()));
@@ -105,15 +106,16 @@ public class TurnoverRepository implements BaseRepository<Turnover>{
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return null;
-        //return turnover;
+
+        return turnover;
     }
 
     @Override
     public void delete(Integer id) {
         String sql = "DELETE FROM turnovers WHERE turnover_id = ?";
+
         try (Connection connection = DatabaseManager.connect();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.execute();
         } catch (IOException | SQLException | ClassNotFoundException e) {

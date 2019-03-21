@@ -26,7 +26,7 @@ public class ReportService {
         this.fileService = new FileService();
     }
 
-    public void writeAllFilesFromResourceToDB() throws IOException, XMLStreamException {
+    public void writeFilesFromResourceToDB() throws IOException, XMLStreamException {
         List<String> newFilesList = fileService.listNewFilesInDirectory();
 
         if (!newFilesList.isEmpty()) {
@@ -60,6 +60,4 @@ public class ReportService {
                 bean.getTurnover()
         ));
     }
-
-
 }
