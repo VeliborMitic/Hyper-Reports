@@ -16,7 +16,8 @@ class FileService {
     private CompanyService companyService;
     private List<String> allFiles;
     private List<String> newFiles;
-    private final String PATH = "E:\\_PRIME\\HyperReports_Reports/";
+    private static final String PATH = "E:\\_PRIME\\HyperReports_Reports/";
+    private static final String REGEX = ".*(\\d{4}-\\d{2}-\\d{2})-(.*)\\.(.*)";
 
     FileService() {
         this.companyService = new CompanyService();
@@ -50,8 +51,7 @@ class FileService {
     // String[0] - date,  String[1] - companyName,  String[2] - extension
     String[] parseFileName(String fileName) {
         String[] strings = new String[3];
-        String regex = ".*(\\d{4}-\\d{2}-\\d{2})-(.*)\\.(.*)";
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile(REGEX);
         Matcher m = pattern.matcher(fileName);
 
         if (m.find()) {
@@ -66,4 +66,3 @@ class FileService {
         return PATH;
     }
 }
-
