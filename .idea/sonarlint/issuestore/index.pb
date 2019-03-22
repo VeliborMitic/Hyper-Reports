@@ -29,12 +29,6 @@ O
 reports/2018-10-01-brainbox.xml,c\c\cc7065b5396c03212714899b64b47a46130e2ce3
 Q
 !reports/2018-10-01-browseblab.xml,3\3\3314f1dbf4591ffbf06ab07269c4adc796ed4a96
-P
- reports/2018-10-01-browsecat.xml,9\b\9bd7f5513f00186ced8ef0878e64f4ccfba60a1b
-Q
-!reports/2018-10-01-bubbletube.csv,0\9\09d97e37207fd7fd9806d3a28fd6b55446620129
-O
-reports/2018-10-01-buzzster.csv,7\d\7d93baef186fcb8587976b00a1e077687599b669
 M
 reports/2018-10-01-ailane.csv,2\a\2aa09dd6b60e096445f3faa2bca23c5236b708b3
 i
