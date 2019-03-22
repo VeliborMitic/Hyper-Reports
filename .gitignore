@@ -11,6 +11,11 @@
 # Generated files
 .idea/**/contentModel.xml
 
+.idea/sonarlint
+.idea/codeStyles
+.idea/inspectionProfiles
+
+
 # Sensitive or high-churn files
 .idea/**/dataSources/
 .idea/**/dataSources.ids
@@ -43,6 +48,7 @@ cmake-build-*/
 
 # IntelliJ
 out/
+
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/

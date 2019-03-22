@@ -1,6 +1,7 @@
 package org.prime.internship.parser;
 
-import org.prime.internship.entity.dto.DailyReportBean;
+import com.sun.xml.internal.bind.v2.TODO;
+import org.prime.internship.entity.dto.DailyReport;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -9,46 +10,45 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class XMLParser extends BaseParser {
-    private List<DailyReportBean> dailyReportBeanList;
+public class XMLParser {
+    private List<DailyReport> dailyReportList;
     private String cityName = "";
     private String departmentName = "";
     private String employeeName = "";
     private String turnover = "";
 
-    public XMLParser(String fileName, String companyName, LocalDate reportDate) {
-        super(fileName, companyName, reportDate);
-        this.dailyReportBeanList = new ArrayList<>();
+    public XMLParser() {
+        this.dailyReportList = new ArrayList<>();
     }
 
-    public List<DailyReportBean> readReportBeans() throws FileNotFoundException, XMLStreamException {
+    public List<DailyReport> readReportBeans(String fileName) throws FileNotFoundException, XMLStreamException {
         boolean bEmployee = false;
         boolean bTurnover = false;
 
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLEventReader eventReader =
-                factory.createXMLEventReader(new FileReader(this.getFileName()));
+        XMLEventReader eventReader = factory.createXMLEventReader(new FileReader(fileName));
 
         while (eventReader.hasNext()) {
             XMLEvent event = eventReader.nextEvent();
 
             switch (event.getEventType()) {
 
+                //TODO: Refactor parser:
+                // parseStartElement(XMLEvent event), parseCharacterElement(XMLEvent event) and parseEndElement(XMLEvent event)
                 case XMLStreamConstants.START_ELEMENT:
                     StartElement startElement = event.asStartElement();
                     String qName = startElement.getName().getLocalPart();
 
-                    if (qName.equalsIgnoreCase("city") || qName.equalsIgnoreCase("department")) {
+                    if (qName.equalsIgnoreCase("city") ||
+                            qName.equalsIgnoreCase("department")) {
                         Iterator<Attribute> attributes = startElement.getAttributes();
                         String startElementValue = attributes.next().getValue();
                         if (qName.equalsIgnoreCase("City")) {
                             cityName = startElementValue;
-
                         } else {
                             departmentName = startElementValue;
                         }
@@ -73,14 +73,13 @@ public class XMLParser extends BaseParser {
 
                 case XMLStreamConstants.END_ELEMENT:
                     EndElement endElement = event.asEndElement();
-
                     if (endElement.getName().getLocalPart().equalsIgnoreCase("department")) {
-                        this.dailyReportBeanList.add(new DailyReportBean(this.getCompanyName(), this.getReportDate(),cityName, departmentName, employeeName, Double.parseDouble(turnover)));
+                        this.dailyReportList.add(new DailyReport(cityName, departmentName, employeeName, Double.parseDouble(turnover)));
                     }
                     break;
             }
         }
-        return dailyReportBeanList;
+        return dailyReportList;
     }
 }
 

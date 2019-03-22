@@ -1,28 +1,29 @@
 package org.prime.internship.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-
-public class Turnover {
-    private int id;
-    private double turnover;
+public class Turnover implements Serializable {
+    private static final long serialVersionUID = 6977947445823075897L;
+    private int turnoverId;
+    private int employeeId;
     private LocalDate date;
-    private Employee employee;
+    private double turnoverValue;
 
-    public int getId() {
-        return id;
+    public int getTurnoverId() {
+        return turnoverId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTurnoverId(int turnoverId) {
+        this.turnoverId = turnoverId;
     }
 
-    public double getTurnover() {
-        return turnover;
+    public int getEmployeeId() {
+        return employeeId;
     }
 
-    public void setTurnover(double turnover) {
-        this.turnover = turnover;
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 
     public LocalDate getDate() {
@@ -33,11 +34,11 @@ public class Turnover {
         this.date = date;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public double getTurnoverValue() {
+        return turnoverValue;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setTurnoverValue(double turnoverValue) {
+        this.turnoverValue = turnoverValue;
     }
 }

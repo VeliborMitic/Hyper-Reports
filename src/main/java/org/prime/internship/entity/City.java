@@ -1,18 +1,18 @@
 package org.prime.internship.entity;
 
-import java.util.List;
+import java.io.Serializable;
 
-
-public class City {
-    private int id;
+public class City implements Serializable {
+    private static final long serialVersionUID = -7573825277866052905L;
+    private int cityId;
     private String name;
 
-    public int getId() {
-        return id;
+    public int getCityId() {
+        return cityId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
     }
 
     public String getName() {

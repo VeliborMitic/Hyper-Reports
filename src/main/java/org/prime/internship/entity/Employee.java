@@ -1,22 +1,21 @@
 package org.prime.internship.entity;
 
+import java.io.Serializable;
 
-import java.util.List;
-
-public class Employee {
-    private int id;
+public class Employee implements Serializable {
+    private static final long serialVersionUID = 2275847963464611489L;
+    private int employeeId;
     private String name;
-    private Company company;
-    private City city;
-    private Department department;
-    private List<Turnover> turnovers;
+    private int companyId;
+    private int cityId;
+    private int departmentId;
 
-    public int getId() {
-        return id;
+    public int getEmployeeId() {
+        return employeeId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getName() {
@@ -27,35 +26,27 @@ public class Employee {
         this.name = name;
     }
 
-    public Company getCompany() {
-        return company;
+    public int getCompanyId() {
+        return companyId;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
     }
 
-    public City getCity() {
-        return city;
+    public int getCityId() {
+        return cityId;
     }
 
-    public void setCity(City city) {
-        this.city = city;
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
     }
 
-    public Department getDepartment() {
-        return department;
+    public int getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
-
-    public List<Turnover> getTurnovers() {
-        return turnovers;
-    }
-
-    public void setTurnovers(List<Turnover> turnovers) {
-        this.turnovers = turnovers;
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 }

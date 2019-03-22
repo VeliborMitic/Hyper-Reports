@@ -1,22 +1,24 @@
 package org.prime.internship.utility;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Util {
 
-    public static void printList (Iterable<?> list){
+    public static void printList(Iterable<?> list) {
         for (Object obj : list) {
             System.out.println(obj);
         }
     }
 
-    public static List<String> listAllFilesInDirectory () {
-        File[] files = new File("reports/").listFiles();
+    public static Timestamp convertLocalDateToTimestamp(LocalDate localDate) {
+        LocalDateTime localDateTime = localDate.atStartOfDay();
+        return Timestamp.valueOf(localDateTime);
+    }
 
-        return Arrays.asList(files).parallelStream().map(file ->
-            file.getName()).collect(Collectors.toList());
+    public static boolean isDateAfter(LocalDate date1, LocalDate date2) {
+
+        return date1.isAfter(date2);
     }
 }

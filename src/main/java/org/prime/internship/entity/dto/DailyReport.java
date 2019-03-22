@@ -2,40 +2,20 @@ package org.prime.internship.entity.dto;
 
 import java.time.LocalDate;
 
-public class DailyReportBean {
-    private String companyName;
-    private LocalDate date;
+public class DailyReport {
     private String city;
     private String department;
     private String employee;
     private Double turnover;
 
-    public DailyReportBean() {
+    public DailyReport() {
     }
 
-    public DailyReportBean(String companyName, LocalDate date, String city, String department, String employee, Double turnover) {
-        this.companyName = companyName;
-        this.date = date;
+    public DailyReport(String city, String department, String employee, Double turnover) {
         this.city = city;
         this.department = department;
         this.employee = employee;
         this.turnover = turnover;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
     }
 
     public String getCity() {
@@ -72,10 +52,7 @@ public class DailyReportBean {
 
     @Override
     public String toString() {
-        return "DailyReportBean{" +
-                "companyName='" + companyName + '\'' +
-                ", date=" + date +
-                ", city='" + city + '\'' +
+        return "city='" + city + '\'' +
                 ", department='" + department + '\'' +
                 ", employee='" + employee + '\'' +
                 ", turnover=" + turnover +
