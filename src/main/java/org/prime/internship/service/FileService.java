@@ -16,6 +16,7 @@ class FileService {
     private CompanyService companyService;
     private List<String> allFiles;
     private List<String> newFiles;
+    private final String PATH = "E:\\_PRIME\\HyperReports_Reports/";
 
     FileService() {
         this.companyService = new CompanyService();
@@ -24,22 +25,22 @@ class FileService {
     }
 
     List<String> listNewFilesInDirectory() {
-        allFiles = Arrays.asList(new File("reports/").listFiles()).parallelStream().map(file ->
+        allFiles = Arrays.asList(new File(PATH).listFiles()).parallelStream().map(file ->
                 file.getName()).collect(Collectors.toList());
         if (!allFiles.isEmpty()) {
             for (String fileName : allFiles) {
                 String[] attributes = parseFileName(fileName);
 
                 Optional<Company> company = Optional.ofNullable(companyService.getOneByName(attributes[1]));
-                if (!company.isPresent()){
-                        newFiles.add(fileName);
-                }else{
-                    if (LocalDate.parse(attributes[0]).isAfter(companyService.getOneByName(attributes[1]).getLastDocumentDate())){
+                if (!company.isPresent()) {
+                    newFiles.add(fileName);
+                } else {
+                    if (LocalDate.parse(attributes[0]).isAfter(companyService.getOneByName(attributes[1]).getLastDocumentDate())) {
                         newFiles.add(fileName);
                     }
                 }
             }
-        }else{
+        } else {
             System.out.println("Resource diretctory is empty!");
             System.exit(99);
         }
@@ -59,6 +60,10 @@ class FileService {
             strings[2] = m.group(3);
         }
         return strings;
+    }
+
+    String getPATH() {
+        return PATH;
     }
 }
 
