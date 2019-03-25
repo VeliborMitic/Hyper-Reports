@@ -2,7 +2,7 @@ package org.prime.internship.repository;
 
 import org.prime.internship.database.DatabaseManager;
 import org.prime.internship.entity.Company;
-import org.prime.internship.utility.Util;
+import org.prime.internship.utility.DateUtils;
 
 import java.io.IOException;
 import java.sql.*;
@@ -90,7 +90,7 @@ public class CompanyRepository implements BaseRepository<Company> {
 
             statement.setInt(1, company.getCompanyId());
             statement.setString(2, company.getName());
-            statement.setTimestamp(3, Util.convertLocalDateToTimestamp(company.getLastDocumentDate()));
+            statement.setTimestamp(3, DateUtils.convertLocalDateToTimestamp(company.getLastDocumentDate()));
             statement.execute();
 
             ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -112,7 +112,7 @@ public class CompanyRepository implements BaseRepository<Company> {
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, company.getName());
-            statement.setTimestamp(2, Util.convertLocalDateToTimestamp(company.getLastDocumentDate()));
+            statement.setTimestamp(2, DateUtils.convertLocalDateToTimestamp(company.getLastDocumentDate()));
             statement.setInt(3, company.getCompanyId());
             statement.execute();
 

@@ -13,7 +13,7 @@ class EmployeeService {
 
     Employee processEmployeeToDB(String name, int companyId, int cityID, int departmentId) {
         Employee employee;
-
+        //Check if employee exists in DB, if not, use INSERT repository method
         if (employeeRepository.getOneByName(name) == null) {
             employee = new Employee();
             employee.setName(name);
@@ -22,6 +22,7 @@ class EmployeeService {
             employee.setDepartmentId(departmentId);
             employee.setEmployeeId(employeeRepository.insert(employee).getEmployeeId());
         } else {
+            // If employee already exists in DB, use UPDATE repository method
             employee = employeeRepository.getOneByName(name);
             employee.setCompanyId(companyId);
             employee.setCityId(cityID);

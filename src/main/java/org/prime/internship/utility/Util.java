@@ -29,11 +29,6 @@ public class Util {
         }
     }
 
-    public static Timestamp convertLocalDateToTimestamp(LocalDate localDate) {
-        LocalDateTime localDateTime = localDate.atStartOfDay();
-        return Timestamp.valueOf(localDateTime);
-    }
-
     // String[0] - date,  String[1] - companyName,  String[2] - extension
     public static String[] parseFileName(String fileName) {
         String[] strings = new String[3];

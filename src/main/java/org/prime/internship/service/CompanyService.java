@@ -14,12 +14,14 @@ class CompanyService {
 
     Company processCompanyToDB(String name, String date) {
         Company company;
+        //Check if company exists in DB, if not, use INSERT repository method
         if (companyRepository.getOneByName(name) == null) {
             company = new Company();
             company.setName(name);
             company.setLastDocumentDate(LocalDate.parse(date));
             company.setCompanyId(companyRepository.insert(company).getCompanyId());
         } else {
+            // If company already exists in DB, use UPDATE repository method
             company = companyRepository.getOneByName(name);
             company.setLastDocumentDate(LocalDate.parse(date));
             companyRepository.update(company);

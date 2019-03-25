@@ -2,7 +2,7 @@ package org.prime.internship.repository;
 
 import org.prime.internship.database.DatabaseManager;
 import org.prime.internship.entity.Turnover;
-import org.prime.internship.utility.Util;
+import org.prime.internship.utility.DateUtils;
 
 import java.io.IOException;
 import java.sql.*;
@@ -71,7 +71,7 @@ public class TurnoverRepository implements BaseRepository<Turnover> {
 
             statement.setInt(1, turnover.getTurnoverId());
             statement.setInt(2, turnover.getEmployeeId());
-            statement.setTimestamp(3, Util.convertLocalDateToTimestamp(turnover.getDate()));
+            statement.setTimestamp(3, DateUtils.convertLocalDateToTimestamp(turnover.getDate()));
             statement.setDouble(4, turnover.getTurnoverValue());
 
             statement.execute();
@@ -97,7 +97,7 @@ public class TurnoverRepository implements BaseRepository<Turnover> {
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, turnover.getEmployeeId());
-            statement.setTimestamp(2, Util.convertLocalDateToTimestamp(turnover.getDate()));
+            statement.setTimestamp(2, DateUtils.convertLocalDateToTimestamp(turnover.getDate()));
             statement.setDouble(3, turnover.getTurnoverValue());
             statement.setInt(4, turnover.getTurnoverId());
 
