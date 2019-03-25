@@ -34,12 +34,12 @@ public class ReportService {
                 String[] attributes = fileService.parseFileName(fileName);
 
                 if (attributes[2].equalsIgnoreCase("csv")) {
-                    dailyReportList = new CSVParser().readReportBeans("reports/" + fileName);
+                    dailyReportList = new CSVParser().readReportBeans(fileService.getPATH() + fileName);
 
                     processFile(attributes);
 
                 } else if (attributes[2].equalsIgnoreCase("xml")) {
-                    dailyReportList = new XMLParser().readReportBeans("reports/" + fileName);
+                    dailyReportList = new XMLParser().readReportBeans(fileService.getPATH() + fileName);
 
                     processFile(attributes);
                 }

@@ -16,6 +16,8 @@ class FileService {
     private CompanyService companyService;
     private List<String> allFiles;
     private List<String> newFiles;
+    private static final String PATH = "E:\\_PRIME\\HyperReports_Reports/";
+    private static final String REGEX = ".*(\\d{4}-\\d{2}-\\d{2})-(.*)\\.(.*)";
 
     FileService() {
         this.companyService = new CompanyService();
@@ -24,22 +26,22 @@ class FileService {
     }
 
     List<String> listNewFilesInDirectory() {
-        allFiles = Arrays.asList(new File("reports/").listFiles()).parallelStream().map(file ->
+        allFiles = Arrays.asList(new File(PATH).listFiles()).parallelStream().map(file ->
                 file.getName()).collect(Collectors.toList());
         if (!allFiles.isEmpty()) {
             for (String fileName : allFiles) {
                 String[] attributes = parseFileName(fileName);
 
                 Optional<Company> company = Optional.ofNullable(companyService.getOneByName(attributes[1]));
-                if (!company.isPresent()){
-                        newFiles.add(fileName);
-                }else{
-                    if (LocalDate.parse(attributes[0]).isAfter(companyService.getOneByName(attributes[1]).getLastDocumentDate())){
+                if (!company.isPresent()) {
+                    newFiles.add(fileName);
+                } else {
+                    if (LocalDate.parse(attributes[0]).isAfter(companyService.getOneByName(attributes[1]).getLastDocumentDate())) {
                         newFiles.add(fileName);
                     }
                 }
             }
-        }else{
+        } else {
             System.out.println("Resource diretctory is empty!");
             System.exit(99);
         }
@@ -49,8 +51,7 @@ class FileService {
     // String[0] - date,  String[1] - companyName,  String[2] - extension
     String[] parseFileName(String fileName) {
         String[] strings = new String[3];
-        String regex = ".*(\\d{4}-\\d{2}-\\d{2})-(.*)\\.(.*)";
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile(REGEX);
         Matcher m = pattern.matcher(fileName);
 
         if (m.find()) {
@@ -60,5 +61,8 @@ class FileService {
         }
         return strings;
     }
-}
 
+    String getPATH() {
+        return PATH;
+    }
+}
