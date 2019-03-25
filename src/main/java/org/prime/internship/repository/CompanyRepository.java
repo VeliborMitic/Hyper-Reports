@@ -21,13 +21,13 @@ public class CompanyRepository implements BaseRepository<Company> {
 
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                if (resultSet.next()) {
-                    Company company = new Company();
-                    company.setCompanyId(resultSet.getInt("company_id"));
-                    company.setName(resultSet.getString("name"));
-                    company.setLastDocumentDate(resultSet.getTimestamp("lastDocument").toLocalDateTime().toLocalDate());
-                    return company;
-                }
+
+                Company company = new Company();
+                company.setCompanyId(resultSet.getInt("company_id"));
+                company.setName(resultSet.getString("name"));
+                company.setLastDocumentDate(resultSet.getTimestamp("lastDocument").toLocalDateTime().toLocalDate());
+                return company;
+
             }
 
         } catch (IOException | SQLException | ClassNotFoundException e) {

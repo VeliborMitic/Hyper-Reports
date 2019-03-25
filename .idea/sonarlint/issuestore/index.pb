@@ -21,18 +21,6 @@ h
 8src/main/java/org/prime/internship/parser/XMLParser.java,6\0\6006bebc863e43ed15474f0726c0837b8ba165ef
 g
 7src/main/java/org/prime/internship/entity/Employee.java,c\5\c52344ecd1ec27df00c56f896a2c4e0d9f703344
-L
-reports/2018-10-01-agivu.xml,7\e\7e9b6641c1d8dc967bd54cab6b305c4ca12b9a96
-O
-reports/2018-10-01-blogtags.csv,5\f\5f5e1c9cefb3b326906dd3ca28fed23c94d3473a
-O
-reports/2018-10-01-brainbox.xml,c\c\cc7065b5396c03212714899b64b47a46130e2ce3
-Q
-!reports/2018-10-01-browseblab.xml,3\3\3314f1dbf4591ffbf06ab07269c4adc796ed4a96
-M
-reports/2018-10-01-ailane.csv,2\a\2aa09dd6b60e096445f3faa2bca23c5236b708b3
-i
-9src/main/java/org/prime/internship/utility/URLReader.java,4\e\4e52446cf44190438a0637854de931ae9e82ff47
 d
 4src/main/java/org/prime/internship/utility/Util.java,d\0\d05a6eb61155c50e4cea21a5aecf7a79c23d744b
 q
@@ -66,5 +54,5 @@ o
 ?src/main/java/org/prime/internship/service/TurnoverService.java,1\7\179b2b90cdf35b5acd92b2ad1feb9e9d1b204726
 n
 >src/main/java/org/prime/internship/entity/dto/DailyReport.java,0\9\098cb27c475d4d91f7d1c7441261790db70719eb
-k
-;src/main/java/org/prime/internship/service/FileService.java,0\4\043721dfdf07e7a0879a4ee23892438818230e9d
+v
+Fsrc/main/java/org/prime/internship/service/ReportGeneratorService.java,4\8\4854e6f3fd8c03d8a59b76167f2b1ad15c101771
