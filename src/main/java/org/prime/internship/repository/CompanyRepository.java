@@ -1,13 +1,18 @@
 package org.prime.internship.repository;
 
+import org.jetbrains.annotations.Nullable;
 import org.prime.internship.database.DatabaseManager;
 import org.prime.internship.entity.Company;
 import org.prime.internship.utility.DateUtils;
 
 import java.io.IOException;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CompanyRepository implements BaseRepository<Company> {
 
@@ -19,16 +24,8 @@ public class CompanyRepository implements BaseRepository<Company> {
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
 
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-
-                Company company = new Company();
-                company.setCompanyId(resultSet.getInt("company_id"));
-                company.setName(resultSet.getString("name"));
-                company.setLastDocumentDate(resultSet.getTimestamp("lastDocument").toLocalDateTime().toLocalDate());
-                return company;
-
-            }
+            Company company = getCompany(statement);
+            if (company != null) return company;
 
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -43,14 +40,8 @@ public class CompanyRepository implements BaseRepository<Company> {
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, name);
 
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                Company company = new Company();
-                company.setCompanyId(resultSet.getInt("company_id"));
-                company.setName(resultSet.getString("name"));
-                company.setLastDocumentDate(resultSet.getTimestamp("lastDocument").toLocalDateTime().toLocalDate());
-                return company;
-            }
+            Company company = getCompany(statement);
+            if (company != null) return company;
 
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -58,21 +49,36 @@ public class CompanyRepository implements BaseRepository<Company> {
         return null;
     }
 
+    @Nullable
+    private Company getCompany(PreparedStatement statement) throws SQLException {
+        try (ResultSet resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                createCompany(resultSet);
+            }
+        }
+        return null;
+    }
+
+    private Company createCompany(ResultSet resultSet) throws SQLException {
+        Company company = new Company();
+        company.setCompanyId(resultSet.getInt("company_id"));
+        company.setName(resultSet.getString("name"));
+        company.setLastDocumentDate(resultSet.getTimestamp("lastDocument").toLocalDateTime().toLocalDate());
+        return company;
+    }
+
     @Override
-    public List<Company> getAll() {
-        List<Company> companies = new ArrayList<>();
+    public Set<Company> getAll() {
+        Set<Company> companies = new HashSet<>();
         String sql = "SELECT * FROM companies";
 
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Company company = new Company();
-                company.setCompanyId(resultSet.getInt("company_id"));
-                company.setName(resultSet.getString("name"));
-                company.setLastDocumentDate(resultSet.getTimestamp("lastDocument").toLocalDateTime().toLocalDate());
-                companies.add(company);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    companies.add(createCompany(resultSet));
+                }
             }
 
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -93,9 +99,10 @@ public class CompanyRepository implements BaseRepository<Company> {
             statement.setTimestamp(3, DateUtils.convertLocalDateToTimestamp(company.getLastDocumentDate()));
             statement.execute();
 
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                company.setCompanyId(generatedKeys.getInt(1));
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    company.setCompanyId(generatedKeys.getInt(1));
+                }
             }
 
         } catch (IOException | SQLException | ClassNotFoundException e) {

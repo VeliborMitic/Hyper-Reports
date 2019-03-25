@@ -10,17 +10,17 @@ import org.supercsv.prefs.CsvPreference;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CSVParser {
-    private List<DailyReport> dailyReportBeansList;
+    private Set<DailyReport> dailyReportBeansList;
 
     public CSVParser() {
-        this.dailyReportBeansList = new ArrayList<>();
+        this.dailyReportBeansList = new HashSet<>();
     }
 
-    public List<DailyReport> readReportBeans(String fileName) throws IOException {
+    public Set<DailyReport> readReportBeans(String fileName) throws IOException {
         DailyReport dailyReport;
         try (ICsvBeanReader beanReader = new CsvBeanReader(
                 new FileReader(fileName), CsvPreference.STANDARD_PREFERENCE)) {

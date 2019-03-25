@@ -9,9 +9,9 @@ import org.prime.internship.utility.Util;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class DataService {
     private CompanyService companyService;
@@ -19,9 +19,9 @@ public class DataService {
     private CityService cityService;
     private EmployeeService employeeService;
     private TurnoverService turnoverService;
-    private List<DailyReport> dailyReportList;
-    private List<String> allFiles;
-    private List<String> newFiles;
+    private Set<DailyReport> dailyReportList;
+    private Set<String> allFiles;
+    private Set<String> newFiles;
 
     public DataService() {
         this.companyService = new CompanyService();
@@ -29,13 +29,13 @@ public class DataService {
         this.cityService = new CityService();
         this.employeeService = new EmployeeService();
         this.turnoverService = new TurnoverService();
-        this.allFiles = new ArrayList<>();
-        this.newFiles = new ArrayList<>();
+        this.allFiles = new HashSet<>();
+        this.newFiles = new HashSet<>();
     }
 
     public void writeFilesFromResourceToDB() throws IOException, XMLStreamException {
+        Set<String> newFilesList = listNewFilesInDirectory();
 
-        List<String> newFilesList = listNewFilesInDirectory();
         if (!newFilesList.isEmpty()) {
             for (String fileName : newFilesList) {
                 String[] attributes = Util.parseFileName(fileName);
@@ -66,7 +66,7 @@ public class DataService {
         ));
     }
 
-    private List<String> listNewFilesInDirectory() {
+    private Set<String> listNewFilesInDirectory() {
         allFiles = Util.findFilesInLocalDir();
 
         if (!allFiles.isEmpty()) {

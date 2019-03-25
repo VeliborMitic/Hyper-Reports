@@ -5,8 +5,8 @@ import org.prime.internship.entity.Department;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DepartmentRepository implements BaseRepository<Department> {
 
@@ -56,8 +56,8 @@ public class DepartmentRepository implements BaseRepository<Department> {
     }
 
     @Override
-    public List<Department> getAll() {
-        List<Department> departments = new ArrayList<>();
+    public Set<Department> getAll() {
+        Set<Department> departments = new HashSet<>();
         String sql = "SELECT * FROM departments";
 
         try (Connection connection = DatabaseManager.connect();

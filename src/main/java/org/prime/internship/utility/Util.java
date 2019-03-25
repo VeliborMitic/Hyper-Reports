@@ -8,12 +8,9 @@ import org.jsoup.nodes.Element;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -43,13 +40,15 @@ public class Util {
         return strings;
     }
 
-    public static List<String> findFilesInLocalDir() {
-        return Arrays.asList(new File(PATH).listFiles()).parallelStream().map(file ->
-                file.getName()).collect(Collectors.toList());
+    public static Set<String> findFilesInLocalDir() {
+        return new HashSet<>(Arrays.asList(new File(PATH).listFiles()).parallelStream().map(file ->
+                file.getName()).collect(Collectors.toList()));
     }
 
     public static void downloadNewUrlFiles() throws IOException {
-        List<String> remoteDirFileNames = new ArrayList<>();
+        Set<String> remoteDirFileNames = new HashSet<>();
+        Set<String> localDirFileNames = findFilesInLocalDir();
+
         Pattern pattern = Pattern.compile(REGEX);
 
         Document doc = Jsoup.connect(URL).get();
@@ -60,7 +59,7 @@ public class Util {
             }
         }
         for (String fileName : remoteDirFileNames) {
-            if (!findFilesInLocalDir().contains(fileName)) {
+            if (!localDirFileNames.contains(fileName)) {
                 FileUtils.copyURLToFile(
                         new URL(URL + fileName),
                         new File(PATH + fileName),

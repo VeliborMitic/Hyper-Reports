@@ -5,8 +5,8 @@ import org.prime.internship.entity.City;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CityRepository implements BaseRepository<City> {
 
@@ -57,8 +57,8 @@ public class CityRepository implements BaseRepository<City> {
     }
 
     @Override
-    public List<City> getAll() {
-        List<City> cities = new ArrayList<>();
+    public Set<City> getAll() {
+        Set<City> cities = new HashSet<>();
         String sql = "SELECT * FROM cities";
 
         try (Connection connection = DatabaseManager.connect();

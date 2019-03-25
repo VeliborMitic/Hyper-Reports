@@ -13,25 +13,25 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 public class XMLParser {
-    private List<DailyReport> dailyReportList;
+    private Set<DailyReport> dailyReportList;
     private String cityName = "";
     private String departmentName = "";
     private String employeeName = "";
     private String turnover = "";
 
     public XMLParser() {
-        this.dailyReportList = new ArrayList<>();
+        this.dailyReportList = new HashSet<>();
     }
 
     private boolean bEmployee = false;
     private boolean bTurnover = false;
 
-    public List<DailyReport> readReportBeans(String fileName) throws FileNotFoundException, XMLStreamException {
+    public Set<DailyReport> readReportBeans(String fileName) throws FileNotFoundException, XMLStreamException {
 
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLEventReader eventReader = factory.createXMLEventReader(new FileReader(fileName));
