@@ -1,6 +1,6 @@
 package org.prime.internship.parser;
 
-import org.prime.internship.entity.dto.DailyReport;
+import org.prime.internship.entity.dto.ParsedDataDTO;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -18,20 +18,20 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class XMLParser {
-    private Set<DailyReport> dailyReportList;
+    private Set<ParsedDataDTO> parsedDataDTOList;
     private String cityName = "";
     private String departmentName = "";
     private String employeeName = "";
     private String turnover = "";
 
     public XMLParser() {
-        this.dailyReportList = new HashSet<>();
+        this.parsedDataDTOList = new HashSet<>();
     }
 
     private boolean bEmployee = false;
     private boolean bTurnover = false;
 
-    public Set<DailyReport> readReportBeans(String fileName) throws FileNotFoundException, XMLStreamException {
+    public Set<ParsedDataDTO> readReportBeans(String fileName) throws FileNotFoundException, XMLStreamException {
 
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLEventReader eventReader = factory.createXMLEventReader(new FileReader(fileName));
@@ -54,7 +54,7 @@ public class XMLParser {
                     break;
             }
         }
-        return dailyReportList;
+        return parsedDataDTOList;
     }
 
     private void parseStartElement(XMLEvent event) {
@@ -92,7 +92,7 @@ public class XMLParser {
     private void parseEndElement(XMLEvent event) {
         EndElement endElement = event.asEndElement();
         if (endElement.getName().getLocalPart().equalsIgnoreCase("department")) {
-            this.dailyReportList.add(new DailyReport(cityName, departmentName, employeeName, Double.parseDouble(turnover)));
+            this.parsedDataDTOList.add(new ParsedDataDTO(cityName, departmentName, employeeName, Double.parseDouble(turnover)));
         }
     }
 }

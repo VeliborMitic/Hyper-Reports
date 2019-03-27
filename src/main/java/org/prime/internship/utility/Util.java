@@ -9,14 +9,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Util {
-    public static final String PATH = "E:\\_PRIME\\HyperReports_Reports/";
+    public static final String DATA_INPUT_PATH = "E:\\_PRIME\\HyperReports_Source/";
+    public static final String REPORT_OUTPUT_PATH = "E:\\_PRIME\\HyperReports_Output/";
     private static final String URL = "http://136ea.k.time4vps.cloud/data/";
     private static final String REGEX = ".*(\\d{4}-\\d{2}-\\d{2})-(.*)\\.(.*)";
 
@@ -41,12 +42,12 @@ public class Util {
     }
 
     public static Set<String> findFilesInLocalDir() {
-        return new HashSet<>(Arrays.asList(new File(PATH).listFiles()).parallelStream().map(file ->
+        return new TreeSet<>(Arrays.asList(new File(DATA_INPUT_PATH).listFiles()).parallelStream().map(file ->
                 file.getName()).collect(Collectors.toList()));
     }
 
     public static void downloadNewUrlFiles() throws IOException {
-        Set<String> remoteDirFileNames = new HashSet<>();
+        Set<String> remoteDirFileNames = new TreeSet<>();
         Set<String> localDirFileNames = findFilesInLocalDir();
 
         Pattern pattern = Pattern.compile(REGEX);
@@ -62,7 +63,7 @@ public class Util {
             if (!localDirFileNames.contains(fileName)) {
                 FileUtils.copyURLToFile(
                         new URL(URL + fileName),
-                        new File(PATH + fileName),
+                        new File(DATA_INPUT_PATH + fileName),
                         10000,
                         10000);
                 System.out.println(fileName + " downloaded");

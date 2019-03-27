@@ -1,17 +1,15 @@
 package org.prime.internship.entity.dto;
 
-import java.time.LocalDate;
-
-public class DailyReport {
+public class ParsedDataDTO {
     private String city;
     private String department;
     private String employee;
     private Double turnover;
 
-    public DailyReport() {
+    public ParsedDataDTO() {
     }
 
-    public DailyReport(String city, String department, String employee, Double turnover) {
+    public ParsedDataDTO(String city, String department, String employee, Double turnover) {
         this.city = city;
         this.department = department;
         this.employee = employee;
@@ -48,14 +46,5 @@ public class DailyReport {
 
     public void setDepartment(String department) {
         this.department = department;
-    }
-
-    @Override
-    public String toString() {
-        return "city='" + city + '\'' +
-                ", department='" + department + '\'' +
-                ", employee='" + employee + '\'' +
-                ", turnover=" + turnover +
-                '}';
     }
 }

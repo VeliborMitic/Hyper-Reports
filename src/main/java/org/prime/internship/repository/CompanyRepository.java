@@ -53,7 +53,7 @@ public class CompanyRepository implements BaseRepository<Company> {
     private Company getCompany(PreparedStatement statement) throws SQLException {
         try (ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
-                createCompany(resultSet);
+                return createCompany(resultSet);
             }
         }
         return null;

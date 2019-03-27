@@ -52,11 +52,13 @@ o
 ?src/main/java/org/prime/internship/service/EmployeeService.java,d\c\dc74e381fca76daf9c8216349522508e985a7080
 o
 ?src/main/java/org/prime/internship/service/TurnoverService.java,1\7\179b2b90cdf35b5acd92b2ad1feb9e9d1b204726
-n
->src/main/java/org/prime/internship/entity/dto/DailyReport.java,0\9\098cb27c475d4d91f7d1c7441261790db70719eb
 i
 9src/main/java/org/prime/internship/utility/DateUtils.java,f\1\f182867f01d798b7774aedc2d7e89bc76d9280b9
 k
 ;src/main/java/org/prime/internship/service/DataService.java,d\a\da6c7b01c62fa0b0c15411c9e772514389316936
 s
 Csrc/main/java/org/prime/internship/repository/ReportRepository.java,1\b\1ba4cbed142cb23f2b95d348c7004a10bca4560d
+p
+@src/main/java/org/prime/internship/entity/dto/ParsedDataDTO.java,2\8\2877878523c8281f346b5730eba579e245008977
+n
+>src/main/java/org/prime/internship/entity/dto/HyperReport.java,4\e\4e24649b89242cec69684b8fbf3c79d78c3dbf2e

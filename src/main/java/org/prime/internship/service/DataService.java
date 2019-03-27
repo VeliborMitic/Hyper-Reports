@@ -1,7 +1,7 @@
 package org.prime.internship.service;
 
 import org.prime.internship.entity.Company;
-import org.prime.internship.entity.dto.DailyReport;
+import org.prime.internship.entity.dto.ParsedDataDTO;
 import org.prime.internship.parser.CSVParser;
 import org.prime.internship.parser.XMLParser;
 import org.prime.internship.utility.Util;
@@ -9,9 +9,9 @@ import org.prime.internship.utility.Util;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class DataService {
     private CompanyService companyService;
@@ -19,7 +19,7 @@ public class DataService {
     private CityService cityService;
     private EmployeeService employeeService;
     private TurnoverService turnoverService;
-    private Set<DailyReport> dailyReportList;
+    private Set<ParsedDataDTO> parsedDataDTOList;
     private Set<String> allFiles;
     private Set<String> newFiles;
 
@@ -29,22 +29,22 @@ public class DataService {
         this.cityService = new CityService();
         this.employeeService = new EmployeeService();
         this.turnoverService = new TurnoverService();
-        this.allFiles = new HashSet<>();
-        this.newFiles = new HashSet<>();
+        this.allFiles = new TreeSet<>();
+        this.newFiles = new TreeSet<>();
     }
 
     public void writeFilesFromResourceToDB() throws IOException, XMLStreamException {
-        Set<String> newFilesList = listNewFilesInDirectory();
+        Set<String> newFilesSet = listNewFilesInDirectory();
 
-        if (!newFilesList.isEmpty()) {
-            for (String fileName : newFilesList) {
+        if (!newFilesSet.isEmpty()) {
+            for (String fileName : newFilesSet) {
                 String[] attributes = Util.parseFileName(fileName);
 
                 if (attributes[2].equalsIgnoreCase("csv")) {
-                    dailyReportList = new CSVParser().readReportBeans(Util.PATH + fileName);
+                    parsedDataDTOList = new CSVParser().readReportBeans(Util.DATA_INPUT_PATH + fileName);
                     processFile(attributes);
                 } else if (attributes[2].equalsIgnoreCase("xml")) {
-                    dailyReportList = new XMLParser().readReportBeans(Util.PATH + fileName);
+                    parsedDataDTOList = new XMLParser().readReportBeans(Util.DATA_INPUT_PATH + fileName);
                     processFile(attributes);
                 }
                 System.out.println("File \"" + fileName + "\" processed!");
@@ -55,7 +55,7 @@ public class DataService {
     }
 
     private void processFile(String[] attributes) {
-        dailyReportList.forEach(bean -> turnoverService.processTurnoverToDB(
+        parsedDataDTOList.forEach(bean -> turnoverService.processTurnoverToDB(
                 employeeService.processEmployeeToDB(
                         bean.getEmployee(),
                         companyService.processCompanyToDB(attributes[1], attributes[0]).getCompanyId(),
@@ -77,7 +77,8 @@ public class DataService {
                 if (!company.isPresent()) {
                     newFiles.add(fileName);
                 } else {
-                    if (LocalDate.parse(attributes[0]).isAfter(companyService.getOneByName(attributes[1]).getLastDocumentDate())) {
+                    if (LocalDate.parse(attributes[0]).isAfter(companyService.getOneByName(attributes[1]).getLastDocumentDate()) &&
+                            !LocalDate.parse(attributes[0]).isEqual(companyService.getOneByName(attributes[1]).getLastDocumentDate())) {
                         newFiles.add(fileName);
                     }
                 }

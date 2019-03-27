@@ -1,6 +1,6 @@
 package org.prime.internship.parser;
 
-import org.prime.internship.entity.dto.DailyReport;
+import org.prime.internship.entity.dto.ParsedDataDTO;
 import org.supercsv.cellprocessor.ParseDouble;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -14,26 +14,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CSVParser {
-    private Set<DailyReport> dailyReportBeansList;
+    private Set<ParsedDataDTO> parsedDataDTOBeansList;
 
     public CSVParser() {
-        this.dailyReportBeansList = new HashSet<>();
+        this.parsedDataDTOBeansList = new HashSet<>();
     }
 
-    public Set<DailyReport> readReportBeans(String fileName) throws IOException {
-        DailyReport dailyReport;
+    public Set<ParsedDataDTO> readReportBeans(String fileName) throws IOException {
+        ParsedDataDTO parsedDataDTO;
         try (ICsvBeanReader beanReader = new CsvBeanReader(
                 new FileReader(fileName), CsvPreference.STANDARD_PREFERENCE)) {
 
             final String[] header = beanReader.getHeader(true);
             final CellProcessor[] processors = getProcessors();
 
-            while ((dailyReport = beanReader.read(DailyReport.class, header, processors)) != null) {
-                dailyReport.setDepartment("no department");
-                this.dailyReportBeansList.add(dailyReport);
+            while ((parsedDataDTO = beanReader.read(ParsedDataDTO.class, header, processors)) != null) {
+                parsedDataDTO.setDepartment("no department");
+                this.parsedDataDTOBeansList.add(parsedDataDTO);
             }
         }
-        return this.dailyReportBeansList;
+        return this.parsedDataDTOBeansList;
     }
 
     private static CellProcessor[] getProcessors() {
