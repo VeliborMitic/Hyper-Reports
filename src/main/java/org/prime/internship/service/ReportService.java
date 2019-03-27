@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jetbrains.annotations.NotNull;
 import org.prime.internship.entity.dto.HyperReport;
 import org.prime.internship.repository.ReportRepository;
 import org.prime.internship.utility.DateUtils;
@@ -29,254 +30,179 @@ public class ReportService {
         this.reportRepository = new ReportRepository();
     }
 
-    public void generateReportForMonth (String companyName, int year, int month)
+    public void generateReportForMonth(String companyName, int year, int month)
             throws SQLException, IOException, ClassNotFoundException {
-        List<HyperReport> dailyReportList = reportRepository.generateReportForMonth(companyName, year, month);
 
-        String[] columns = {"Date", "Turnover"};
+        List<HyperReport> dailyReportList = reportRepository.generateReportForMonth(companyName, year, month);
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             XSSFSheet sheet = workbook.createSheet("Monthly Report");
+
             CreationHelper createHelper = workbook.getCreationHelper();
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
 
-            // Create a Font for styling header cells
-            Font headerFont = workbook.createFont();
-            headerFont.setBold(true);
-            headerFont.setFontHeightInPoints((short) 14);
-            headerFont.setColor(IndexedColors.BLUE.getIndex());
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
 
-            // Create a CellStyle with the font
-            CellStyle headerCellStyle = workbook.createCellStyle();
-            headerCellStyle.setFont(headerFont);
-            headerCellStyle.setAlignment(HorizontalAlignment.RIGHT);
-            headerCellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("#,##0.00"));
-
-            // Create a Font for styling companyName cell
-            Font companyNameFont = workbook.createFont();
-            companyNameFont.setBold(true);
-            companyNameFont.setFontHeightInPoints((short) 20);
-            companyNameFont.setColor(IndexedColors.RED.getIndex());
-            // Create a CellStyle with the font
-            CellStyle companyNameCellStyle = workbook.createCellStyle();
-            companyNameCellStyle.setFont(companyNameFont);
-            companyNameCellStyle.setAlignment(HorizontalAlignment.LEFT);
-
-            // Create a Row for CompanyName
-            Row nameRow = sheet.createRow(0);
-            Cell companyNameCell = nameRow.createCell(0);
-            sheet.addMergedRegion(new CellRangeAddress(0,0,0,5));
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month + " Monthly Report");
-            companyNameCell.setCellStyle(companyNameCellStyle);
 
-            Row headerRow = sheet.createRow(1);
-            // Create cells
-            for (int i = 0; i < columns.length; i++) {
-                Cell cell = headerRow.createCell(i);
-                cell.setCellValue(columns[i]);
-                cell.setCellStyle(headerCellStyle);
-            }
-
-            // Create Cell Style for formatting Date
+            String[] columns = {"Date", "Turnover"};
+            createRowCells(sheet, headerCellStyle, columns);
             CellStyle dateCellStyle = workbook.createCellStyle();
             dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd-MM-yyyy"));
 
-            // Create Other rows and cells with turnovers
             int rowNum = 2;
             for (HyperReport report : dailyReportList) {
                 Row row = sheet.createRow(rowNum++);
-
                 Cell date = row.createCell(0);
-                    date.setCellValue(DateUtils.convertLocalDateToDate(report.getDate()));
-                    date.setCellStyle(dateCellStyle);
-                Cell turnover = row.createCell(1);
-                    turnover.setCellValue(report.getTurnover());
-            }
-
-            Row sumRow = sheet.createRow(sheet.getLastRowNum() + 1);
-            Cell totalCell = sumRow.createCell(0);
-            Cell sumCell = sumRow.createCell(1);
-            totalCell.setCellStyle(headerCellStyle);
-            sumCell.setCellStyle(headerCellStyle);
-            totalCell.setCellValue("TOTAL:");
-            sumCell.setCellType(CellType.FORMULA);
-            sumCell.setCellFormula("SUM(B2:B"  + (sheet.getLastRowNum()) + ")");
-
-            // Resize all columns to fit the content size
-            for (int i = 0; i < columns.length; i++) {
-                sheet.setDefaultColumnWidth(20);
-            }
-
-            // Write the output to a file
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
-                    "-" + year + "-" + month + "-" + "MonthlyReport.xlsx";
-            FileOutputStream fileOut = new FileOutputStream(outputFileName);
-            workbook.write(fileOut);
-            fileOut.close();
-        }
-    }
-
-
-
-    public void generateReportForQuarter (String companyName, int year, int quarter)
-            throws SQLException, IOException, ClassNotFoundException {
-        List<HyperReport> monthList = reportRepository.generateReportForQuarter (companyName, year, quarter);
-
-        String[] columns = {"Month", "Turnover"};
-
-        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-            XSSFSheet sheet = workbook.createSheet("Quarterly Report");
-            CreationHelper createHelper = workbook.getCreationHelper();
-
-            // Create a Font for styling header cells
-            Font headerFont = workbook.createFont();
-            headerFont.setBold(true);
-            headerFont.setFontHeightInPoints((short) 14);
-            headerFont.setColor(IndexedColors.BLUE.getIndex());
-
-            // Create a CellStyle with the font
-            CellStyle headerCellStyle = workbook.createCellStyle();
-            headerCellStyle.setFont(headerFont);
-            headerCellStyle.setAlignment(HorizontalAlignment.RIGHT);
-            headerCellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("#,##0.00"));
-
-            // Create a Font for styling companyName cell
-            Font companyNameFont = workbook.createFont();
-            companyNameFont.setBold(true);
-            companyNameFont.setFontHeightInPoints((short) 20);
-            companyNameFont.setColor(IndexedColors.RED.getIndex());
-            // Create a CellStyle with the font
-            CellStyle companyNameCellStyle = workbook.createCellStyle();
-            companyNameCellStyle.setFont(companyNameFont);
-            companyNameCellStyle.setAlignment(HorizontalAlignment.LEFT);
-
-            // Create a Row
-            Row nameRow = sheet.createRow(0);
-            Cell companyNameCell = nameRow.createCell(0);
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
-            companyNameCell.setCellValue(companyName.toUpperCase()
-                    + " " + year + "-" + quarter + "thQuarter" + " Quarterly Report");
-            companyNameCell.setCellStyle(companyNameCellStyle);
-
-            Row headerRow = sheet.createRow(1);
-            // Create cells
-            for (int i = 0; i < columns.length; i++) {
-                Cell cell = headerRow.createCell(i);
-                cell.setCellValue(columns[i]);
-                cell.setCellStyle(headerCellStyle);
-            }
-
-            // Create Other rows and cells with turnovers
-            int rowNum = 2;
-            for (HyperReport report : monthList) {
-                Row row = sheet.createRow(rowNum++);
-                Cell month = row.createCell(0);
-                    month.setCellValue(report.getMonth());
-                Cell turnover = row.createCell(1);
-                    turnover.setCellValue(report.getTurnover());
-            }
-
-            Row sumRow = sheet.createRow(sheet.getLastRowNum() + 1);
-            Cell totalCell = sumRow.createCell(0);
-            Cell sumCell = sumRow.createCell(1);
-            totalCell.setCellStyle(headerCellStyle);
-            sumCell.setCellStyle(headerCellStyle);
-            totalCell.setCellValue("TOTAL:");
-            sumCell.setCellType(CellType.FORMULA);
-            sumCell.setCellFormula("SUM(B2:B" + (sheet.getLastRowNum()) + ")");
-
-            // Resize all columns to fit the content size
-            for (int i = 0; i < columns.length; i++) {
-                sheet.setDefaultColumnWidth(20);
-            }
-
-            // Write the output to a file
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
-                    "-" + year + "-" + quarter + "thQuarter-" + "QuarterlyReport.xlsx";
-            FileOutputStream fileOut = new FileOutputStream(outputFileName);
-            workbook.write(fileOut);
-            fileOut.close();
-        }
-    }
-
-    public void generateReportForYear (String companyName, int year)
-            throws SQLException, IOException, ClassNotFoundException{
-        List<HyperReport> quarterList =
-                reportRepository.generateReportForYear(companyName, year);
-
-        String[] columns = {"Quarter", "Turnover"};
-
-        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-            XSSFSheet sheet = workbook.createSheet("Yearly Report");
-            CreationHelper createHelper = workbook.getCreationHelper();
-
-            // Create a Font for styling header cells
-            Font headerFont = workbook.createFont();
-            headerFont.setBold(true);
-            headerFont.setFontHeightInPoints((short) 14);
-            headerFont.setColor(IndexedColors.BLUE.getIndex());
-
-            // Create a CellStyle with the font
-            CellStyle headerCellStyle = workbook.createCellStyle();
-            headerCellStyle.setFont(headerFont);
-            headerCellStyle.setAlignment(HorizontalAlignment.RIGHT);
-            headerCellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("#,##0.00"));
-
-            // Create a Font for styling companyName cell
-            Font companyNameFont = workbook.createFont();
-            companyNameFont.setBold(true);
-            companyNameFont.setFontHeightInPoints((short) 20);
-            companyNameFont.setColor(IndexedColors.RED.getIndex());
-            // Create a CellStyle with the font
-            CellStyle companyNameCellStyle = workbook.createCellStyle();
-            companyNameCellStyle.setFont(companyNameFont);
-            companyNameCellStyle.setAlignment(HorizontalAlignment.LEFT);
-
-            // Create a Row
-            Row nameRow = sheet.createRow(0);
-            Cell companyNameCell = nameRow.createCell(0);
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
-            companyNameCell.setCellValue(companyName.toUpperCase()
-                    + " " + year + " Yearly Report");
-            companyNameCell.setCellStyle(companyNameCellStyle);
-
-            Row headerRow = sheet.createRow(1);
-            // Create cells
-            for (int i = 0; i < columns.length; i++) {
-                Cell cell = headerRow.createCell(i);
-                cell.setCellValue(columns[i]);
-                cell.setCellStyle(headerCellStyle);
-            }
-
-            // Create Other rows and cells with turnovers
-            int rowNum = 2;
-            for (HyperReport report : quarterList) {
-                Row row = sheet.createRow(rowNum++);
-                Cell quarter = row.createCell(0);
-                    quarter.setCellValue(report.getQuarter());
+                date.setCellValue(DateUtils.convertLocalDateToDate(report.getDate()));
+                date.setCellStyle(dateCellStyle);
                 Cell turnover = row.createCell(1);
                 turnover.setCellValue(report.getTurnover());
             }
 
-            Row sumRow = sheet.createRow(sheet.getLastRowNum() + 1);
-            Cell totalCell = sumRow.createCell(0);
-            Cell sumCell = sumRow.createCell(1);
-            totalCell.setCellStyle(headerCellStyle);
-            sumCell.setCellStyle(headerCellStyle);
-            totalCell.setCellValue("TOTAL:");
-            sumCell.setCellType(CellType.FORMULA);
-            sumCell.setCellFormula("SUM(B2:B" + (sheet.getLastRowNum()) + ")");
+            createSumRow(sheet, headerCellStyle);
+            setDefaultColumnWidth(sheet, columns);
 
-            // Resize all columns to fit the content size
-            for (int i = 0; i < columns.length; i++) {
-                sheet.setDefaultColumnWidth(20);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + month + "-" + "MonthlyReport.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    public void generateReportForQuarter(String companyName, int year, int quarter)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<HyperReport> monthList = reportRepository.generateReportForQuarter(companyName, year, quarter);
+
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Quarterly Report");
+
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase()
+                    + " " + year + "-" + quarter + "thQuarter" + " Quarterly Report");
+
+            String[] columns = {"Month", "Turnover"};
+            createRowCells(sheet, headerCellStyle, columns);
+            int rowNum = 2;
+            for (HyperReport report : monthList) {
+                rowNum = getRowNum(sheet, rowNum, report, report.getMonth());
             }
 
-            // Write the output to a file
+            createSumRow(sheet, headerCellStyle);
+            setDefaultColumnWidth(sheet, columns);
+
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + quarter + "thQuarter-" + "QuarterlyReport.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    public void generateReportForYear(String companyName, int year)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<HyperReport> quarterList =
+                reportRepository.generateReportForYear(companyName, year);
+
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Yearly Report");
+
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase()
+                    + " " + year + " Yearly Report");
+
+            String[] columns = {"Quarter", "Turnover"};
+            createRowCells(sheet, headerCellStyle, columns);
+            int rowNum = 2;
+            for (HyperReport report : quarterList) {
+                rowNum = getRowNum(sheet, rowNum, report, report.getQuarter());
+            }
+
+            createSumRow(sheet, headerCellStyle);
+            setDefaultColumnWidth(sheet, columns);
+
             String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + "YearlyReport.xlsx";
-            FileOutputStream fileOut = new FileOutputStream(outputFileName);
-            workbook.write(fileOut);
-            fileOut.close();
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    private int getRowNum(XSSFSheet sheet, int rowNum, HyperReport report, int month2) {
+        Row row = sheet.createRow(rowNum++);
+        Cell month = row.createCell(0);
+        month.setCellValue(month2);
+        Cell turnover = row.createCell(1);
+        turnover.setCellValue(report.getTurnover());
+        return rowNum;
+    }
+
+    @NotNull
+    private static CellStyle createCompanyCellStyle(XSSFWorkbook workbook) {
+        Font companyNameFont = workbook.createFont();
+        companyNameFont.setBold(true);
+        companyNameFont.setFontHeightInPoints((short) 20);
+        companyNameFont.setColor(IndexedColors.RED.getIndex());
+        CellStyle companyNameCellStyle = workbook.createCellStyle();
+        companyNameCellStyle.setFont(companyNameFont);
+        companyNameCellStyle.setAlignment(HorizontalAlignment.LEFT);
+        return companyNameCellStyle;
+    }
+
+    @NotNull
+    private Cell createCompanyNameCell(XSSFSheet sheet, CellStyle companyNameCellStyle) {
+        Row nameRow = sheet.createRow(0);
+        Cell companyNameCell = nameRow.createCell(0);
+        companyNameCell.setCellStyle(companyNameCellStyle);
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
+        return companyNameCell;
+    }
+
+    @NotNull
+    private CellStyle createHeaderStyle(XSSFWorkbook workbook) {
+        Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerFont.setFontHeightInPoints((short) 14);
+        headerFont.setColor(IndexedColors.BLUE.getIndex());
+        CellStyle headerCellStyle = workbook.createCellStyle();
+        headerCellStyle.setFont(headerFont);
+        headerCellStyle.setAlignment(HorizontalAlignment.RIGHT);
+        headerCellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("#,##0.00"));
+        return headerCellStyle;
+    }
+
+    private static void setDefaultColumnWidth(XSSFSheet sheet, String[] columns) {
+        for (int i = 0; i < columns.length; i++) {
+            sheet.setDefaultColumnWidth(20);
+        }
+    }
+
+    private static void saveOutputFile(XSSFWorkbook workbook, String outputFileName) throws IOException {
+        FileOutputStream fileOut = new FileOutputStream(outputFileName);
+        workbook.write(fileOut);
+        fileOut.close();
+    }
+
+    private static void createSumRow(XSSFSheet sheet, CellStyle headerCellStyle) {
+        Row sumRow = sheet.createRow(sheet.getLastRowNum() + 1);
+        Cell totalCell = sumRow.createCell(0);
+        Cell sumCell = sumRow.createCell(1);
+        totalCell.setCellStyle(headerCellStyle);
+        sumCell.setCellStyle(headerCellStyle);
+        totalCell.setCellValue("TOTAL:");
+        sumCell.setCellType(CellType.FORMULA);
+        sumCell.setCellFormula("SUM(B2:B" + (sheet.getLastRowNum()) + ")");
+    }
+
+    private static void createRowCells(XSSFSheet sheet, CellStyle headerCellStyle, String[] columns) {
+        Row headerRow = sheet.createRow(1);
+        for (int i = 0; i < columns.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(columns[i]);
+            cell.setCellStyle(headerCellStyle);
         }
     }
 
