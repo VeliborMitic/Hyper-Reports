@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class XMLParser {
-    private Set<ParsedDataDTO> parsedDataDTOList;
+    private final Set<ParsedDataDTO> parsedDataDTOList;
     private String cityName = "";
     private String departmentName = "";
     private String employeeName = "";

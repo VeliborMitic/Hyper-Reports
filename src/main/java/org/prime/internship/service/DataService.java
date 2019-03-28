@@ -14,14 +14,14 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class DataService {
-    private CompanyService companyService;
-    private DepartmentService departmentService;
-    private CityService cityService;
-    private EmployeeService employeeService;
-    private TurnoverService turnoverService;
+    private final CompanyService companyService;
+    private final DepartmentService departmentService;
+    private final CityService cityService;
+    private final EmployeeService employeeService;
+    private final TurnoverService turnoverService;
     private Set<ParsedDataDTO> parsedDataDTOList;
     private Set<String> allFiles;
-    private Set<String> newFiles;
+    private final Set<String> newFiles;
 
     public DataService() {
         this.companyService = new CompanyService();
@@ -84,7 +84,7 @@ public class DataService {
                 }
             }
         } else {
-            System.out.println("Resource diretctory is empty!");
+            System.out.println("Resource directory is empty!");
             System.exit(99);
         }
         return newFiles;

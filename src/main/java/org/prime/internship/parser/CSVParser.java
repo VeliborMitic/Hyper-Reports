@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CSVParser {
-    private Set<ParsedDataDTO> parsedDataDTOBeansList;
+    private final Set<ParsedDataDTO> parsedDataDTOBeansList;
 
     public CSVParser() {
         this.parsedDataDTOBeansList = new HashSet<>();

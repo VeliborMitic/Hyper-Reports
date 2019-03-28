@@ -30,7 +30,20 @@ public class App {
             reportService.generateReportForMonth("agivu", 2018, 11);
             reportService.generateReportForQuarter("agivu", 2018, 4);
             reportService.generateReportForYear("agivu", 2018);
-        } catch (SQLException | IOException | ClassNotFoundException e) {
+
+            reportService.monthlyTopNEmployees("agivu", 2018, 10, 15);
+            reportService.quarterlyTopNEmployees("agivu", 2018, 4, 15);
+            reportService.yearlyTopNEmployees("agivu", 2018, 15);
+
+            reportService.monthlyTopNCities("agivu", 2018, 10, 10);
+            reportService.quarterlyTopNCities("agivu", 2018, 4, 10);
+            reportService.yearlyTopNCities("agivu", 2018, 10);
+
+            reportService.monthlyTopNDepartments("agivu", 2018, 10, 5);
+            reportService.quarterlyTopNDepartments("agivu", 2018, 4, 5);
+            reportService.yearlyTopNDepartments("agivu", 2018, 5);
+        }
+        catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

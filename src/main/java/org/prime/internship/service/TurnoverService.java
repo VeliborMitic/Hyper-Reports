@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 class TurnoverService {
 
-    private TurnoverRepository turnoverRepository;
+    private final TurnoverRepository turnoverRepository;
 
     TurnoverService() {
         this.turnoverRepository = new TurnoverRepository();

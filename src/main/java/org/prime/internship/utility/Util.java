@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -42,8 +43,8 @@ public class Util {
     }
 
     public static Set<String> findFilesInLocalDir() {
-        return new TreeSet<>(Arrays.asList(new File(DATA_INPUT_PATH).listFiles()).parallelStream().map(file ->
-                file.getName()).collect(Collectors.toList()));
+        return Arrays.asList(Objects.requireNonNull(new File(DATA_INPUT_PATH).listFiles())).parallelStream()
+                .map(File::getName).collect(Collectors.toCollection(TreeSet::new));
     }
 
     public static void downloadNewUrlFiles() throws IOException {

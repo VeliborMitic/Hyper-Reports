@@ -5,7 +5,7 @@ import org.prime.internship.repository.DepartmentRepository;
 
 public class DepartmentService {
 
-    private DepartmentRepository departmentRepository;
+    private final DepartmentRepository departmentRepository;
 
     DepartmentService() {
         this.departmentRepository = new DepartmentRepository();

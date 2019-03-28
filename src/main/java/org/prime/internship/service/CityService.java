@@ -4,7 +4,7 @@ import org.prime.internship.entity.City;
 import org.prime.internship.repository.CityRepository;
 
 class CityService {
-    private CityRepository cityRepository;
+    private final CityRepository cityRepository;
 
     CityService() {
         this.cityRepository = new CityRepository();

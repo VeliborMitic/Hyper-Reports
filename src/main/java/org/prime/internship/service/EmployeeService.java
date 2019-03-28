@@ -5,7 +5,7 @@ import org.prime.internship.repository.EmployeeRepository;
 
 class EmployeeService {
 
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
 
     EmployeeService() {
         this.employeeRepository = new EmployeeRepository();

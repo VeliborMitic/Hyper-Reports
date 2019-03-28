@@ -6,7 +6,7 @@ import org.prime.internship.repository.CompanyRepository;
 import java.time.LocalDate;
 
 class CompanyService {
-    private CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
 
     CompanyService() {
         this.companyRepository = new CompanyRepository();

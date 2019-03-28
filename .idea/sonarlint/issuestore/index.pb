@@ -60,5 +60,5 @@ s
 Csrc/main/java/org/prime/internship/repository/ReportRepository.java,1\b\1ba4cbed142cb23f2b95d348c7004a10bca4560d
 p
 @src/main/java/org/prime/internship/entity/dto/ParsedDataDTO.java,2\8\2877878523c8281f346b5730eba579e245008977
-n
->src/main/java/org/prime/internship/entity/dto/HyperReport.java,4\e\4e24649b89242cec69684b8fbf3c79d78c3dbf2e
+l
+<src/main/java/org/prime/internship/entity/dto/ReportDTO.java,c\b\cbfbaa371f41f269ec8af02a90d430be9e4f23ce

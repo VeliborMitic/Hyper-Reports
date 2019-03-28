@@ -18,7 +18,7 @@ public class ReportRepository {
             throws SQLException, IOException, ClassNotFoundException {
         List<ReportDTO> reports = new ArrayList<>();
 
-        String sql = "SELECT turnovers.date, ROUND(SUM(turnovers.turnover),2) " +
+        String sql = "SELECT  turnovers.date, ROUND(SUM(turnovers.turnover),2) " +
                 "FROM ((employees " +
                 "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
                 "JOIN companies on employees.company_id = companies.company_id) " +
@@ -53,7 +53,7 @@ public class ReportRepository {
 
         List<ReportDTO> reports = new ArrayList<>();
 
-        String sql = "SELECT MONTH(turnovers.date), ROUND(SUM(turnovers.turnover),2) " +
+        String sql = "SELECT  MONTH(turnovers.date), ROUND(SUM(turnovers.turnover),2) " +
                 "FROM ((employees " +
                 "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
                 "JOIN companies on employees.company_id = companies.company_id) " +
@@ -133,7 +133,8 @@ public class ReportRepository {
                 "WHERE companies.name = ? " +
                 "AND YEAR(turnovers.date) = ? " +
                 "AND MONTH(turnovers.date) = ? " +
-                "ORDER BY TotalTurnover" +
+                "GROUP BY employees.name " +
+                "ORDER BY TotalTurnover " +
                 "DESC LIMIT ?;";
 
         try (Connection connection = DatabaseManager.connect();
@@ -161,7 +162,7 @@ public class ReportRepository {
     }
 
     // Generates TOP N EMPLOYEES report for a QUARTER
-    public List<ReportDTO> quoterlyTopNEmployees(String companyName, int year, int quarter, int topN)
+    public List<ReportDTO> quarterlyTopNEmployees(String companyName, int year, int quarter, int topN)
             throws SQLException, IOException, ClassNotFoundException {
         List<ReportDTO> reports = new ArrayList<>();
 
@@ -173,7 +174,8 @@ public class ReportRepository {
                 "WHERE companies.name = ? " +
                 "AND YEAR(turnovers.date) = ? " +
                 "AND QUARTER(turnovers.date) = ? " +
-                "ORDER BY TotalTurnover" +
+                "GROUP BY employees.name " +
+                "ORDER BY TotalTurnover " +
                 "DESC LIMIT ?;";
 
         try (Connection connection = DatabaseManager.connect();
@@ -212,7 +214,8 @@ public class ReportRepository {
                 "JOIN companies on employees.company_id = companies.company_id) " +
                 "WHERE companies.name = ? " +
                 "AND YEAR(turnovers.date) = ? " +
-                "ORDER BY TotalTurnover" +
+                "GROUP BY employees.name " +
+                "ORDER BY TotalTurnover " +
                 "DESC LIMIT ?;";
 
         try (Connection connection = DatabaseManager.connect();
@@ -246,15 +249,15 @@ public class ReportRepository {
 
         String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
                 "cities.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
-                "FROM ((employees " +
+                "FROM (((employees " +
                 "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
                 "JOIN companies on employees.company_id = companies.company_id) " +
-                "JOIN cities on employees.city_id = cities.city_id)) " +
+                "JOIN cities on employees.city_id = cities.city_id) " +
                 "WHERE companies.name = ? " +
                 "AND YEAR(turnovers.date) = ? " +
                 "AND MONTH(turnovers.date) = ? " +
                 "GROUP BY cities.name " +
-                "ORDER BY TotalTurnover" +
+                "ORDER BY TotalTurnover " +
                 "DESC LIMIT ?;";
 
         try (Connection connection = DatabaseManager.connect();
@@ -282,21 +285,21 @@ public class ReportRepository {
     }
 
     // Generates TOP N CITIES report for a QUARTER in Company X
-    public List<ReportDTO> quoterlyTopNCities(String companyName, int year, int quarter, int topN)
+    public List<ReportDTO> quarterlyTopNCities(String companyName, int year, int quarter, int topN)
             throws SQLException, IOException, ClassNotFoundException {
         List<ReportDTO> reports = new ArrayList<>();
 
         String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
-                "employees.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
-                "FROM ((employees " +
+                "cities.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
+                "FROM (((employees " +
                 "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
                 "JOIN companies on employees.company_id = companies.company_id) " +
-                "JOIN cities on employees.city_id = cities.city_id)) " +
+                "JOIN cities on employees.city_id = cities.city_id) " +
                 "WHERE companies.name = ? " +
                 "AND YEAR(turnovers.date) = ? " +
                 "AND QUARTER(turnovers.date) = ? " +
                 "GROUP BY cities.name " +
-                "ORDER BY TotalTurnover" +
+                "ORDER BY TotalTurnover " +
                 "DESC LIMIT ?;";
 
         try (Connection connection = DatabaseManager.connect();
@@ -329,15 +332,15 @@ public class ReportRepository {
         List<ReportDTO> reports = new ArrayList<>();
 
         String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
-                "employees.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
-                "FROM ((employees " +
+                "cities.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
+                "FROM (((employees " +
                 "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
                 "JOIN companies on employees.company_id = companies.company_id) " +
-                "JOIN cities on employees.city_id = cities.city_id)) " +
+                "JOIN cities on employees.city_id = cities.city_id) " +
                 "WHERE companies.name = ? " +
                 "AND YEAR(turnovers.date) = ? " +
                 "GROUP BY cities.name " +
-                "ORDER BY TotalTurnover" +
+                "ORDER BY TotalTurnover " +
                 "DESC LIMIT ?;";
 
         try (Connection connection = DatabaseManager.connect();
@@ -371,7 +374,7 @@ public class ReportRepository {
 
         String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
                 "departments.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
-                "FROM ((employees " +
+                "FROM (((employees " +
                 "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
                 "JOIN companies on employees.company_id = companies.company_id) " +
                 "JOIN departments on employees.department_id = departments.department_id) " +
@@ -379,7 +382,7 @@ public class ReportRepository {
                 "AND YEAR(turnovers.date) = ? " +
                 "AND MONTH(turnovers.date) = ? " +
                 "GROUP BY departments.name " +
-                "ORDER BY TotalTurnover" +
+                "ORDER BY TotalTurnover " +
                 "DESC LIMIT ?;";
 
         try (Connection connection = DatabaseManager.connect();
@@ -407,13 +410,13 @@ public class ReportRepository {
     }
 
     // Generates TOP N DEPARTMENTS report for a QUARTER in Company X
-    public List<ReportDTO> quoterlyTopNDepartments(String companyName, int year, int quarter, int topN)
+    public List<ReportDTO> quarterlyTopNDepartments(String companyName, int year, int quarter, int topN)
             throws SQLException, IOException, ClassNotFoundException {
         List<ReportDTO> reports = new ArrayList<>();
 
         String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
                 "departments.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
-                "FROM ((employees " +
+                "FROM (((employees " +
                 "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
                 "JOIN companies on employees.company_id = companies.company_id) " +
                 "JOIN departments on employees.department_id = departments.department_id) " +
@@ -421,7 +424,7 @@ public class ReportRepository {
                 "AND YEAR(turnovers.date) = ? " +
                 "AND QUARTER(turnovers.date) = ? " +
                 "GROUP BY departments.name " +
-                "ORDER BY TotalTurnover" +
+                "ORDER BY TotalTurnover " +
                 "DESC LIMIT ?;";
 
         try (Connection connection = DatabaseManager.connect();
@@ -455,14 +458,14 @@ public class ReportRepository {
 
         String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
                 "departments.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
-                "FROM ((employees " +
+                "FROM (((employees " +
                 "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
                 "JOIN companies on employees.company_id = companies.company_id) " +
                 "JOIN departments on employees.department_id = departments.department_id) " +
                 "WHERE companies.name = ? " +
                 "AND YEAR(turnovers.date) = ? " +
                 "GROUP BY departments.name " +
-                "ORDER BY TotalTurnover" +
+                "ORDER BY TotalTurnover " +
                 "DESC LIMIT ?;";
 
         try (Connection connection = DatabaseManager.connect();
