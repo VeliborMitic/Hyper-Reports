@@ -1,7 +1,7 @@
 package org.prime.internship.repository;
 
 import org.prime.internship.database.DatabaseManager;
-import org.prime.internship.entity.dto.HyperReport;
+import org.prime.internship.entity.dto.ReportDTO;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -12,247 +12,479 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReportRepository {
-    private static String startDate;
-    private static String endDate;
 
-    // Generate report for MONTH
-    public List<HyperReport> generateReportForMonth(String companyName, int year, int month) throws SQLException, IOException, ClassNotFoundException {
+    // Generates Company Report for MONTH - by Days
+    public List<ReportDTO> generateReportForMonth(String companyName, int year, int month)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = new ArrayList<>();
 
-        setMonthlyReportStartAndEndDate(year, month);
-
-        String sql = "SELECT turnovers.date, SUM(turnovers.turnover) " +
-                "FROM ((((employees " +
+        String sql = "SELECT turnovers.date, ROUND(SUM(turnovers.turnover),2) " +
+                "FROM ((employees " +
                 "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
                 "JOIN companies on employees.company_id = companies.company_id) " +
-                "JOIN cities on employees.city_id = cities.city_id) " +
-                "JOIN departments on employees.department_id = departments.department_id) " +
                 "WHERE companies.name = ? " +
-                "AND turnovers.date >= ? " +
-                "AND turnovers.date <= ? " +
+                "AND YEAR(turnovers.date) = ? " +
+                "AND MONTH(turnovers.date) = ? " +
                 "GROUP BY turnovers.date;";
-
-        return generateHyperReport(companyName, sql);
-    }
-
-    // Generate report for a QUARTER
-    public List<HyperReport> generateReportForQuarter(String companyName, int year, int quarter)
-            throws SQLException, IOException, ClassNotFoundException {
-
-        List<HyperReport> quarterHyperReportList = new ArrayList<>();
-
-        String sql = "SELECT SUM(turnovers.turnover) " +
-                "FROM ((((employees " +
-                "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
-                "JOIN companies on employees.company_id = companies.company_id) " +
-                "JOIN cities on employees.city_id = cities.city_id) " +
-                "JOIN departments on employees.department_id = departments.department_id) " +
-                "WHERE companies.name = ? " +
-                "AND turnovers.date >= ? " +
-                "AND turnovers.date <= ?;";
-
-        int firstOfThree = setFirstMonthOfQuarter(quarter);
-        int lastOfThree = firstOfThree + 2;
-        for (int month = firstOfThree; month <= lastOfThree; month++){
-            setMonthlyReportStartAndEndDate(year, month);
-            quarterHyperReportList.add(generateHyperReport(companyName, quarter, month, sql));
-        }
-        return quarterHyperReportList;
-    }
-
-    // Generate report for a YEAR
-    public List<HyperReport> generateReportForYear(String companyName, int year)
-            throws SQLException, IOException, ClassNotFoundException {
-        List<HyperReport> yearHyperReportList = new ArrayList<>();
-
-        String sql = "SELECT SUM(turnovers.turnover) " +
-                "FROM ((((employees " +
-                "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
-                "JOIN companies on employees.company_id = companies.company_id) " +
-                "JOIN cities on employees.city_id = cities.city_id) " +
-                "JOIN departments on employees.department_id = departments.department_id) " +
-                "WHERE companies.name = ? " +
-                "AND turnovers.date >= ? " +
-                "AND turnovers.date <= ?;";
-
-        for (int quarter = 1; quarter <= 4; quarter++) {
-            setYearQuartersStartAndEndDate(year, quarter);
-            yearHyperReportList.add(generateHyperReport(companyName, quarter, sql));
-        }
-        return yearHyperReportList;
-    }
-    // Overloaded factory method for creating reports
-    private List<HyperReport> generateHyperReport(String companyName, String sql)
-            throws SQLException, IOException, ClassNotFoundException {
-        List<HyperReport> dailyHyperReport = new ArrayList<>();
 
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, companyName);
-            statement.setString(2, startDate);
-            statement.setString(3, endDate);
+            statement.setInt(2, year);
+            statement.setInt(3, month);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    HyperReport hyperReport = new HyperReport();
-                    hyperReport.setCompanyName(companyName);
-                    hyperReport.setDate(resultSet.getTimestamp(1).toLocalDateTime().toLocalDate());
-                    hyperReport.setMonth(hyperReport.getDate().getMonthValue());
-                    hyperReport.setTurnover(resultSet.getDouble(2));
+                    ReportDTO reportDTO = new ReportDTO();
+                    reportDTO.setCompanyName(companyName);
+                    reportDTO.setDate(resultSet.getTimestamp(1).toLocalDateTime().toLocalDate());
+                    reportDTO.setTurnover(resultSet.getDouble(2));
 
-                    dailyHyperReport.add(hyperReport);
+                    reports.add(reportDTO);
                 }
             }
-            return dailyHyperReport;
         }
+        return reports;
     }
 
-    // Overloaded factory method for creating reports
-    private HyperReport generateHyperReport(String companyName, int quarter, int month, String sql)
+    // Generates Company Report for a QUARTER - by Months
+    public List<ReportDTO> generateReportForQuarter(String companyName, int year, int quarter)
             throws SQLException, IOException, ClassNotFoundException {
+
+        List<ReportDTO> reports = new ArrayList<>();
+
+        String sql = "SELECT MONTH(turnovers.date), ROUND(SUM(turnovers.turnover),2) " +
+                "FROM ((employees " +
+                "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
+                "JOIN companies on employees.company_id = companies.company_id) " +
+                "WHERE companies.name = ? " +
+                "AND YEAR(turnovers.date) = ? " +
+                "AND QUARTER(turnovers.date) = ? " +
+                "GROUP BY MONTH(turnovers.date)";
 
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, companyName);
-            statement.setString(2, startDate);
-            statement.setString(3, endDate);
+            statement.setInt(2, year);
+            statement.setInt(3, quarter);
 
             try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    HyperReport hyperReport = new HyperReport();
-                    hyperReport.setCompanyName(companyName);
-                    hyperReport.setMonth(month);
-                    hyperReport.setQuarter(quarter);
-                    hyperReport.setTurnover(resultSet.getDouble(1));
+                while (resultSet.next()) {
+                    ReportDTO reportDTO = new ReportDTO();
+                    reportDTO.setCompanyName(companyName);
+                    reportDTO.setQuarter(quarter);
+                    reportDTO.setMonth(resultSet.getInt(1));
+                    reportDTO.setTurnover(resultSet.getDouble(2));
 
-                    return hyperReport;
+                    reports.add(reportDTO);
                 }
             }
-            return null;
         }
+        return reports;
     }
 
-    // Overloaded factory method for creating reports
-    private HyperReport generateHyperReport(String companyName, int quarter, String sql)
+    // Generates Company Report for a YEAR - by Quarters
+    public List<ReportDTO> generateReportForYear(String companyName, int year)
             throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = new ArrayList<>();
+
+        String sql = "SELECT QUARTER(turnovers.date), ROUND(SUM(turnovers.turnover),2) " +
+                "FROM ((employees " +
+                "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
+                "JOIN companies on employees.company_id = companies.company_id) " +
+                "WHERE companies.name = ? " +
+                "AND YEAR(turnovers.date) = ? " +
+                "GROUP BY QUARTER(turnovers.date);";
 
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, companyName);
-            statement.setString(2, startDate);
-            statement.setString(3, endDate);
+            statement.setInt(2, year);
 
             try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    HyperReport hyperReport = new HyperReport();
-                    hyperReport.setCompanyName(companyName);
-                    hyperReport.setQuarter(quarter);
-                    hyperReport.setTurnover(resultSet.getDouble(1));
+                while (resultSet.next()) {
+                    ReportDTO reportDTO = new ReportDTO();
+                    reportDTO.setCompanyName(companyName);
+                    reportDTO.setYear(year);
+                    reportDTO.setQuarter(resultSet.getInt(1));
+                    reportDTO.setTurnover(resultSet.getDouble(2));
 
-                    return hyperReport;
+                    reports.add(reportDTO);
                 }
             }
-            return null;
         }
+        return reports;
     }
 
-    // THREE METHODS FOR SETTING START AND END DATE
+    // TOP N REPORTS SECTION ////////////////////////////////////////////////////////////////////////////////////////
 
-    private static void setMonthlyReportStartAndEndDate(int year, int month) {
-        String yearString = Integer.toString(year);
+    // TOP N EMPLOYEES
 
-        switch (month) {
-            case 1:
-                startDate = yearString + "-01-01 00:00:00";
-                endDate = yearString + "-01-31 00:00:00";
-                break;
-            case 2:
-                startDate = yearString + "-02-01 00:00:00";
-                endDate = yearString + "-02-29 00:00:00";
-                break;
-            case 3:
-                startDate = yearString + "-03-01 00:00:00";
-                endDate = yearString + "-03-31 00:00:00";
-                break;
-            case 4:
-                startDate = yearString + "-04-01 00:00:00";
-                endDate = yearString + "-04-30 00:00:00";
-                break;
-            case 5:
-                startDate = yearString + "-05-01 00:00:00";
-                endDate = yearString + "-05-31 00:00:00";
-                break;
-            case 6:
-                startDate = yearString + "-06-01 00:00:00";
-                endDate = yearString + "-06-30 00:00:00";
-                break;
-            case 7:
-                startDate = yearString + "-07-01 00:00:00";
-                endDate = yearString + "-07-31 00:00:00";
-                break;
-            case 8:
-                startDate = yearString + "-08-01 00:00:00";
-                endDate = yearString + "-08-31 00:00:00";
-                break;
-            case 9:
-                startDate = yearString + "-09-01 00:00:00";
-                endDate = yearString + "09-30 00:00:00";
-                break;
-            case 10:
-                startDate = yearString + "-10-01 00:00:00";
-                endDate = yearString + "-10-31 00:00:00";
-                break;
-            case 11:
-                startDate = yearString + "-11-01 00:00:00";
-                endDate = yearString + "-11-30 00:00:00";
-                break;
-            case 12:
-                startDate = yearString + "-12-01 00:00:00";
-                endDate = yearString + "-12-31 00:00:00";
-                break;
-            default:
-                System.out.println("Try with number between 1-12 !!!");
-                break;
+    // Generates TOP N EMPLOYEES report for a MONTH
+    public List<ReportDTO> monthlyTopNEmployees(String companyName, int year, int month, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = new ArrayList<>();
+
+        String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
+                "employees.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
+                "FROM ((employees " +
+                "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
+                "JOIN companies on employees.company_id = companies.company_id) " +
+                "WHERE companies.name = ? " +
+                "AND YEAR(turnovers.date) = ? " +
+                "AND MONTH(turnovers.date) = ? " +
+                "ORDER BY TotalTurnover" +
+                "DESC LIMIT ?;";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, companyName);
+            statement.setInt(2, year);
+            statement.setInt(3, month);
+            statement.setInt(4, topN);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ReportDTO reportDTO = new ReportDTO();
+                    reportDTO.setCompanyName(companyName);
+                    reportDTO.setYear(year);
+                    reportDTO.setMonth(month);
+                    reportDTO.setRowNumber(resultSet.getInt(1));
+                    reportDTO.setEmployee(resultSet.getString(2));
+                    reportDTO.setTurnover(resultSet.getDouble(3));
+
+                    reports.add(reportDTO);
+                }
+            }
         }
+        return reports;
     }
 
-    private int setFirstMonthOfQuarter(int quarter) {
-        int firstOfThree = 0;
-        switch (quarter) {
-            case 1: firstOfThree = 1; break;
-            case 2: firstOfThree = 4; break;
-            case 3: firstOfThree = 7; break;
-            case 4: firstOfThree = 10; break;
-            default:
-                System.out.println("Try with numbers 1-4 !!!");
-                break;
+    // Generates TOP N EMPLOYEES report for a QUARTER
+    public List<ReportDTO> quoterlyTopNEmployees(String companyName, int year, int quarter, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = new ArrayList<>();
+
+        String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
+                "employees.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
+                "FROM ((employees " +
+                "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
+                "JOIN companies on employees.company_id = companies.company_id) " +
+                "WHERE companies.name = ? " +
+                "AND YEAR(turnovers.date) = ? " +
+                "AND QUARTER(turnovers.date) = ? " +
+                "ORDER BY TotalTurnover" +
+                "DESC LIMIT ?;";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, companyName);
+            statement.setInt(2, year);
+            statement.setInt(3, quarter);
+            statement.setInt(4, topN);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ReportDTO reportDTO = new ReportDTO();
+                    reportDTO.setCompanyName(companyName);
+                    reportDTO.setYear(year);
+                    reportDTO.setQuarter(quarter);
+                    reportDTO.setRowNumber(resultSet.getInt(1));
+                    reportDTO.setEmployee(resultSet.getString(2));
+                    reportDTO.setTurnover(resultSet.getDouble(3));
+
+                    reports.add(reportDTO);
+                }
+            }
         }
-        return firstOfThree;
+        return reports;
     }
 
-    private static void setYearQuartersStartAndEndDate(int year, int quarter) {
-        String yearString = Integer.toString(year);
+    // Generates TOP N EMPLOYEES report for a YEAR
+    public List<ReportDTO> yearlyTopNEmployees(String companyName, int year, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = new ArrayList<>();
 
-        switch (quarter) {
-            case 1:
-                startDate = yearString + "-01-01 00:00:00";
-                endDate = yearString + "-03-31 00:00:00";
-                break;
-            case 2:
-                startDate = yearString + "-04-01 00:00:00";
-                endDate = yearString + "-06-30 00:00:00";
-                break;
-            case 3:
-                startDate = yearString + "-07-01 00:00:00";
-                endDate = yearString + "-09-30 00:00:00";
-                break;
-            case 4:
-                startDate = yearString + "-10-01 00:00:00";
-                endDate = yearString + "-12-31 00:00:00";
-                break;
-            default:
-                System.out.println("Try with numbers 1-4 !!!");
-                break;
+        String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
+                "employees.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
+                "FROM ((employees " +
+                "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
+                "JOIN companies on employees.company_id = companies.company_id) " +
+                "WHERE companies.name = ? " +
+                "AND YEAR(turnovers.date) = ? " +
+                "ORDER BY TotalTurnover" +
+                "DESC LIMIT ?;";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, companyName);
+            statement.setInt(2, year);
+            statement.setInt(3, topN);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ReportDTO reportDTO = new ReportDTO();
+                    reportDTO.setCompanyName(companyName);
+                    reportDTO.setYear(year);
+                    reportDTO.setRowNumber(resultSet.getInt(1));
+                    reportDTO.setEmployee(resultSet.getString(2));
+                    reportDTO.setTurnover(resultSet.getDouble(3));
+
+                    reports.add(reportDTO);
+                }
+            }
         }
+        return reports;
+    }
+
+    // TOP N CITIES
+
+    // Generates TOP N CITIES report for a MONTH in Company
+    public List<ReportDTO> monthlyTopNCities(String companyName, int year, int month, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = new ArrayList<>();
+
+        String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
+                "cities.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
+                "FROM ((employees " +
+                "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
+                "JOIN companies on employees.company_id = companies.company_id) " +
+                "JOIN cities on employees.city_id = cities.city_id)) " +
+                "WHERE companies.name = ? " +
+                "AND YEAR(turnovers.date) = ? " +
+                "AND MONTH(turnovers.date) = ? " +
+                "GROUP BY cities.name " +
+                "ORDER BY TotalTurnover" +
+                "DESC LIMIT ?;";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, companyName);
+            statement.setInt(2, year);
+            statement.setInt(3, month);
+            statement.setInt(4, topN);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ReportDTO reportDTO = new ReportDTO();
+                    reportDTO.setCompanyName(companyName);
+                    reportDTO.setYear(year);
+                    reportDTO.setMonth(month);
+                    reportDTO.setRowNumber(resultSet.getInt(1));
+                    reportDTO.setCity(resultSet.getString(2));
+                    reportDTO.setTurnover(resultSet.getDouble(3));
+
+                    reports.add(reportDTO);
+                }
+            }
+        }
+        return reports;
+    }
+
+    // Generates TOP N CITIES report for a QUARTER in Company X
+    public List<ReportDTO> quoterlyTopNCities(String companyName, int year, int quarter, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = new ArrayList<>();
+
+        String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
+                "employees.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
+                "FROM ((employees " +
+                "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
+                "JOIN companies on employees.company_id = companies.company_id) " +
+                "JOIN cities on employees.city_id = cities.city_id)) " +
+                "WHERE companies.name = ? " +
+                "AND YEAR(turnovers.date) = ? " +
+                "AND QUARTER(turnovers.date) = ? " +
+                "GROUP BY cities.name " +
+                "ORDER BY TotalTurnover" +
+                "DESC LIMIT ?;";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, companyName);
+            statement.setInt(2, year);
+            statement.setInt(3, quarter);
+            statement.setInt(4, topN);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ReportDTO reportDTO = new ReportDTO();
+                    reportDTO.setCompanyName(companyName);
+                    reportDTO.setYear(year);
+                    reportDTO.setQuarter(quarter);
+                    reportDTO.setRowNumber(resultSet.getInt(1));
+                    reportDTO.setCity(resultSet.getString(2));
+                    reportDTO.setTurnover(resultSet.getDouble(3));
+
+                    reports.add(reportDTO);
+                }
+            }
+        }
+        return reports;
+    }
+
+    // Generates TOP N CITIES report for a YEAR in Company X
+    public List<ReportDTO> yearlyTopNCities(String companyName, int year, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = new ArrayList<>();
+
+        String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
+                "employees.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
+                "FROM ((employees " +
+                "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
+                "JOIN companies on employees.company_id = companies.company_id) " +
+                "JOIN cities on employees.city_id = cities.city_id)) " +
+                "WHERE companies.name = ? " +
+                "AND YEAR(turnovers.date) = ? " +
+                "GROUP BY cities.name " +
+                "ORDER BY TotalTurnover" +
+                "DESC LIMIT ?;";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, companyName);
+            statement.setInt(2, year);
+            statement.setInt(3, topN);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ReportDTO reportDTO = new ReportDTO();
+                    reportDTO.setCompanyName(companyName);
+                    reportDTO.setYear(year);
+                    reportDTO.setRowNumber(resultSet.getInt(1));
+                    reportDTO.setCity(resultSet.getString(2));
+                    reportDTO.setTurnover(resultSet.getDouble(3));
+
+                    reports.add(reportDTO);
+                }
+            }
+        }
+        return reports;
+    }
+
+    // TOP N DEPARTMENTS
+
+    // Generates TOP N DEPARTMENTS report for a MONTH in Company
+    public List<ReportDTO> monthlyTopNDepartments(String companyName, int year, int month, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = new ArrayList<>();
+
+        String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
+                "departments.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
+                "FROM ((employees " +
+                "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
+                "JOIN companies on employees.company_id = companies.company_id) " +
+                "JOIN departments on employees.department_id = departments.department_id) " +
+                "WHERE companies.name = ? " +
+                "AND YEAR(turnovers.date) = ? " +
+                "AND MONTH(turnovers.date) = ? " +
+                "GROUP BY departments.name " +
+                "ORDER BY TotalTurnover" +
+                "DESC LIMIT ?;";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, companyName);
+            statement.setInt(2, year);
+            statement.setInt(3, month);
+            statement.setInt(4, topN);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ReportDTO reportDTO = new ReportDTO();
+                    reportDTO.setCompanyName(companyName);
+                    reportDTO.setYear(year);
+                    reportDTO.setMonth(month);
+                    reportDTO.setRowNumber(resultSet.getInt(1));
+                    reportDTO.setDepartment(resultSet.getString(2));
+                    reportDTO.setTurnover(resultSet.getDouble(3));
+
+                    reports.add(reportDTO);
+                }
+            }
+        }
+        return reports;
+    }
+
+    // Generates TOP N DEPARTMENTS report for a QUARTER in Company X
+    public List<ReportDTO> quoterlyTopNDepartments(String companyName, int year, int quarter, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = new ArrayList<>();
+
+        String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
+                "departments.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
+                "FROM ((employees " +
+                "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
+                "JOIN companies on employees.company_id = companies.company_id) " +
+                "JOIN departments on employees.department_id = departments.department_id) " +
+                "WHERE companies.name = ? " +
+                "AND YEAR(turnovers.date) = ? " +
+                "AND QUARTER(turnovers.date) = ? " +
+                "GROUP BY departments.name " +
+                "ORDER BY TotalTurnover" +
+                "DESC LIMIT ?;";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, companyName);
+            statement.setInt(2, year);
+            statement.setInt(3, quarter);
+            statement.setInt(4, topN);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ReportDTO reportDTO = new ReportDTO();
+                    reportDTO.setCompanyName(companyName);
+                    reportDTO.setYear(year);
+                    reportDTO.setQuarter(quarter);
+                    reportDTO.setRowNumber(resultSet.getInt(1));
+                    reportDTO.setDepartment(resultSet.getString(2));
+                    reportDTO.setTurnover(resultSet.getDouble(3));
+
+                    reports.add(reportDTO);
+                }
+            }
+        }
+        return reports;
+    }
+
+    // Generates TOP N DEPARTMENTS report for a YEAR in Company X
+    public List<ReportDTO> yearlyTopNDepartments(String companyName, int year, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = new ArrayList<>();
+
+        String sql = "SELECT ROW_NUMBER() over (ORDER BY SUM(turnovers.turnover)DESC) AS RowNumber, " +
+                "departments.name, ROUND(SUM(turnovers.turnover),2) AS TotalTurnover " +
+                "FROM ((employees " +
+                "JOIN turnovers on employees.employee_id = turnovers.employee_id) " +
+                "JOIN companies on employees.company_id = companies.company_id) " +
+                "JOIN departments on employees.department_id = departments.department_id) " +
+                "WHERE companies.name = ? " +
+                "AND YEAR(turnovers.date) = ? " +
+                "GROUP BY departments.name " +
+                "ORDER BY TotalTurnover" +
+                "DESC LIMIT ?;";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, companyName);
+            statement.setInt(2, year);
+            statement.setInt(3, topN);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ReportDTO reportDTO = new ReportDTO();
+                    reportDTO.setCompanyName(companyName);
+                    reportDTO.setYear(year);
+                    reportDTO.setRowNumber(resultSet.getInt(1));
+                    reportDTO.setDepartment(resultSet.getString(2));
+                    reportDTO.setTurnover(resultSet.getDouble(3));
+
+                    reports.add(reportDTO);
+                }
+            }
+        }
+        return reports;
     }
 }
 
