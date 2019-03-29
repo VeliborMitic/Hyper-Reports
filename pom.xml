@@ -72,7 +72,12 @@
       <artifactId>poi-ooxml</artifactId>
       <version>4.0.1</version>
     </dependency>
-
+    <!-- https://mvnrepository.com/artifact/com.beust/jcommander -->
+    <dependency>
+      <groupId>com.beust</groupId>
+      <artifactId>jcommander</artifactId>
+      <version>1.72</version>
+    </dependency>
   </dependencies>
 
   <build>

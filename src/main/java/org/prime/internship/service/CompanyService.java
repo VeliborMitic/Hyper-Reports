@@ -5,7 +5,7 @@ import org.prime.internship.repository.CompanyRepository;
 
 import java.time.LocalDate;
 
-class CompanyService {
+public class CompanyService {
     private final CompanyRepository companyRepository;
 
     CompanyService() {
@@ -29,7 +29,7 @@ class CompanyService {
         return company;
     }
 
-    Company getOneByName(String name) {
+    public Company getOneByName(String name) {
         return companyRepository.getOneByName(name);
     }
 }

@@ -11,23 +11,22 @@ import java.sql.SQLException;
 public class App {
     public static void main(String[] args) {
 
-        try {
-            Util.downloadNewUrlFiles();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        DataService service = new DataService();
-        try {
-            service.writeFilesFromResourceToDB();
-        } catch (IOException | XMLStreamException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Util.downloadNewUrlFiles();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        DataService service = new DataService();
+//        try {
+//            service.writeFilesFromResourceToDB();
+//        } catch (IOException | XMLStreamException e) {
+//            e.printStackTrace();
+//        }
 
         ReportService reportService = new ReportService();
         try {
             reportService.generateReportForMonth("agivu", 2018, 10);
-            reportService.generateReportForMonth("agivu", 2018, 11);
             reportService.generateReportForQuarter("agivu", 2018, 4);
             reportService.generateReportForYear("agivu", 2018);
 
@@ -42,6 +41,20 @@ public class App {
             reportService.monthlyTopNDepartments("agivu", 2018, 10, 5);
             reportService.quarterlyTopNDepartments("agivu", 2018, 4, 5);
             reportService.yearlyTopNDepartments("agivu", 2018, 5);
+
+            reportService.monthlyBottomNEmployees("agivu", 2018, 10, 15);
+            reportService.quarterlyBottomNEmployees("agivu", 2018, 4, 15);
+            reportService.yearlyBottomNEmployees("agivu", 2018, 15);
+
+            reportService.monthlyBottomNCities("agivu", 2018, 10, 10);
+            reportService.quarterlyBottomNCities("agivu", 2018, 4, 10);
+            reportService.yearlyBottomNCities("agivu", 2018, 10);
+
+            reportService.monthlyBottomNDepartments("agivu", 2018, 10, 5);
+            reportService.quarterlyBottomNDepartments("agivu", 2018, 4, 5);
+            reportService.yearlyBottomNDepartments("agivu", 2018, 5);
+
+
         }
         catch (SQLException | IOException | ClassNotFoundException e) {
             e.printStackTrace();

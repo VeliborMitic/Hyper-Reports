@@ -33,26 +33,20 @@ public class ReportService {
     public void generateReportForMonth(String companyName, int year, int month)
             throws SQLException, IOException, ClassNotFoundException {
 
-        List<ReportDTO> dailyReportList = reportRepository.generateReportForMonth(companyName, year, month);
-
+        List<ReportDTO> reports = reportRepository.generateCompanyReportForMonth(companyName, year, month);
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             XSSFSheet sheet = workbook.createSheet("Monthly Report");
             CreationHelper createHelper = workbook.getCreationHelper();
-
             CellStyle headerCellStyle = createHeaderStyle(workbook);
             CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
             Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
-
             CellStyle dateCellStyle = workbook.createCellStyle();
             dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd-MM-yyyy"));
-
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month + " Monthly Report");
-
             String[] columns = {"Date", "Turnover"};
-
             createRowCells(sheet, headerCellStyle, columns);
             int rowNum = 2;
-            for (ReportDTO report : dailyReportList) {
+            for (ReportDTO report : reports) {
                 Row row = sheet.createRow(rowNum++);
                 Cell date = row.createCell(0);
                 date.setCellValue(DateUtils.convertLocalDateToDate(report.getDate()));
@@ -60,10 +54,8 @@ public class ReportService {
                 Cell turnover = row.createCell(1);
                 turnover.setCellValue(report.getTurnover());
             }
-
             createSumRow(sheet, headerCellStyle);
             setDefaultColumnWidth(sheet, columns);
-
             String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + month + "-" + "MonthlyReport.xlsx";
             saveOutputFile(workbook, outputFileName);
@@ -72,28 +64,23 @@ public class ReportService {
 
     public void generateReportForQuarter(String companyName, int year, int quarter)
             throws SQLException, IOException, ClassNotFoundException {
-        List<ReportDTO> monthList = reportRepository.generateReportForQuarter(companyName, year, quarter);
+        List<ReportDTO> reports = reportRepository.generateCompanyReportForQuarter(companyName, year, quarter);
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             XSSFSheet sheet = workbook.createSheet("Quarterly Report");
-
             CellStyle headerCellStyle = createHeaderStyle(workbook);
             CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
             Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
-
             companyNameCell.setCellValue(companyName.toUpperCase()
                     + " " + year + "-" + quarter + "thQuarter" + " Quarterly Report");
-
             String[] columns = {"Month", "Turnover"};
             createRowCells(sheet, headerCellStyle, columns);
             int rowNum = 2;
-            for (ReportDTO report : monthList) {
+            for (ReportDTO report : reports) {
                 rowNum = getRowNum(sheet, rowNum, report, report.getMonth());
             }
-
             createSumRow(sheet, headerCellStyle);
             setDefaultColumnWidth(sheet, columns);
-
             String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + quarter + "thQuarter-" + "QuarterlyReport.xlsx";
             saveOutputFile(workbook, outputFileName);
@@ -102,103 +89,352 @@ public class ReportService {
 
     public void generateReportForYear(String companyName, int year)
             throws SQLException, IOException, ClassNotFoundException {
-        List<ReportDTO> quarterList =
-                reportRepository.generateReportForYear(companyName, year);
+        List<ReportDTO> reports =
+                reportRepository.generateCompanyReportForYear(companyName, year);
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             XSSFSheet sheet = workbook.createSheet("Yearly Report");
-
             CellStyle headerCellStyle = createHeaderStyle(workbook);
             CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
-
             Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
             companyNameCell.setCellValue(companyName.toUpperCase()
                     + " " + year + " Yearly Report");
-
             String[] columns = {"Quarter", "Turnover"};
             createRowCells(sheet, headerCellStyle, columns);
             int rowNum = 2;
-            for (ReportDTO report : quarterList) {
+            for (ReportDTO report : reports) {
                 rowNum = getRowNum(sheet, rowNum, report, report.getQuarter());
             }
-
             createSumRow(sheet, headerCellStyle);
             setDefaultColumnWidth(sheet, columns);
-
             String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + "YearlyReport.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
     }
 
-    //TOP N EMPLOYEES SECTION
+    //TOP N EMPLOYEES
 
     public void monthlyTopNEmployees(String companyName, int year, int month, int topN)
             throws SQLException, IOException, ClassNotFoundException {
-
-        List<ReportDTO> dailyReportList = reportRepository.monthlyTopNEmployees(companyName, year, month, topN);
-
+        List<ReportDTO> reports = reportRepository.monthlyTopNEmployees(companyName, year, month, topN, "DESC");
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             XSSFSheet sheet = workbook.createSheet("Monthly TOP " + topN + " Employees Report");
-
             CellStyle headerCellStyle = createHeaderStyle(workbook);
             CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
             Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
-
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
                     + " Monthly TOP " + topN + " Employees Report");
-
-            createTopEmployeeTable(dailyReportList, sheet, headerCellStyle);
-
+            createTopEmployeeTable(reports, sheet, headerCellStyle);
             String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + month + "-" + "Monthly-TOP-" + topN + "-Employees-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
     }
 
-    public void quarterlyTopNEmployees(String companyName, int year, int quarter, int topN)
+    public void monthlyBottomNEmployees(String companyName, int year, int month, int topN)
             throws SQLException, IOException, ClassNotFoundException {
-
-        List<ReportDTO> dailyReportList = reportRepository.quarterlyTopNEmployees(companyName, year, quarter, topN);
-
+        List<ReportDTO> reports = reportRepository.monthlyTopNEmployees(companyName, year, month, topN, "ASC");
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-            XSSFSheet sheet = workbook.createSheet("Quarterly TOP " + topN + " Employees Report");
-
+            XSSFSheet sheet = workbook.createSheet("Monthly BOTTOM " + topN + " Employees Report");
             CellStyle headerCellStyle = createHeaderStyle(workbook);
             CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
             Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
+                    + " Monthly BOTTOM " + topN + " Employees Report");
+            createTopEmployeeTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + month + "-" + "Monthly-BOTTOM-" + topN + "-Employees-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
 
+    public void quarterlyTopNEmployees(String companyName, int year, int quarter, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.quarterlyTopNEmployees(companyName, year, quarter, topN, "DESC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Quarterly TOP " + topN + " Employees Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
                     + " Quarterly TOP " + topN + " Employees Report");
-
-            createTopEmployeeTable(dailyReportList, sheet, headerCellStyle);
-
+            createTopEmployeeTable(reports, sheet, headerCellStyle);
             String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + quarter + "-" + "Quarterly-TOP-" + topN + "-Employees-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
     }
 
-    public void yearlyTopNEmployees(String companyName, int year, int topN)
+    public void quarterlyBottomNEmployees(String companyName, int year, int quarter, int topN)
             throws SQLException, IOException, ClassNotFoundException {
-
-        List<ReportDTO> dailyReportList = reportRepository.yearlyTopNEmployees(companyName, year, topN);
-
+        List<ReportDTO> reports = reportRepository.quarterlyTopNEmployees(companyName, year, quarter, topN, "ASC");
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-            XSSFSheet sheet = workbook.createSheet("Yearly TOP " + topN + " Employees Report");
-
+            XSSFSheet sheet = workbook.createSheet("Quarterly BOTTOM " + topN + " Employees Report");
             CellStyle headerCellStyle = createHeaderStyle(workbook);
             CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
             Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
+                    + " Quarterly BOTTOM " + topN + " Employees Report");
+            createTopEmployeeTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + quarter + "-" + "Quarterly-BOTTOM-" + topN + "-Employees-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
 
+    public void yearlyTopNEmployees(String companyName, int year, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.yearlyTopNEmployees(companyName, year, topN, "DESC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Yearly TOP " + topN + " Employees Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
                     + " Yearly TOP " + topN + " Employees Report");
-
-            createTopEmployeeTable(dailyReportList, sheet, headerCellStyle);
-
+            createTopEmployeeTable(reports, sheet, headerCellStyle);
             String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + "Yearly-TOP-" + topN + "-Employees-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    public void yearlyBottomNEmployees(String companyName, int year, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.yearlyTopNEmployees(companyName, year, topN, "ASC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Yearly BOTTOM " + topN + " Employees Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
+                    + " Yearly BOTTOM " + topN + " Employees Report");
+            createTopEmployeeTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + "Yearly-BOTTOM-" + topN + "-Employees-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+
+    // TOP N CITIES
+
+    public void monthlyTopNCities(String companyName, int year, int month, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.monthlyTopNCities(companyName, year, month, topN, "DESC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Monthly TOP " + topN + " Cities Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
+                    + " Monthly TOP " + topN + " Cities Report");
+            createTopCitiesTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + month + "-" + "Monthly-TOP-" + topN + "-Cities-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    public void monthlyBottomNCities(String companyName, int year, int month, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.monthlyTopNCities(companyName, year, month, topN, "ASC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Monthly BOTTOM " + topN + " Cities Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
+                    + " Monthly BOTTOM " + topN + " Cities Report");
+            createTopCitiesTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + month + "-" + "Monthly-BOTTOM-" + topN + "-Cities-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    public void quarterlyTopNCities(String companyName, int year, int quarter, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.quarterlyTopNCities(companyName, year, quarter, topN, "DESC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Quarterly TOP " + topN + " Cities Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
+                    + " Quarterly TOP " + topN + " Cities Report");
+            createTopCitiesTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + quarter + "-" + "Quarterly-TOP-" + topN + "-Cities-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    public void quarterlyBottomNCities(String companyName, int year, int quarter, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.quarterlyTopNCities(companyName, year, quarter, topN, "ASC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Quarterly BOTTOM " + topN + " Cities Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
+                    + " Quarterly BOTTOM " + topN + " Cities Report");
+            createTopCitiesTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + quarter + "-" + "Quarterly-BOTTOM-" + topN + "-Cities-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    public void yearlyTopNCities(String companyName, int year, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.yearlyTopNCities(companyName, year, topN, "DESC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Yearly TOP " + topN + " Cities Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
+                    + " Yearly TOP " + topN + " Cities Report");
+            createTopCitiesTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + "Yearly-TOP-" + topN + "-Cities-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    public void yearlyBottomNCities(String companyName, int year, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.yearlyTopNCities(companyName, year, topN, "ASC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Yearly BOTTOM " + topN + " Cities Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
+                    + " Yearly BOTTOM " + topN + " Cities Report");
+            createTopCitiesTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + "Yearly-BOTTOM-" + topN + "-Cities-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    // TOP N DEPARTMENTS
+
+    public void monthlyTopNDepartments(String companyName, int year, int month, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.monthlyTopNDepartments(companyName, year, month, topN, "DESC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Monthly TOP " + topN + " Departments Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
+                    + " Monthly TOP " + topN + " Departments Report");
+            createTopDepartmentsTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + month + "-" + "Monthly-TOP-" + topN + "-Departments-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    public void monthlyBottomNDepartments(String companyName, int year, int month, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.monthlyTopNDepartments(companyName, year, month, topN, "ASC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Monthly BOTTOM " + topN + " Departments Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
+                    + " Monthly BOTTOM " + topN + " Departments Report");
+            createTopDepartmentsTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + month + "-" + "Monthly-BOTTOM-" + topN + "-Departments-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    public void quarterlyTopNDepartments(String companyName, int year, int quarter, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.quarterlyTopNDepartments(companyName, year, quarter, topN, "DESC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Quarterly TOP " + topN + " Departments Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
+                    + " Quarterly TOP " + topN + " Departments Report");
+            createTopDepartmentsTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + quarter + "-" + "Quarterly-TOP-" + topN + "-Departments-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    public void quarterlyBottomNDepartments(String companyName, int year, int quarter, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.quarterlyTopNDepartments(companyName, year, quarter, topN, "ASC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Quarterly BOTTOM " + topN + " Departments Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
+                    + " Quarterly BOTTOM " + topN + " Departments Report");
+            createTopDepartmentsTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + quarter + "-" + "Quarterly-BOTTOM-" + topN + "-Departments-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    public void yearlyTopNDepartments(String companyName, int year, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.yearlyTopNDepartments(companyName, year, topN, "DESC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Yearly TOP " + topN + " Departments Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
+                    + " Yearly TOP " + topN + " Departments Report");
+            createTopDepartmentsTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + "Yearly-TOP-" + topN + "-Departments-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    public void yearlyBottomNDepartments(String companyName, int year, int topN)
+            throws SQLException, IOException, ClassNotFoundException {
+        List<ReportDTO> reports = reportRepository.yearlyTopNDepartments(companyName, year, topN, "ASC");
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Yearly BOTTOM " + topN + " Departments Report");
+            CellStyle headerCellStyle = createHeaderStyle(workbook);
+            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
+            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
+            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
+                    + " Yearly BOTTOM " + topN + " Departments Report");
+            createTopDepartmentsTable(reports, sheet, headerCellStyle);
+            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+                    "-" + year + "-" + "Yearly-BOTTOM-" + topN + "-Departments-Report.xlsx";
+            saveOutputFile(workbook, outputFileName);
+        }
+    }
+
+    //  PRIVATE HELPER METHODS
+
+    private static void saveOutputFile(@NotNull XSSFWorkbook workbook, String outputFileName) {
+        try {
+            FileOutputStream fileOut = new FileOutputStream(outputFileName);
+            workbook.write(fileOut);
+            fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -209,175 +445,28 @@ public class ReportService {
         for (ReportDTO report : dailyReportList) {
             rowNum = getRowNum(sheet, rowNum, report, report.getEmployee());
         }
-
         create2SumRow(sheet, headerCellStyle);
         setDefaultColumnWidth(sheet, columns);
     }
 
-    // TOP N CITIES REPORTS SECTION
-
-    public void monthlyTopNCities(String companyName, int year, int month, int topN)
-            throws SQLException, IOException, ClassNotFoundException {
-
-        List<ReportDTO> dailyReportList = reportRepository.monthlyTopNCities(companyName, year, month, topN);
-
-        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-            XSSFSheet sheet = workbook.createSheet("Monthly TOP " + topN + " Cities Report");
-
-            CellStyle headerCellStyle = createHeaderStyle(workbook);
-            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
-            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
-
-            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
-                    + " Monthly TOP " + topN + " Cities Report");
-
-            createTopCitiesTable(dailyReportList, sheet, headerCellStyle);
-
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
-                    "-" + year + "-" + month + "-" + "Monthly-TOP-" + topN + "-Cities-Report.xlsx";
-            saveOutputFile(workbook, outputFileName);
-        }
-    }
-
-    public void quarterlyTopNCities(String companyName, int year, int quarter, int topN)
-            throws SQLException, IOException, ClassNotFoundException {
-
-        List<ReportDTO> dailyReportList = reportRepository.quarterlyTopNCities(companyName, year, quarter, topN);
-
-        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-            XSSFSheet sheet = workbook.createSheet("Quarterly TOP " + topN + " Cities Report");
-
-            CellStyle headerCellStyle = createHeaderStyle(workbook);
-            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
-            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
-
-            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
-                    + " Quarterly TOP " + topN + " Cities Report");
-
-            createTopCitiesTable(dailyReportList, sheet, headerCellStyle);
-
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
-                    "-" + year + "-" + quarter + "-" + "Quarterly-TOP-" + topN + "-Cities-Report.xlsx";
-            saveOutputFile(workbook, outputFileName);
-        }
-    }
-
-    public void yearlyTopNCities(String companyName, int year, int topN)
-            throws SQLException, IOException, ClassNotFoundException {
-
-        List<ReportDTO> dailyReportList = reportRepository.yearlyTopNCities(companyName, year, topN);
-
-        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-            XSSFSheet sheet = workbook.createSheet("Yearly TOP " + topN + " Cities Report");
-
-            CellStyle headerCellStyle = createHeaderStyle(workbook);
-            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
-            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
-
-            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
-                    + " Yearly TOP " + topN + " Cities Report");
-
-            createTopCitiesTable(dailyReportList, sheet, headerCellStyle);
-
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
-                    "-" + year + "-" + "Yearly-TOP-" + topN + "-Cities-Report.xlsx";
-            saveOutputFile(workbook, outputFileName);
-        }
-    }
-
     private void createTopCitiesTable(List<ReportDTO> dailyReportList, XSSFSheet sheet, CellStyle headerCellStyle) {
         String[] columns = {"Nr. ", "City Name", "Turnover"};
-
         createRowCells(sheet, headerCellStyle, columns);
         int rowNum = 2;
         for (ReportDTO report : dailyReportList) {
             rowNum = getRowNum(sheet, rowNum, report, report.getCity());
         }
-
         create2SumRow(sheet, headerCellStyle);
         setDefaultColumnWidth(sheet, columns);
     }
 
-    // TOP N DEPARTMENTS
-
-    public void monthlyTopNDepartments(String companyName, int year, int month, int topN)
-            throws SQLException, IOException, ClassNotFoundException {
-
-        List<ReportDTO> dailyReportList = reportRepository.monthlyTopNDepartments(companyName, year, month, topN);
-
-        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-            XSSFSheet sheet = workbook.createSheet("Monthly TOP " + topN + " Departments Report");
-
-            CellStyle headerCellStyle = createHeaderStyle(workbook);
-            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
-            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
-
-            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
-                    + " Monthly TOP " + topN + " Departments Report");
-
-            createTopDepartmentsTable(dailyReportList, sheet, headerCellStyle);
-
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
-                    "-" + year + "-" + month + "-" + "Monthly-TOP-" + topN + "-Departments-Report.xlsx";
-            saveOutputFile(workbook, outputFileName);
-        }
-    }
-
-    public void quarterlyTopNDepartments(String companyName, int year, int quarter, int topN)
-            throws SQLException, IOException, ClassNotFoundException {
-
-        List<ReportDTO> dailyReportList = reportRepository.quarterlyTopNDepartments(companyName, year, quarter, topN);
-
-        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-            XSSFSheet sheet = workbook.createSheet("Quarterly TOP " + topN + " Departments Report");
-
-            CellStyle headerCellStyle = createHeaderStyle(workbook);
-            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
-            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
-
-            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
-                    + " Quarterly TOP " + topN + " Departments Report");
-
-            createTopDepartmentsTable(dailyReportList, sheet, headerCellStyle);
-
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
-                    "-" + year + "-" + quarter + "-" + "Quarterly-TOP-" + topN + "-Departments-Report.xlsx";
-            saveOutputFile(workbook, outputFileName);
-        }
-    }
-
-    public void yearlyTopNDepartments(String companyName, int year, int topN)
-            throws SQLException, IOException, ClassNotFoundException {
-
-        List<ReportDTO> dailyReportList = reportRepository.yearlyTopNDepartments(companyName, year, topN);
-
-        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-            XSSFSheet sheet = workbook.createSheet("Yearly TOP " + topN + " Departments Report");
-
-            CellStyle headerCellStyle = createHeaderStyle(workbook);
-            CellStyle companyNameCellStyle = createCompanyCellStyle(workbook);
-            Cell companyNameCell = createCompanyNameCell(sheet, companyNameCellStyle);
-
-            companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
-                    + " Yearly TOP " + topN + " Departments Report");
-
-            createTopDepartmentsTable(dailyReportList, sheet, headerCellStyle);
-
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
-                    "-" + year + "-" + "Yearly-TOP-" + topN + "-Departments-Report.xlsx";
-            saveOutputFile(workbook, outputFileName);
-        }
-    }
-
     private void createTopDepartmentsTable(List<ReportDTO> dailyReportList, XSSFSheet sheet, CellStyle headerCellStyle) {
         String[] columns = {"Nr. ", "Department Name", "Turnover"};
-
         createRowCells(sheet, headerCellStyle, columns);
         int rowNum = 2;
         for (ReportDTO report : dailyReportList) {
             rowNum = getRowNum(sheet, rowNum, report, report.getDepartment());
         }
-
         create2SumRow(sheet, headerCellStyle);
         setDefaultColumnWidth(sheet, columns);
     }
@@ -440,16 +529,6 @@ public class ReportService {
     private static void setDefaultColumnWidth(XSSFSheet sheet, @NotNull String[] columns) {
         for (int i = 0; i < columns.length; i++) {
             sheet.setDefaultColumnWidth(20);
-        }
-    }
-
-    private static void saveOutputFile(@NotNull XSSFWorkbook workbook, String outputFileName) {
-        try {
-            FileOutputStream fileOut = new FileOutputStream(outputFileName);
-            workbook.write(fileOut);
-            fileOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
