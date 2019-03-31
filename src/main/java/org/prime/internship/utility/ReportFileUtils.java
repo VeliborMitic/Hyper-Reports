@@ -16,17 +16,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class Util {
+public class ReportFileUtils {
     public static final String DATA_INPUT_PATH = "E:\\_PRIME\\HyperReports_Source/";
     public static final String REPORT_OUTPUT_PATH = "E:\\_PRIME\\HyperReports_Output/";
     private static final String URL = "http://136ea.k.time4vps.cloud/data/";
     private static final String REGEX = ".*(\\d{4}-\\d{2}-\\d{2})-(.*)\\.(.*)";
-
-    public static void printList(Iterable<?> list) {
-        for (Object obj : list) {
-            System.out.println(obj);
-        }
-    }
 
     // String[0] - date,  String[1] - companyName,  String[2] - extension
     public static String[] parseFileName(String fileName) {
@@ -50,6 +44,7 @@ public class Util {
     public static void downloadNewUrlFiles() throws IOException {
         Set<String> remoteDirFileNames = new TreeSet<>();
         Set<String> localDirFileNames = findFilesInLocalDir();
+        int countDownloadedFiles = 0;
 
         Pattern pattern = Pattern.compile(REGEX);
 
@@ -68,7 +63,14 @@ public class Util {
                         10000,
                         10000);
                 System.out.println(fileName + " downloaded");
+                countDownloadedFiles++;
             }
+        }
+        if (countDownloadedFiles == 0) {
+            System.out.println("No new reports in remote directory!");
+        }
+        else {
+            System.out.println("Downloaded " + countDownloadedFiles + " files.");
         }
     }
 }

@@ -4,7 +4,7 @@ import org.prime.internship.entity.Company;
 import org.prime.internship.entity.dto.ParsedDataDTO;
 import org.prime.internship.parser.CSVParser;
 import org.prime.internship.parser.XMLParser;
-import org.prime.internship.utility.Util;
+import org.prime.internship.utility.ReportFileUtils;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -38,13 +38,13 @@ public class DataService {
 
         if (!newFilesSet.isEmpty()) {
             for (String fileName : newFilesSet) {
-                String[] attributes = Util.parseFileName(fileName);
+                String[] attributes = ReportFileUtils.parseFileName(fileName);
 
                 if (attributes[2].equalsIgnoreCase("csv")) {
-                    parsedDataDTOList = new CSVParser().readReportBeans(Util.DATA_INPUT_PATH + fileName);
+                    parsedDataDTOList = new CSVParser().readReportBeans(ReportFileUtils.DATA_INPUT_PATH + fileName);
                     processFile(attributes);
                 } else if (attributes[2].equalsIgnoreCase("xml")) {
-                    parsedDataDTOList = new XMLParser().readReportBeans(Util.DATA_INPUT_PATH + fileName);
+                    parsedDataDTOList = new XMLParser().readReportBeans(ReportFileUtils.DATA_INPUT_PATH + fileName);
                     processFile(attributes);
                 }
                 System.out.println("File \"" + fileName + "\" processed!");
@@ -67,11 +67,11 @@ public class DataService {
     }
 
     private Set<String> listNewFilesInDirectory() {
-        allFiles = Util.findFilesInLocalDir();
+        allFiles = ReportFileUtils.findFilesInLocalDir();
 
         if (!allFiles.isEmpty()) {
             for (String fileName : allFiles) {
-                String[] attributes = Util.parseFileName(fileName);
+                String[] attributes = ReportFileUtils.parseFileName(fileName);
 
                 Optional<Company> company = Optional.ofNullable(companyService.getOneByName(attributes[1]));
                 if (!company.isPresent()) {

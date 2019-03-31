@@ -11,7 +11,7 @@ public class PropertiesReader {
     }
 
     public static Properties properties() throws IOException {
-        InputStream inputStream = App.class.getClassLoader().getResourceAsStream("application.properties");
+        InputStream inputStream = HyperReportsApp.class.getClassLoader().getResourceAsStream("application.properties");
         Properties prop = new Properties();
         prop.load(inputStream);
         Objects.requireNonNull(inputStream).close();

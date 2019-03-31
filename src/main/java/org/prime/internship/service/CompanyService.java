@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class CompanyService {
     private final CompanyRepository companyRepository;
 
-    CompanyService() {
+    public CompanyService() {
         this.companyRepository = new CompanyRepository();
     }
 

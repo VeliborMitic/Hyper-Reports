@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.prime.internship.entity.dto.ReportDTO;
 import org.prime.internship.repository.ReportRepository;
 import org.prime.internship.utility.DateUtils;
-import org.prime.internship.utility.Util;
+import org.prime.internship.utility.ReportFileUtils;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -56,7 +56,7 @@ public class ReportService {
             }
             createSumRow(sheet, headerCellStyle);
             setDefaultColumnWidth(sheet, columns);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + month + "-" + "MonthlyReport.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -81,7 +81,7 @@ public class ReportService {
             }
             createSumRow(sheet, headerCellStyle);
             setDefaultColumnWidth(sheet, columns);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + quarter + "thQuarter-" + "QuarterlyReport.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -107,7 +107,7 @@ public class ReportService {
             }
             createSumRow(sheet, headerCellStyle);
             setDefaultColumnWidth(sheet, columns);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + "YearlyReport.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -126,7 +126,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
                     + " Monthly TOP " + topN + " Employees Report");
             createTopEmployeeTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + month + "-" + "Monthly-TOP-" + topN + "-Employees-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -143,7 +143,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
                     + " Monthly BOTTOM " + topN + " Employees Report");
             createTopEmployeeTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + month + "-" + "Monthly-BOTTOM-" + topN + "-Employees-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -160,7 +160,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
                     + " Quarterly TOP " + topN + " Employees Report");
             createTopEmployeeTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + quarter + "-" + "Quarterly-TOP-" + topN + "-Employees-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -177,7 +177,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
                     + " Quarterly BOTTOM " + topN + " Employees Report");
             createTopEmployeeTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + quarter + "-" + "Quarterly-BOTTOM-" + topN + "-Employees-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -194,7 +194,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
                     + " Yearly TOP " + topN + " Employees Report");
             createTopEmployeeTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + "Yearly-TOP-" + topN + "-Employees-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -211,7 +211,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
                     + " Yearly BOTTOM " + topN + " Employees Report");
             createTopEmployeeTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + "Yearly-BOTTOM-" + topN + "-Employees-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -231,7 +231,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
                     + " Monthly TOP " + topN + " Cities Report");
             createTopCitiesTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + month + "-" + "Monthly-TOP-" + topN + "-Cities-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -248,7 +248,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
                     + " Monthly BOTTOM " + topN + " Cities Report");
             createTopCitiesTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + month + "-" + "Monthly-BOTTOM-" + topN + "-Cities-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -265,7 +265,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
                     + " Quarterly TOP " + topN + " Cities Report");
             createTopCitiesTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + quarter + "-" + "Quarterly-TOP-" + topN + "-Cities-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -282,7 +282,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
                     + " Quarterly BOTTOM " + topN + " Cities Report");
             createTopCitiesTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + quarter + "-" + "Quarterly-BOTTOM-" + topN + "-Cities-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -299,7 +299,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
                     + " Yearly TOP " + topN + " Cities Report");
             createTopCitiesTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + "Yearly-TOP-" + topN + "-Cities-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -316,7 +316,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
                     + " Yearly BOTTOM " + topN + " Cities Report");
             createTopCitiesTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + "Yearly-BOTTOM-" + topN + "-Cities-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -335,7 +335,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
                     + " Monthly TOP " + topN + " Departments Report");
             createTopDepartmentsTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + month + "-" + "Monthly-TOP-" + topN + "-Departments-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -352,7 +352,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + month
                     + " Monthly BOTTOM " + topN + " Departments Report");
             createTopDepartmentsTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + month + "-" + "Monthly-BOTTOM-" + topN + "-Departments-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -369,7 +369,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
                     + " Quarterly TOP " + topN + " Departments Report");
             createTopDepartmentsTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + quarter + "-" + "Quarterly-TOP-" + topN + "-Departments-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -386,7 +386,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year + "-" + quarter
                     + " Quarterly BOTTOM " + topN + " Departments Report");
             createTopDepartmentsTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + quarter + "-" + "Quarterly-BOTTOM-" + topN + "-Departments-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -403,7 +403,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
                     + " Yearly TOP " + topN + " Departments Report");
             createTopDepartmentsTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + "Yearly-TOP-" + topN + "-Departments-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
@@ -420,7 +420,7 @@ public class ReportService {
             companyNameCell.setCellValue(companyName.toUpperCase() + " " + year
                     + " Yearly BOTTOM " + topN + " Departments Report");
             createTopDepartmentsTable(reports, sheet, headerCellStyle);
-            String outputFileName = Util.REPORT_OUTPUT_PATH + companyName +
+            String outputFileName = ReportFileUtils.REPORT_OUTPUT_PATH + companyName +
                     "-" + year + "-" + "Yearly-BOTTOM-" + topN + "-Departments-Report.xlsx";
             saveOutputFile(workbook, outputFileName);
         }
