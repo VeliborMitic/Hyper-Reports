@@ -62,8 +62,6 @@ l
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 g
 7src/main/java/org/prime/internship/cli/CommandLoad.java,b\6\b6211dd298ec02b6833d0e8858585cd68d0f01c9
-h
-8src/main/java/org/prime/internship/cli/CommandWrite.java,6\b\6b09df98b14eb988b52dc8bbdbca8dc0ba79cff6
 x
 Hsrc/main/java/org/prime/internship/cli/validator/TopBottomValidator.java,e\4\e45a89e41e3983655a6b855100fc1c28a2cb1405
 v
@@ -84,3 +82,7 @@ k
 ;src/test/java/org/prime/internship/HyperReportsAppTest.java,9\6\96dee4874573639dad7a6fa43b3f26d2dc436c60
 g
 7src/main/java/org/prime/internship/HyperReportsApp.java,b\0\b046257f689b3b3d87e4319ed1c80d7e40af6e78
+n
+>src/main/java/org/prime/internship/cli/CommandProcessToDB.java,d\8\d8643dac34e6e961ca26f81ce1493df0418c7af4
+R
+"src/main/java/META-INF/MANIFEST.MF,6\3\63ef5783cbf71fdf39c1fd6ae6873fd812259930

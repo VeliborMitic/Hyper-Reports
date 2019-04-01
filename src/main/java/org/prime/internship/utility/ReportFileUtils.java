@@ -4,12 +4,14 @@ import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.prime.internship.PropertiesReader;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -17,9 +19,22 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ReportFileUtils {
-    public static final String DATA_INPUT_PATH = "E:\\_PRIME\\HyperReports_Source/";
-    public static final String REPORT_OUTPUT_PATH = "E:\\_PRIME\\HyperReports_Output/";
-    private static final String URL = "http://136ea.k.time4vps.cloud/data/";
+
+    private ReportFileUtils() {
+    }
+    private static Properties prop;
+
+    static {
+        try {
+            prop = PropertiesReader.properties();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static final String DATA_INPUT_PATH = prop.getProperty("local.reports.folder");
+    public static final String REPORT_OUTPUT_PATH = prop.getProperty("local.output.folder");
+    private static final String URL = prop.getProperty("remote.source.directory");
     private static final String REGEX = ".*(\\d{4}-\\d{2}-\\d{2})-(.*)\\.(.*)";
 
     // String[0] - date,  String[1] - companyName,  String[2] - extension
