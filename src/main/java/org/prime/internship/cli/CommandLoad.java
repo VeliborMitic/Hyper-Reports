@@ -5,7 +5,7 @@ import org.prime.internship.utility.ReportFileUtils;
 
 import java.io.IOException;
 
-@Parameters(commandNames = {"load"}, commandDescription = "Load new files from remote directory")
+@Parameters(commandNames = {"load"}, commandDescription = "Load new report files from remote directory")
 public class CommandLoad {
 
     public  void run() {

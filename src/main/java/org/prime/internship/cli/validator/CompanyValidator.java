@@ -12,7 +12,7 @@ public class CompanyValidator   implements IParameterValidator {
 
     @Override
     public void validate(String s, String s1) {
-        Optional<Company> company = Optional.ofNullable(companyService.getOneByName(s1));
+        Optional<Company> company = Optional.ofNullable(companyService.getOneByName(s1.toLowerCase()));
         if (!company.isPresent()) {
             throw new ParameterException("Company " + s1 + " does not exist in databasse!");
         }

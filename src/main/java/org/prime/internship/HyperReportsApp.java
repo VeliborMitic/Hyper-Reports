@@ -5,7 +5,7 @@ import com.beust.jcommander.ParameterException;
 import org.prime.internship.cli.CommandHelp;
 import org.prime.internship.cli.CommandLoad;
 import org.prime.internship.cli.CommandReport;
-import org.prime.internship.cli.CommandWrite;
+import org.prime.internship.cli.CommandProcessToDB;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -18,7 +18,7 @@ public class HyperReportsApp {
 
         CommandReport report = new CommandReport();
         CommandLoad load = new CommandLoad();
-        CommandWrite write = new CommandWrite();
+        CommandProcessToDB write = new CommandProcessToDB();
         CommandHelp help = new CommandHelp();
 
         jc.addCommand("report", report);
@@ -26,11 +26,8 @@ public class HyperReportsApp {
         jc.addCommand(load);
         jc.addCommand(help);
 
-        //jc.parse(args);
-        String[] simArgs = {"report", "-c", "agivu", "-y", "2018", "-m", "10", "-b", "10"};
-
         try {
-            jc.parse(simArgs);
+            jc.parse(args);
 
             if (jc.getParsedCommand() == null) {
                 jc.usage();
@@ -54,8 +51,8 @@ public class HyperReportsApp {
                 }
             }
         } catch (ParameterException | SQLException | IOException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
             jc.usage();
+            System.out.println(e.getMessage());
             System.exit(1);
         }
     }
