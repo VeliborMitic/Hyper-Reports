@@ -41,7 +41,7 @@ Hyper Reports processes CSV and XML companies daily reports to database, and gen
     
     - set path for local source and output folder  
 
-- Execute hyper.sql to build database structure  
+- Execute resource/hyper.sql to build database structure  
 
 - Build  
 
