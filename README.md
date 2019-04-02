@@ -5,6 +5,7 @@
  - 
  - SQL  
  
+
 <h4> Design Pattern: MVC</h4>
 
 <h4> Others: </h4>
@@ -44,6 +45,7 @@ Hyper Reports processes CSV and XML companies daily reports to database, and gen
 - Build  
 
 <h4> Command line interface:</h4>  
+
 - File streams
 
 - From command line interface invoke method "help"  
@@ -56,6 +58,7 @@ Hyper Reports processes CSV and XML companies daily reports to database, and gen
 
 
 <h4> Prerequsites:</h4>  
+
 - Java 8  
 
 - Maven 4  
