@@ -51,11 +51,11 @@ Hyper Reports processes CSV and XML companies daily reports to database, and gen
 
 - From command line interface invoke method "help"  
 
-- From comand line interface invoke method "load" (java -jar HyperReports.jar load) to download files from remote url  
+- From command line interface invoke method "load" (java -jar HyperReports.jar load) to download files from remote url  
 
-- From comand line interface invoke method "write" (java -jar HyperReports.jar write) to process files to database  
+- From command line interface invoke method "write" (java -jar HyperReports.jar write) to process files to database  
 
-- From comand line interface invoke method "report" (java -jar HyperReports.jar report) and add required parameters to generate reports  
+- From command line interface invoke method "report" (java -jar HyperReports.jar report) and add required parameters to generate reports  
 
 
 <h4> Prerequsites:</h4>  
