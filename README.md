@@ -1,15 +1,21 @@
 <h2>Hyper Reports<h2>
 <h4> Languages and frameworks:</h4>
+
  - Java Core  
+ - 
  - SQL  
  
 <h4> Design Pattern: MVC</h4>
 
 <h4> Others: </h1>
     - File streams  
+    
     - Data serialization (XML - StAX, CSV - SuperCSV)  
+    
     - Command-line interface (JCommander)  
+    
     - Export in spreadsheet (Apache POI)  
+    
     - Maven  
 
 <h4> Overview</h4>
