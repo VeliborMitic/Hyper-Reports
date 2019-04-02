@@ -1,4 +1,4 @@
-<h3>Hyper Reports<h3>
+<h2>Hyper Reports App<h2>
 
 <h4> Languages and frameworks:</h4>
 
