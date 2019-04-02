@@ -2,7 +2,7 @@
 <h4> Languages and frameworks:</h4>
 
  - Java Core  
- - 
+ 
  - SQL  
  
 
