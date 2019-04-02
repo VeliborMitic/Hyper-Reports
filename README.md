@@ -26,11 +26,13 @@ Hyper Reports is a module of the product Hyper Process. It transfers turnover da
 Hyper Reports processes CSV and XML companies daily reports to database, and generates monthly, quarterly and yearly reports. App as well generates reports for Top N cities, departments and employees with highest/lowest turnover.  
 
 <h4> Technical details:</h4>
+
 - Command-line application: Java Core  
 
 - Relational database: MariaDB  
 
 <h3> Build and run: </h3>
+
 - Set app properties in resource/application.properties:  
  
     - set database name and port  
