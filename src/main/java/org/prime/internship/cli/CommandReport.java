@@ -15,35 +15,35 @@ import java.sql.SQLException;
 @Parameters(commandNames = "report", commandDescription = "Generates reports for a Company")
 public class CommandReport {
 
-    @Parameter(names = {"-c", "--company"},
+    @Parameter(names = {"-c", "--company"}, help = true,
             required = true,
             validateWith = CompanyValidator.class,
             description = "Name of the company to generate report")
     private String company;
 
-    @Parameter(names = {"-y", "--year"},
+    @Parameter(names = {"-y", "--year"}, help = true,
             required = true,
             validateWith = YearValidator.class,
             description = "Year for which you want to generate the report")
     private int year;
 
-    @Parameter(names = {"-q", "--quarter"},
+    @Parameter(names = {"-q", "--quarter"}, help = true,
             validateWith = QuarterValidator.class,
             description = "Quarter of the year (1 - 4) to generate the report for")
     private int quarter;
 
     @Parameter(names = {"-m", "--month"},
-            validateWith = MonthValidator.class,
+            validateWith = MonthValidator.class, help = true,
             description = "Month to generate report for")
     private int month;
 
     @Parameter(names = {"-t", "--top"},
-            validateWith = TopBottomValidator.class,
+            validateWith = TopBottomValidator.class, help = true,
             description = "Number of Top entities (1 - 100)")
     private int topN;
 
     @Parameter(names = {"-b", "--bottom"},
-            validateWith = TopBottomValidator.class,
+            validateWith = TopBottomValidator.class, help = true,
             description = "Number of Bottom entities (1 - 100)")
     private int bottomN;
 

@@ -6,7 +6,7 @@ import org.prime.internship.service.DataService;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 
-@Parameters(commandNames = "write" ,commandDescription = "Process newly added report files from local directory to database")
+@Parameters(commandNames = "write" ,commandDescription = "Enters data files from local directory to database")
 public class CommandProcessToDB {
     private DataService dataService;
 
@@ -21,5 +21,4 @@ public class CommandProcessToDB {
             e.printStackTrace();
         }
     }
-
 }
