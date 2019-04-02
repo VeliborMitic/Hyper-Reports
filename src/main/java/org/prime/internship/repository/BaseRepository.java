@@ -1,12 +1,12 @@
 package org.prime.internship.repository;
 
-import java.util.List;
+import java.util.Set;
 
 public interface BaseRepository<T> {
 
     T getOne(Integer id);
 
-    List<T> getAll();
+    Set<T> getAll();
 
     T insert(T t);
 

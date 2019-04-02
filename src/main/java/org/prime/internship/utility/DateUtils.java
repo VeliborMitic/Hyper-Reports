@@ -3,22 +3,19 @@ package org.prime.internship.utility;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
-public class Util {
-
-    public static void printList(Iterable<?> list) {
-        for (Object obj : list) {
-            System.out.println(obj);
-        }
-    }
+public class DateUtils {
 
     public static Timestamp convertLocalDateToTimestamp(LocalDate localDate) {
         LocalDateTime localDateTime = localDate.atStartOfDay();
         return Timestamp.valueOf(localDateTime);
     }
 
-    public static boolean isDateAfter(LocalDate date1, LocalDate date2) {
-
-        return date1.isAfter(date2);
+    public static Date convertLocalDateToDate(LocalDate localDate){
+        Date date;
+        date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return date;
     }
 }

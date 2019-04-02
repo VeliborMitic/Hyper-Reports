@@ -1,8 +1,6 @@
 
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
-[
-+src/main/java/org/prime/internship/App.java,9\6\96484e44a3ff7c7aa6ce1371148935e79037fc8e
 h
 8src/main/java/org/prime/internship/parser/CSVParser.java,2\d\2d5f4cbb5051f49751b9b3be68b92b8bcf21a86f
 c
@@ -21,20 +19,6 @@ h
 8src/main/java/org/prime/internship/parser/XMLParser.java,6\0\6006bebc863e43ed15474f0726c0837b8ba165ef
 g
 7src/main/java/org/prime/internship/entity/Employee.java,c\5\c52344ecd1ec27df00c56f896a2c4e0d9f703344
-L
-reports/2018-10-01-agivu.xml,7\e\7e9b6641c1d8dc967bd54cab6b305c4ca12b9a96
-O
-reports/2018-10-01-blogtags.csv,5\f\5f5e1c9cefb3b326906dd3ca28fed23c94d3473a
-O
-reports/2018-10-01-brainbox.xml,c\c\cc7065b5396c03212714899b64b47a46130e2ce3
-Q
-!reports/2018-10-01-browseblab.xml,3\3\3314f1dbf4591ffbf06ab07269c4adc796ed4a96
-M
-reports/2018-10-01-ailane.csv,2\a\2aa09dd6b60e096445f3faa2bca23c5236b708b3
-i
-9src/main/java/org/prime/internship/utility/URLReader.java,4\e\4e52446cf44190438a0637854de931ae9e82ff47
-d
-4src/main/java/org/prime/internship/utility/Util.java,d\0\d05a6eb61155c50e4cea21a5aecf7a79c23d744b
 q
 Asrc/main/java/org/prime/internship/repository/BaseRepository.java,8\5\85ad4a207d830e38c1b923f83b99f21d740f64e3
 q
@@ -64,7 +48,41 @@ o
 ?src/main/java/org/prime/internship/service/EmployeeService.java,d\c\dc74e381fca76daf9c8216349522508e985a7080
 o
 ?src/main/java/org/prime/internship/service/TurnoverService.java,1\7\179b2b90cdf35b5acd92b2ad1feb9e9d1b204726
-n
->src/main/java/org/prime/internship/entity/dto/DailyReport.java,0\9\098cb27c475d4d91f7d1c7441261790db70719eb
+i
+9src/main/java/org/prime/internship/utility/DateUtils.java,f\1\f182867f01d798b7774aedc2d7e89bc76d9280b9
 k
-;src/main/java/org/prime/internship/service/FileService.java,0\4\043721dfdf07e7a0879a4ee23892438818230e9d
+;src/main/java/org/prime/internship/service/DataService.java,d\a\da6c7b01c62fa0b0c15411c9e772514389316936
+s
+Csrc/main/java/org/prime/internship/repository/ReportRepository.java,1\b\1ba4cbed142cb23f2b95d348c7004a10bca4560d
+p
+@src/main/java/org/prime/internship/entity/dto/ParsedDataDTO.java,2\8\2877878523c8281f346b5730eba579e245008977
+l
+<src/main/java/org/prime/internship/entity/dto/ReportDTO.java,c\b\cbfbaa371f41f269ec8af02a90d430be9e4f23ce
+9
+	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+g
+7src/main/java/org/prime/internship/cli/CommandLoad.java,b\6\b6211dd298ec02b6833d0e8858585cd68d0f01c9
+x
+Hsrc/main/java/org/prime/internship/cli/validator/TopBottomValidator.java,e\4\e45a89e41e3983655a6b855100fc1c28a2cb1405
+v
+Fsrc/main/java/org/prime/internship/cli/validator/QuarterValidator.java,2\c\2c894d3003c4e9902a16f99f2d87cd31f4735cd9
+v
+Fsrc/main/java/org/prime/internship/cli/validator/CompanyValidator.java,d\1\d1be28bf9b6b8fd7219cf66abf6f72ac063bc51e
+t
+Dsrc/main/java/org/prime/internship/cli/validator/MonthValidator.java,3\7\37f4b096bf0d63c35ce172b7e15a19f4c45f9205
+s
+Csrc/main/java/org/prime/internship/cli/validator/YearValidator.java,b\7\b7eba1b9fa57826d02778d8d791e059cdfb597a8
+i
+9src/main/java/org/prime/internship/cli/CommandReport.java,e\f\ef47a7d0b81e11df66e73716fca6baffb84132c7
+g
+7src/main/java/org/prime/internship/cli/CommandHelp.java,f\8\f8c116cb3f560569ebb01a0d29b224d4642c9358
+o
+?src/main/java/org/prime/internship/utility/ReportFileUtils.java,b\b\bb3995ccd14541703ed2ad835ce008b9aabbb075
+k
+;src/test/java/org/prime/internship/HyperReportsAppTest.java,9\6\96dee4874573639dad7a6fa43b3f26d2dc436c60
+g
+7src/main/java/org/prime/internship/HyperReportsApp.java,b\0\b046257f689b3b3d87e4319ed1c80d7e40af6e78
+n
+>src/main/java/org/prime/internship/cli/CommandProcessToDB.java,d\8\d8643dac34e6e961ca26f81ce1493df0418c7af4
+R
+"src/main/java/META-INF/MANIFEST.MF,6\3\63ef5783cbf71fdf39c1fd6ae6873fd812259930

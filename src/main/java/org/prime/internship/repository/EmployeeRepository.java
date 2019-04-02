@@ -9,8 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class EmployeeRepository implements BaseRepository<Employee> {
 
@@ -64,8 +64,8 @@ public class EmployeeRepository implements BaseRepository<Employee> {
     }
 
     @Override
-    public List<Employee> getAll() {
-        List<Employee> employees = new ArrayList<>();
+    public Set<Employee> getAll() {
+        Set<Employee> employees = new HashSet<>();
         String sql = "SELECT * FROM employees";
 
         try (Connection connection = DatabaseManager.connect();
@@ -90,8 +90,7 @@ public class EmployeeRepository implements BaseRepository<Employee> {
 
     @Override
     public Employee insert(Employee employee) {
-        String sql = "INSERT INTO employees (employee_id, name, company_id, city_id, department_id) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO employees (employee_id, name, company_id, city_id, department_id) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -116,8 +115,7 @@ public class EmployeeRepository implements BaseRepository<Employee> {
 
     @Override
     public Employee update(Employee employee) {
-        String sql = "UPDATE employees SET name = ?, company_id = ?, city_id = ?, department_id = ? " +
-                "WHERE employee_id = ?";
+        String sql = "UPDATE employees SET name = ?, company_id = ?, city_id = ?, department_id = ? WHERE employee_id = ?";
 
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
