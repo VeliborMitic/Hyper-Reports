@@ -7,16 +7,16 @@
  
 <h4> Design Pattern: MVC</h4>
 
-<h4> Others: </h1>
- - File streams
+<h4> Others: </h4>
+- File streams
  
- - Data serialization (XML - StAX, CSV - SuperCSV)  
+- Data serialization (XML - StAX, CSV - SuperCSV)  
     
- - Command-line interface (JCommander)  
+- Command-line interface (JCommander)  
+
+- Export in spreadsheet (Apache POI)  
     
- - Export in spreadsheet (Apache POI)  
-    
- - Maven  
+- Maven  
 
 <h4> Overview</h4>
 Hyper Reports is a module of the product Hyper Process. It transfers turnover daily reports data from different files into related database in order to provide more complex reporting functionality.  
