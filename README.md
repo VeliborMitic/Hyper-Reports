@@ -8,6 +8,7 @@
 <h4> Design Pattern: MVC</h4>
 
 <h4> Others: </h4>
+
 - File streams
  
 - Data serialization (XML - StAX, CSV - SuperCSV)  
